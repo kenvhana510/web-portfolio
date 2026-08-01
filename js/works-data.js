@@ -70,15 +70,15 @@ const WORKS_DATA = [
   {
     slug: "work-03",
     number: "03",
-    status: "demo",
+    status: "published",
     title: "NESTA ARCHITECTS（ネスタ建築設計）",
     industry: "建築設計（架空・注文住宅設計事務所）",
     siteType: "企業サイト（全7ページ、WordPress + SWELL）",
     summary: "「Quiet Luxury」を軸にしたWordPress＋SWELLの高デザイン企業サイト。",
-    url: null,
+    url: "https://nesta.legacraft.com/",
     thumbnail: "images/works/work-03-pc.jpg",
     period: "2026年7月",
-    disclosure: "掲載可（架空企業を想定した制作サンプル・現在ローカル環境のみで確認可能）",
+    disclosure: "掲載可（架空企業を想定した制作サンプル・エックスサーバーで本番公開済み）",
     purpose:
       "WordPress／SWELLを使用した高デザイン企業サイトの制作実績を示すことを目的とした一作品。写真・余白・タイポグラフィで品質を伝える設計力の証明。",
     target:
