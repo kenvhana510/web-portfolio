@@ -242,12 +242,12 @@ section + section {
   width: 100%;
 }
 
-.nav-cta {
+.btn.nav-cta {
   display: none;
 }
 
 @media (min-width: 900px) {
-  .nav-cta {
+  .btn.nav-cta {
     display: inline-flex;
   }
 }
@@ -839,6 +839,11 @@ section + section {
   padding-top: 3rem;
 }
 
+.cs-hero .btn {
+  white-space: normal;
+  text-align: center;
+}
+
 .cs-meta {
   display: flex;
   flex-wrap: wrap;
@@ -906,6 +911,7 @@ section + section {
 
 .cs-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding-top: var(--space-section);
   gap: 1rem;
