@@ -3,9 +3,8 @@
  * ここを書き換えるだけでサイト全体に反映される。
  */
 const SITE_CONFIG = {
-  // 屋号・個人名は現時点で確定情報がないため掲載しない（推測で記載しない）。
-  // 各ページのヘッダー/フッターは「Web Creation Portfolio」という汎用表記で運用する。
-  siteName: "Web Creation Portfolio",
+  // 屋号：LEGACRAFT（legacraft/brand/brand-guidelines.md Version 1.0で確定）。
+  siteName: "LEGACRAFT",
   tagline: "WordPress（SWELL）・LP制作専門のWeb制作",
 
   // 2026-07-31確定：実績構築期（初回受注獲得優先）の正式価格。

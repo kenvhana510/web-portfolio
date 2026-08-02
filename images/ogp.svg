@@ -1,6 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#131316"/>
-  <text x="80" y="280" font-family="'Zen Kaku Gothic New','Hiragino Sans',sans-serif" font-size="64" font-weight="700" fill="#faf9f6">高品質なWordPressサイトを、</text>
-  <text x="80" y="360" font-family="'Zen Kaku Gothic New','Hiragino Sans',sans-serif" font-size="64" font-weight="700" fill="#faf9f6">スマホでも美しく。</text>
-  <text x="80" y="430" font-family="'Zen Kaku Gothic New','Hiragino Sans',sans-serif" font-size="28" fill="#a9a8a2">個人事業主・中小企業のためのWeb制作 ― WordPress（SWELL）専門</text>
+  <rect width="1200" height="630" fill="#22372E"/>
+  <g transform="translate(150 195)">
+    <polygon points="0,-84 72.75,-42 72.75,42 0,84 -72.75,42 -72.75,-42" fill="none" stroke="#B08D3F" stroke-width="4.3"/>
+    <g transform="scale(1.04)">
+      <path d="M -34 -34 L -14 -34 L -14 14 L 26 14 L 26 34 L -34 34 Z" fill="#EDE4CE"/>
+      <path d="M 34 -34 L 34 -14 L 6 -14 L 6 6 L -6 6 L -6 -34 Z" fill="#B08D3F"/>
+    </g>
+  </g>
+  <text x="255" y="222" font-family="Georgia,'Times New Roman',serif" font-size="58" letter-spacing="9" fill="#EDE4CE">LEGACRAFT</text>
+  <line x1="255" y1="250" x2="1050" y2="250" stroke="#B08D3F" stroke-width="1.5"/>
+  <text x="255" y="288" font-family="'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif" font-size="20" letter-spacing="8" fill="#B08D3F">未来へ、遺す。</text>
+  <text x="150" y="400" font-family="'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif" font-size="34" fill="#EDE4CE">高品質なWordPressサイトを、スマホでも美しく。</text>
+  <text x="150" y="450" font-family="'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif" font-size="22" fill="#CFCBB5">個人事業主・中小企業のためのWeb制作ポートフォリオ</text>
 </svg>

@@ -3,22 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WORKS｜制作実績 | Web Creation Portfolio</title>
-<meta name="description" content="WordPress（SWELL）を中心に制作した4作品の実績一覧。各作品のCASE STUDYで課題・設計・デザイン・実装・QAの流れをご覧いただけます。">
-<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<title>WORKS｜制作実績 | LEGACRAFT</title>
+<meta name="description" content="LEGACRAFTの制作実績。WordPress（SWELL）を中心に制作した4作品の実績一覧。各作品のCASE STUDYで課題・設計・デザイン・実装・QAの流れをご覧いただけます。">
 <link rel="canonical" href="https://kenvhana510.github.io/web-portfolio/works.html">
+<meta name="theme-color" content="#22372E">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="LEGACRAFT">
 <meta property="og:url" content="https://kenvhana510.github.io/web-portfolio/works.html">
-<meta property="og:title" content="WORKS｜制作実績">
+<meta property="og:title" content="WORKS｜制作実績 | LEGACRAFT">
+<meta property="og:description" content="WordPress（SWELL）を中心に制作した4作品の実績一覧。">
 <meta property="og:image" content="https://kenvhana510.github.io/web-portfolio/images/ogp.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="works">
+<a class="skip-link" href="#main">本文へスキップ</a>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="brand">Web Creation Portfolio</a>
+    <a href="index.html" class="brand" aria-label="LEGACRAFT トップページ">
+      <img src="images/brand/icon.svg" alt="" width="32" height="32" class="brand-mark">
+      <span class="brand-word">LEGACRAFT</span>
+    </a>
     <ul class="nav-list">
       <li><a href="index.html" data-nav-link="top">TOP</a></li>
       <li><a href="works.html" data-nav-link="works" aria-current="page">WORKS</a></li>
@@ -27,9 +40,9 @@
       <li><a href="contact.html" data-nav-link="contact">CONTACT</a></li>
     </ul>
     <a href="contact.html" class="btn btn-primary nav-cta">相談する</a>
-    <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false"><span></span></button>
+    <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-nav"><span></span></button>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav" aria-label="モバイルナビゲーション">
     <a href="index.html">TOP</a>
     <a href="works.html">WORKS</a>
     <a href="service.html">SERVICE</a>
@@ -38,17 +51,18 @@
   </nav>
 </header>
 
-<main>
+<main id="main">
   <section style="padding-bottom:0;">
     <div class="container section-head reveal">
       <div class="eyebrow">WORKS</div>
-      <h2>制作実績</h2>
+      <h1>制作実績</h1>
       <p>WordPress（SWELL）を中心に制作した4作品です。各作品をクリックすると、課題から完成までの制作プロセスをご覧いただけます。</p>
     </div>
   </section>
 
   <section>
     <div class="container">
+      <h2 class="sr-only">作品一覧</h2>
       <div class="works-grid" id="works-grid-all"></div>
     </div>
   </section>
@@ -64,14 +78,18 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-nav">
+    <a href="index.html" class="footer-brand brand" aria-label="LEGACRAFT トップページ">
+      <img src="images/brand/icon.svg" alt="" width="24" height="24" class="brand-mark">
+      <span class="brand-word">LEGACRAFT</span>
+    </a>
+    <nav class="footer-nav" aria-label="フッターナビゲーション">
       <a href="index.html">TOP</a>
       <a href="works.html">WORKS</a>
       <a href="service.html">SERVICE</a>
       <a href="about.html">ABOUT</a>
       <a href="contact.html">CONTACT</a>
-    </div>
-    <div class="copyright">&copy; 2026 Web Creation Portfolio</div>
+    </nav>
+    <div class="copyright">&copy; 2026 LEGACRAFT — 未来へ、遺す。</div>
   </div>
 </footer>
 

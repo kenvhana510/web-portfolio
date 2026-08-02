@@ -3,16 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>404 Not Found | Web Creation Portfolio</title>
+<title>404 Not Found | LEGACRAFT</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#22372E">
 <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="404">
+<a class="skip-link" href="#main">本文へスキップ</a>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="brand">Web Creation Portfolio</a>
+    <a href="index.html" class="brand" aria-label="LEGACRAFT トップページ">
+      <img src="images/brand/icon.svg" alt="" width="32" height="32" class="brand-mark">
+      <span class="brand-word">LEGACRAFT</span>
+    </a>
     <ul class="nav-list">
       <li><a href="index.html" data-nav-link="top">TOP</a></li>
       <li><a href="works.html" data-nav-link="works">WORKS</a></li>
@@ -21,9 +31,9 @@
       <li><a href="contact.html" data-nav-link="contact">CONTACT</a></li>
     </ul>
     <a href="contact.html" class="btn btn-primary nav-cta">相談する</a>
-    <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false"><span></span></button>
+    <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-nav"><span></span></button>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav" aria-label="モバイルナビゲーション">
     <a href="index.html">TOP</a>
     <a href="works.html">WORKS</a>
     <a href="service.html">SERVICE</a>
@@ -32,11 +42,11 @@
   </nav>
 </header>
 
-<main>
+<main id="main">
   <section>
     <div class="container section-head reveal" style="text-align:center;">
       <div class="eyebrow">404</div>
-      <h2>ページが見つかりませんでした</h2>
+      <h1>ページが見つかりませんでした</h1>
       <p>お探しのページは移動または削除された可能性があります。</p>
       <div style="margin-top:2rem;">
         <a href="index.html" class="btn btn-primary">TOPへ戻る</a>
@@ -47,14 +57,18 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-nav">
+    <a href="index.html" class="footer-brand brand" aria-label="LEGACRAFT トップページ">
+      <img src="images/brand/icon.svg" alt="" width="24" height="24" class="brand-mark">
+      <span class="brand-word">LEGACRAFT</span>
+    </a>
+    <nav class="footer-nav" aria-label="フッターナビゲーション">
       <a href="index.html">TOP</a>
       <a href="works.html">WORKS</a>
       <a href="service.html">SERVICE</a>
       <a href="about.html">ABOUT</a>
       <a href="contact.html">CONTACT</a>
-    </div>
-    <div class="copyright">&copy; 2026 Web Creation Portfolio</div>
+    </nav>
+    <div class="copyright">&copy; 2026 LEGACRAFT — 未来へ、遺す。</div>
   </div>
 </footer>
 

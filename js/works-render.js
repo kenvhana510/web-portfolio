@@ -8,16 +8,25 @@
     demo: "制作事例（DEMO）",
   };
 
-  function thumbStyle(work) {
-    return work.thumbnail
-      ? ' style="background-image:url(\'' + work.thumbnail + '\');background-size:cover;background-position:top center;"'
-      : "";
+  function escapeAttr(str) {
+    return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
   }
 
-  function workCardHTML(work) {
+  function thumbImg(work, eager) {
+    if (!work.thumbnail) return "";
+    var alt = escapeAttr(work.title + "（" + work.siteType + "）のスクリーンショット");
+    return (
+      '<img src="' + work.thumbnail + '" alt="' + alt + '" width="800" height="500"' +
+      (eager ? ' loading="eager" fetchpriority="high"' : ' loading="lazy"') +
+      ' decoding="async">'
+    );
+  }
+
+  function workCardHTML(work, index) {
     return (
       '<a class="work-card reveal" href="case-study.html?work=' + work.slug + '">' +
-      '<div class="work-thumb"' + thumbStyle(work) + '>' +
+      '<div class="work-thumb">' +
+      thumbImg(work, index === 0) +
       '<span class="work-status">' + STATUS_LABEL[work.status] + '</span>' +
       '<span class="work-number">WORK ' + work.number + '</span>' +
       '</div>' +
@@ -34,6 +43,11 @@
     var el = document.querySelector(selector);
     if (!el) return;
     el.innerHTML = WORKS_DATA.map(workCardHTML).join("");
+    el.querySelectorAll("img").forEach(function (img) {
+      img.addEventListener("error", function () {
+        img.remove();
+      });
+    });
     if (window.__initReveal) window.__initReveal();
   }
 
@@ -67,8 +81,10 @@
       (work.url
         ? '<div class="reveal" style="margin-bottom:1rem;"><a class="btn btn-primary" href="' + work.url + '" target="_blank" rel="noopener">サイトを見る（実際の公開ページ） →</a></div>'
         : '<div class="reveal" style="margin-bottom:1rem;color:var(--color-ink-soft);font-size:0.85rem;">現在ローカル環境のみで確認可能な制作事例です（DEMO）。</div>') +
-      '<div class="cs-visual reveal"' + thumbStyle(work) + '>' +
-      (work.thumbnail ? "" : "Screenshot準備中（PC / Mobile）") +
+      '<div class="cs-visual reveal">' +
+      (work.thumbnail
+        ? '<img src="' + work.thumbnail + '" alt="' + escapeAttr(work.title + "のトップページスクリーンショット") + '" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async">'
+        : "Screenshot準備中（PC / Mobile）") +
       "</div>" +
       "</div>" +
       '<div class="container">' +
@@ -90,7 +106,7 @@
   function csStep(label, body) {
     return (
       '<div class="cs-step reveal">' +
-      "<h3>" + label + "</h3>" +
+      "<h2>" + label + "</h2>" +
       "<p>" + body + "</p>" +
       "</div>"
     );

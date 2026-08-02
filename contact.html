@@ -3,22 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CONTACT｜お問い合わせ | Web Creation Portfolio</title>
-<meta name="description" content="クラウドワークス・ランサーズ・ココナラ経由でお気軽にお問い合わせください。まずはご相談だけでも承ります。">
-<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<title>CONTACT｜お問い合わせ | LEGACRAFT</title>
+<meta name="description" content="LEGACRAFTへのお問い合わせ。クラウドワークス・ランサーズ・ココナラ経由でお気軽にお問い合わせください。まずはご相談だけでも承ります。">
 <link rel="canonical" href="https://kenvhana510.github.io/web-portfolio/contact.html">
+<meta name="theme-color" content="#22372E">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="LEGACRAFT">
 <meta property="og:url" content="https://kenvhana510.github.io/web-portfolio/contact.html">
-<meta property="og:title" content="CONTACT｜お問い合わせ">
+<meta property="og:title" content="CONTACT｜お問い合わせ | LEGACRAFT">
+<meta property="og:description" content="クラウドワークス・ランサーズ・ココナラ経由でお気軽にお問い合わせください。">
 <meta property="og:image" content="https://kenvhana510.github.io/web-portfolio/images/ogp.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="contact">
+<a class="skip-link" href="#main">本文へスキップ</a>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="brand">Web Creation Portfolio</a>
+    <a href="index.html" class="brand" aria-label="LEGACRAFT トップページ">
+      <img src="images/brand/icon.svg" alt="" width="32" height="32" class="brand-mark">
+      <span class="brand-word">LEGACRAFT</span>
+    </a>
     <ul class="nav-list">
       <li><a href="index.html" data-nav-link="top">TOP</a></li>
       <li><a href="works.html" data-nav-link="works">WORKS</a></li>
@@ -27,9 +40,9 @@
       <li><a href="contact.html" data-nav-link="contact" aria-current="page">CONTACT</a></li>
     </ul>
     <a href="contact.html" class="btn btn-primary nav-cta">相談する</a>
-    <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false"><span></span></button>
+    <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-nav"><span></span></button>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav" aria-label="モバイルナビゲーション">
     <a href="index.html">TOP</a>
     <a href="works.html">WORKS</a>
     <a href="service.html">SERVICE</a>
@@ -38,17 +51,18 @@
   </nav>
 </header>
 
-<main>
+<main id="main">
   <section style="padding-bottom:0;">
     <div class="container section-head reveal">
       <div class="eyebrow">CONTACT</div>
-      <h2>お問い合わせ</h2>
+      <h1>お問い合わせ</h1>
       <p>現在は各プラットフォーム経由でのご依頼受付を準備しています。料金・納期のご相談だけでも構いませんので、お気軽にご連絡ください。</p>
     </div>
   </section>
 
   <section style="padding-top:2rem;">
     <div class="container">
+      <h2 class="sr-only">お問い合わせ方法</h2>
       <div class="contact-grid" id="contact-grid"></div>
     </div>
   </section>
@@ -56,19 +70,22 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-nav">
+    <a href="index.html" class="footer-brand brand" aria-label="LEGACRAFT トップページ">
+      <img src="images/brand/icon.svg" alt="" width="24" height="24" class="brand-mark">
+      <span class="brand-word">LEGACRAFT</span>
+    </a>
+    <nav class="footer-nav" aria-label="フッターナビゲーション">
       <a href="index.html">TOP</a>
       <a href="works.html">WORKS</a>
       <a href="service.html">SERVICE</a>
       <a href="about.html">ABOUT</a>
       <a href="contact.html">CONTACT</a>
-    </div>
-    <div class="copyright">&copy; 2026 Web Creation Portfolio</div>
+    </nav>
+    <div class="copyright">&copy; 2026 LEGACRAFT — 未来へ、遺す。</div>
   </div>
 </footer>
 
 <script src="js/site-config.js"></script>
-<script src="js/works-data.js"></script>
 <script src="js/main.js"></script>
 <script>
   (function () {

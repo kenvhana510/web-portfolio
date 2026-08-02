@@ -19,6 +19,14 @@
         toggle.setAttribute("aria-expanded", "false");
       });
     });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && mobileNav.classList.contains("is-open")) {
+        mobileNav.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.focus();
+      }
+    });
   }
 
   // --- Active nav link ---
