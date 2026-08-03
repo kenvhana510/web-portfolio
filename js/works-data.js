@@ -101,15 +101,15 @@ const WORKS_DATA = [
   {
     slug: "work-04",
     number: "04",
-    status: "demo",
+    status: "published",
     title: "LUMÉA SKIN CLINIC（ルメア スキンクリニック）",
     industry: "美容医療（架空・美容皮膚科クリニック）",
     siteType: "コーポレート＋集客サイト（全11ページ、WordPress + SWELL）",
     summary: "「Soft Luxury」を軸にした、20〜40代女性向け美容クリニックサイト。",
-    url: null,
+    url: "https://lumea.legacraft.com/",
     thumbnail: "images/works/work-04-pc.jpg",
     period: "2026年7月",
-    disclosure: "掲載可（架空企業を想定した制作サンプル・現在ローカル環境のみで確認可能）",
+    disclosure: "掲載可（架空企業を想定した制作サンプル・エックスサーバーで本番公開済み）",
     purpose:
       "美容医療・医療広告特有のルール（誇大表現の禁止、症例が架空である旨の明示等）を踏まえたうえで、WordPress＋SWELLによるカスタム投稿タイプ活用・予約導線設計の実装力を示す一作品。",
     target: "美容医療に関心はあるが、派手な変化より自然な変化を重視する20〜40代女性。初めての来院に不安を感じやすい層。",
