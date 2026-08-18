@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【無料】Web制作費用シミュレーター｜3分で費用の目安がわかる | LEGACRAFT</title>
+<meta name="description" content="事業種別・ページ数・デザイン方向性などの質問に答えるだけで、Web制作費用の概算レンジが3分でわかる無料シミュレーター。入力内容は送信されず、ブラウザ内だけで計算します。">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://kenvhana510.github.io/web-portfolio/tools/price-estimator/">
+<link rel="icon" href="../../images/favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LEGACRAFT">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="【無料】Web制作費用シミュレーター｜3分で費用の目安がわかる">
+<meta property="og:description" content="9つの質問に答えるだけで、あなたのサイトの概算費用レンジと考え方がわかります。入力内容はサーバーに送信されません。">
+<meta property="og:url" content="https://kenvhana510.github.io/web-portfolio/tools/price-estimator/">
+<meta property="og:image" content="https://kenvhana510.github.io/web-portfolio/images/ogp.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【無料】Web制作費用シミュレーター｜LEGACRAFT">
+<meta name="twitter:description" content="9つの質問に答えるだけで、Web制作費用の概算レンジが3分でわかります。">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="proto-banner">
+  ⚠️ 本シミュレーターはベータ版です。表示される金額はあくまで<strong>目安（概算レンジ）</strong>であり、
+  正式なお見積りではありません。正式金額はヒアリング後に個別にご提示します。
+</div>
+
+<header class="site-header">
+  <p class="eyebrow">FREE TOOL — PRICE SIMULATOR</p>
+  <h1>Web制作費用シミュレーター</h1>
+  <p class="lead">9つの質問に答えるだけで、あなたのサイトの<strong>概算費用レンジ</strong>と考え方がわかります。所要時間 約3分。</p>
+  <p class="privacy-note">
+    🔒 入力内容はどこにも送信されません。診断はすべてお使いのブラウザ内で完結し、サーバーには一切送られません。
+  </p>
+</header>
+
+<main>
+  <form id="estimator-form" novalidate>
+
+    <fieldset>
+      <legend><span class="step-no">1</span> 事業種別</legend>
+      <div class="options-grid" role="radiogroup" aria-label="事業種別">
+        <label class="opt"><input type="radio" name="bizType" value="individual" checked> 個人事業主</label>
+        <label class="opt"><input type="radio" name="bizType" value="store"> 店舗・クリニック等の実店舗業</label>
+        <label class="opt"><input type="radio" name="bizType" value="sme"> 中小企業</label>
+        <label class="opt"><input type="radio" name="bizType" value="pro"> 士業</label>
+        <label class="opt"><input type="radio" name="bizType" value="other"> その他</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">2</span> 目的</legend>
+      <div class="options-grid" role="radiogroup" aria-label="目的">
+        <label class="opt"><input type="radio" name="purpose" value="new" checked> 新規制作</label>
+        <label class="opt"><input type="radio" name="purpose" value="renewal"> 既存サイトのリニューアル</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">3</span> 希望ページ数 <span class="req">必須・プラン判定に影響</span></legend>
+      <div class="options-grid" role="radiogroup" aria-label="希望ページ数">
+        <label class="opt"><input type="radio" name="pageCount" value="1" checked> 1ページ完結（LP）</label>
+        <label class="opt"><input type="radio" name="pageCount" value="5-8"> 5〜8ページ</label>
+        <label class="opt"><input type="radio" name="pageCount" value="8plus"> 8〜12ページ以上</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">4</span> 更新頻度の希望（CMS）</legend>
+      <div class="options-grid" role="radiogroup" aria-label="更新頻度の希望">
+        <label class="opt"><input type="radio" name="cms" value="self" checked> 自分で更新したい（WordPress希望）</label>
+        <label class="opt"><input type="radio" name="cms" value="managed"> 更新はお任せでよい（静的サイトでも可）</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">5</span> 希望の仕上がり方向性 <span class="req">必須・プラン判定に影響</span></legend>
+      <div class="options-grid" role="radiogroup" aria-label="希望の仕上がり方向性">
+        <label class="opt"><input type="radio" name="designLevel" value="simple" checked> シンプル・低コスト重視</label>
+        <label class="opt"><input type="radio" name="designLevel" value="balanced"> バランス重視</label>
+        <label class="opt"><input type="radio" name="designLevel" value="branding"> ブランディング重視</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">6</span> お問い合わせフォーム</legend>
+      <div class="options-grid" role="radiogroup" aria-label="お問い合わせフォーム">
+        <label class="opt"><input type="radio" name="contactForm" value="yes" checked> 設置したい（全プラン標準対応）</label>
+        <label class="opt"><input type="radio" name="contactForm" value="no"> 不要</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">7</span> SEO</legend>
+      <div class="options-grid" role="radiogroup" aria-label="SEO">
+        <label class="opt"><input type="radio" name="seo" value="basic" checked> 基本SEO設定でよい（全プラン標準対応）</label>
+        <label class="opt"><input type="radio" name="seo" value="boost"> キーワード設計等の強化を相談したい</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">8</span> コンテンツ・撮影サポート</legend>
+      <div class="options-grid">
+        <label class="opt"><input type="checkbox" name="addon" value="contentSupport"> 文章作成のサポートが必要</label>
+        <label class="opt"><input type="checkbox" name="addon" value="photography"> プロ撮影・画像素材の相談をしたい</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>特殊機能・追加オプション（複数選択可）</legend>
+      <div class="options-grid">
+        <label class="opt"><input type="checkbox" name="addon" value="multilingual"> 多言語対応</label>
+        <label class="opt"><input type="checkbox" name="addon" value="blogEnhance"> ブログ機能強化</label>
+        <label class="opt"><input type="checkbox" name="addon" value="recruitPage"> 採用ページ拡張</label>
+        <label class="opt"><input type="checkbox" name="addon" value="meo"> MEO基本設定</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>（任意）結果を受け取るメールアドレス</legend>
+      <label for="email" class="visually-hidden">結果を受け取るメールアドレス</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="you@example.com"
+        class="email-input"
+        autocomplete="email"
+        aria-describedby="email-hint email-error"
+      >
+      <p class="hint" id="email-hint">未入力でも結果は画面表示されます。入力は任意です。入力する場合は正しい形式のメールアドレスを入力してください。</p>
+      <p class="field-error" id="email-error" role="alert" hidden></p>
+    </fieldset>
+
+    <!-- Honeypot: 人間には見えない入力。bot対策の下準備（実送信は未実装のため現状は判定のみ） -->
+    <div class="honeypot" aria-hidden="true">
+      <label for="website-hp">Webサイト（入力しないでください）</label>
+      <input type="text" id="website-hp" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <p class="field-error" id="form-error" role="alert" hidden></p>
+
+    <button type="submit" class="btn-primary" id="submit-btn">概算費用を見る</button>
+  </form>
+
+  <section id="result" class="result-section" hidden aria-live="polite">
+    <h2>診断結果</h2>
+
+    <div class="result-card">
+      <p class="result-plan-label" id="result-plan-name"></p>
+      <p class="result-range" id="result-range"></p>
+      <p class="result-note">※ ヒアリング内容により変動します。正式金額ではありません。</p>
+    </div>
+
+    <div class="result-block">
+      <h3>この金額に含まれる制作範囲</h3>
+      <ul id="result-includes"></ul>
+    </div>
+
+    <div class="result-block">
+      <h3>この概算に含まれないもの</h3>
+      <ul id="result-excludes"></ul>
+    </div>
+
+    <div class="result-block" id="addon-block" hidden>
+      <h3>選択したオプションの加算目安 <span class="tentative-badge">目安</span></h3>
+      <p class="hint">
+        以下はオプションごとの参考加算レンジです。正式な金額はヒアリング後に個別にお見積りします。
+      </p>
+      <ul id="result-addons"></ul>
+    </div>
+
+    <div class="result-block disclaimer-block">
+      <h3>この概算レンジの考え方</h3>
+      <p id="result-reasoning"></p>
+      <p>
+        表示している価格帯は現時点の目安であり、正式な金額ではありません。
+        より正確な金額を知りたい方は、下記から無料のお見積り相談をご利用ください。
+      </p>
+    </div>
+
+    <div class="cta-block">
+      <button type="button" id="cta-contact" class="btn-primary btn-cta" aria-expanded="false" aria-controls="lead-form-panel">
+        この概算でお見積り相談する
+      </button>
+      <button type="button" id="cta-email" class="btn-secondary btn-cta">概算結果をメールで受け取る（準備中）</button>
+      <a href="#" id="cta-line" class="btn-line btn-cta">LINE公式アカウントを友だち追加（準備中）</a>
+      <p class="hint">
+        ※ メール受け取り・LINE連携は現在準備中の機能です。有効化まで今しばらくお待ちください。
+      </p>
+    </div>
+
+    <div id="lead-form-panel" class="lead-form-panel" hidden>
+      <h3>詳細見積り・無料相談のお申し込み</h3>
+      <p class="hint">
+        ※ フォームの送信機能は現在準備中です。送信ボタンを押すと入力内容の確認はできますが、
+        実際の送信はまだ有効化されていません。有効化までもうしばらくお待ちください。
+      </p>
+      <form id="lead-form" novalidate>
+        <div class="lead-field">
+          <label for="lead-name">お名前 <span class="req">必須</span></label>
+          <input type="text" id="lead-name" name="leadName" autocomplete="name" aria-describedby="lead-name-error">
+          <p class="field-error" id="lead-name-error" role="alert" hidden></p>
+        </div>
+        <div class="lead-field">
+          <label for="lead-email">メールアドレス <span class="req">必須</span></label>
+          <input type="email" id="lead-email" name="leadEmail" autocomplete="email" aria-describedby="lead-email-error">
+          <p class="field-error" id="lead-email-error" role="alert" hidden></p>
+        </div>
+        <div class="lead-field">
+          <label for="lead-message">ご相談内容</label>
+          <textarea id="lead-message" name="leadMessage" rows="4"></textarea>
+        </div>
+        <p class="field-error" id="lead-form-error" role="alert" hidden></p>
+        <button type="submit" class="btn-primary btn-cta" id="lead-submit-btn">送信内容を確認する（送信は準備中）</button>
+        <p class="lead-success" id="lead-success" role="status" hidden>
+          ご入力ありがとうございます。内容を確認しました。実際の送信機能は現在準備中のため、この内容はどこにも送信・保存されていません。
+        </p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../../index.html">&larr; LEGACRAFT トップページに戻る</a></p>
+  <p>&copy; LEGACRAFT — Web制作費用シミュレーター</p>
+</footer>
+
+<script src="logic.js"></script>
+</body>
+</html>
