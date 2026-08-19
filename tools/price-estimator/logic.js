@@ -8,19 +8,29 @@
  * 独自に価格を決定しない。オプション加算額のみ、06-price.mdに定義がないため
  * 本ツールの暫定値（仮実装・要確認）として明示する。
  *
- * Privacy: 本ツールはユーザーの入力値を一切サーバー・外部サービスへ送信しない。
- * すべての計算はブラウザ内（クライアントサイド）で完結する。fetch/XHR等の通信コードは
- * このファイル内に一切存在しない（診断結果シミュレーションもリード獲得フォームも、
- * 現状は画面表示・ローカル処理のみ）。
+ * Privacy: 概算診断（診断結果シミュレーション）の計算は一切サーバー・外部サービスへ
+ * 送信せず、ブラウザ内（クライアントサイド）で完結する。fetch/XHR等の通信コードが
+ * 存在するのは、ユーザーが明示的に送信操作を行うリード獲得フォーム（#lead-form）のみ。
  *
- * Lead Pipeline接続: リード獲得フォーム（#lead-form）の送信処理は
- * handleLeadFormSubmit() に集約している。実際のLead Pipelineへの送信は
- * submitLeadToPipeline() を実装（このファイル内に1関数追加する想定）することで
- * 接続できる設計にしてある。本ファイルのバリデーション・UI制御ロジックには影響しない。
+ * Lead Pipeline接続（Wave04 LANE D / TASK-20260818-034、本番同期候補は W05-P1c /
+ * TASK-20260819-034）: リード獲得フォームの送信処理は handleLeadFormSubmit() に集約している。
+ * 実際のLead Pipelineへの送信は submitLeadToPipeline() が担い、lead-system側に新設した
+ * HTTP API（POST /api/lead。../../lead-system/server.mjs）へfetchする。API側でValidation・
+ * 重複統合・Scoring・保存（Human Review対象化）まで一括実行される（lead-system/lib/connector.mjs）。
+ * デフォルトの接続先はローカル開発用（http://localhost:4310/api/lead）。本番URLへの
+ * 切り替えはwindow.LEAD_API_BASE_URLで上書き可能にしてあるが、実ユーザーLead受付を
+ * 有効化する（=本番URLで一般公開する）にはHuman Gate（人による承認）を経ること。
  *
- * Abuse: 外部通信・外部APIが無いため連打によるサーバー負荷やコスト増のリスクはない。
- * 将来実送信を接続した際に備え、リードフォームにはハニーポット欄を用意している
- * （bot対策の下準備。現状は判定のみでブロック処理は行わない＝実送信自体が無いため）。
+ * 本番安全弁（window.LEAD_SUBMIT_ENABLED）: LEAD_API_BASE_URLを設定しただけでは実送信は
+ * 有効化されない。window.LEAD_SUBMIT_ENABLED === true を明示的に設定しない限り、
+ * リード獲得フォーム送信時はこれまで通り「送信は準備中」の安全な表示のみ行い、
+ * submitLeadToPipeline()（実fetch）は一切呼び出さない。lead-system本番API（Render等）の
+ * デプロイ完了とHuman Gate承認がそろって初めて、この2つのフラグ（BASE_URLとENABLED）を
+ * 同時に本番値へ切り替えることを想定した二段階ゲート。
+ *
+ * Abuse: リードフォームにはハニーポット欄（送信時にbot疑いフラグとしてサーバーへ送る）
+ * に加え、API側（lead-system/server.mjs）にも同一IPからの短時間大量リクエストを防ぐ
+ * 簡易レート制限を実装している（多層防御）。
  *
  * 出典：C:\Users\unear\legacraft\site\06-price.md（最終更新 2026-08-01）
  */
@@ -159,17 +169,32 @@
     branding: "ブランディング重視",
   };
 
+  // Lead Pipeline接続先（ローカル開発用デフォルト）。本番URLへの切り替えは
+  // ページ側でwindow.LEAD_API_BASE_URLを設定することで上書きできる（Human Gate対象）。
+  var LEAD_API_BASE_URL =
+    (typeof window !== "undefined" && window.LEAD_API_BASE_URL) || "http://localhost:4310";
+
+  // 実送信の安全弁（デフォルトfalse＝準備中表示のまま）。詳細はファイル冒頭コメント参照。
+  var LEAD_SUBMIT_ENABLED =
+    typeof window !== "undefined" && window.LEAD_SUBMIT_ENABLED === true;
+
+  // 直近の概算診断結果（リード獲得フォーム送信時にplan情報を引き継ぐために保持）。
+  // ユーザー入力値そのものではなく計算結果のみを保持し、フォーム送信前提の一時状態。
+  var lastEstimate = null;
+
   // ---------------------------------------------------------------------
-  // 3. GA4イベント計測ラッパー（FREE_TOOL_MVP_SPEC.md 準拠のイベント名 + 本実装での拡張）
-  //    実GA4未接続のためdataLayerが無い場合はconsoleへ出力するのみ。
+  // 3. イベント計測ラッパー
+  //    実送信の実装詳細（GA4 gtag / GTM dataLayer / console.debugフォールバック）は
+  //    analytics.js（analytics.track）に集約している。イベント名・パラメータの定義は
+  //    GA4_EVENT_TAXONOMY.md を正本とする（TASK-20260819-028）。
+  //    analytics.js未読込の環境でも動作を止めないよう、フォールバックを用意する。
   // ---------------------------------------------------------------------
   function trackEvent(eventName, params) {
-    var payload = Object.assign({ event: eventName }, params || {});
-    if (typeof window !== "undefined" && Array.isArray(window.dataLayer)) {
-      window.dataLayer.push(payload);
+    if (typeof window !== "undefined" && window.analytics && typeof window.analytics.track === "function") {
+      window.analytics.track(eventName, params || {});
     } else {
       // eslint-disable-next-line no-console
-      console.log("[GA4 stub]", payload);
+      console.debug("[analytics stub]", eventName, params || {});
     }
   }
 
@@ -360,11 +385,12 @@
       var willOpen = leadPanel.hidden;
       leadPanel.hidden = !willOpen;
       ctaContact.setAttribute("aria-expanded", String(willOpen));
+      trackEvent("cta_click", { cta_type: "consult", plan: result.plan.key });
       if (willOpen) {
         if (!leadMessage.value) {
           leadMessage.value = summaryText;
         }
-        trackEvent("tool_b_cta_contact_click", { plan: result.plan.key });
+        trackEvent("lead_form_open", { plan: result.plan.key });
         leadPanel.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
@@ -373,7 +399,7 @@
     ctaLine.href = "#line-placeholder";
     ctaLine.onclick = function (e) {
       e.preventDefault();
-      trackEvent("tool_b_cta_line_click", { plan: result.plan.key });
+      trackEvent("cta_click", { cta_type: "line", plan: result.plan.key });
       alert("LINE公式アカウントの友だち追加導線は現在準備中です。有効化まで今しばらくお待ちください。");
     };
 
@@ -381,9 +407,10 @@
     ctaEmail.onclick = function () {
       var emailInput = document.getElementById("email");
       var currentEmail = (emailInput.value || "").trim();
-      trackEvent("tool_b_cta_email_submit", {
+      trackEvent("cta_click", {
+        cta_type: "email",
         plan: result.plan.key,
-        hasEmail: !!currentEmail,
+        has_email: !!currentEmail,
       });
       if (!currentEmail) {
         alert(
@@ -401,10 +428,10 @@
     document.getElementById("result").hidden = false;
     document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "start" });
 
-    trackEvent("tool_b_result_view", {
+    trackEvent("estimator_complete", {
       plan: result.plan.key,
-      rangeMin: result.totalMin,
-      rangeMax: result.totalMax,
+      range_min: result.totalMin,
+      range_max: result.totalMax,
     });
   }
 
@@ -415,17 +442,28 @@
   /**
    * Lead Pipeline 接続ポイント。
    *
-   * 現状はスタブ実装で、実際の送信は行わずローカルで成功扱いにする
-   * （Promiseで解決するのは、将来ここを実際のfetch呼び出しに置き換えても
-   * handleLeadFormSubmit側の呼び出し方を変えずに済むようにするため）。
+   * lead-system側に新設したHTTP API（POST /api/lead）へfetchする。
+   * API側でmapPriceEstimatorPayload → Validation → 重複統合 → Scoring → 保存 →
+   * Human Review対象化まで一括実行される（lead-system/lib/connector.mjs）。
+   * 本関数自体は通知メール送信・自動返信・見積送付・契約・決済を一切行わない。
    *
-   * 実装を差し替える場合は、この関数の中身だけを書き換えればよい。
-   * 引数 leadData: { name, email, message, suspectedBot, plan, rangeMin, rangeMax }
-   * 戻り値: Promise<{ ok: boolean }>
+   * 引数 leadData: { name, email, message, suspectedBot, planKey, planName,
+   *                  totalMin, totalMax, pageCountLabel, designLevelLabel }
+   * 戻り値: Promise<{ ok: boolean }>（ネットワークエラー時はPromiseがreject）
    */
   function submitLeadToPipeline(leadData) {
-    // eslint-disable-next-line no-unused-vars
-    return Promise.resolve({ ok: true, stub: true });
+    return fetch(LEAD_API_BASE_URL + "/api/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(leadData),
+    }).then(function (response) {
+      if (!response.ok) {
+        return { ok: false };
+      }
+      return response.json().catch(function () {
+        return { ok: true };
+      });
+    });
   }
 
   function handleLeadFormSubmit(e) {
@@ -461,29 +499,58 @@
     }
 
     if (hasError) {
-      trackEvent("tool_b_lead_form_validation_error", {});
+      trackEvent("lead_form_validation_error", {});
       return;
     }
 
     var suspectedBot = isHoneypotFilled(document.getElementById("estimator-form"));
+    var estimate = lastEstimate; // 直近の概算診断結果（プラン情報をLeadに引き継ぐ）
     var leadData = {
       name: name,
       email: email,
       message: messageInput.value.trim(),
       suspectedBot: suspectedBot,
+      planKey: estimate ? estimate.result.plan.key : null,
+      planName: estimate ? estimate.result.plan.name : null,
+      totalMin: estimate ? estimate.result.totalMin : null,
+      totalMax: estimate ? estimate.result.totalMax : null,
+      pageCountLabel: estimate
+        ? PAGE_COUNT_LABELS[estimate.data.pageCount] || estimate.data.pageCount
+        : null,
+      designLevelLabel: estimate
+        ? DESIGN_LEVEL_LABELS[estimate.data.designLevel] || estimate.data.designLevel
+        : null,
     };
 
     leadForm.dataset.submitting = "true";
     leadSubmitBtn.disabled = true;
 
-    trackEvent("tool_b_lead_form_submit", { suspectedBot: suspectedBot });
+    trackEvent("lead_submit_start", { suspected_bot: suspectedBot });
+
+    // 安全弁が無効（デフォルト）の間は、実際にはfetchを呼ばず、これまで通り
+    // 「準備中」の確認表示のみ行う（Human Gate: lead-system本番APIデプロイ前の既定挙動）。
+    if (!LEAD_SUBMIT_ENABLED) {
+      leadSuccess.hidden = false;
+      leadForm.querySelectorAll("input, textarea, button").forEach(function (el) {
+        el.disabled = true;
+      });
+      trackEvent("lead_submit_stub_confirmed", { suspected_bot: suspectedBot });
+      return;
+    }
 
     submitLeadToPipeline(leadData)
       .then(function (res) {
         if (res && res.ok) {
+          // 実送信有効時のみ、静的HTMLの「準備中」文言を実送信完了の文言へ差し替える
+          // （UI文言更新案：DIST_CANDIDATE_NOTES.md参照）。
+          leadSuccess.textContent =
+            "送信しました。担当者が内容を確認のうえご連絡いたします。";
           leadSuccess.hidden = false;
           leadForm.querySelectorAll("input, textarea, button").forEach(function (el) {
             el.disabled = true;
+          });
+          trackEvent("lead_submit_success", {
+            plan: estimate ? estimate.result.plan.key : null,
           });
         } else {
           leadForm.dataset.submitting = "false";
@@ -493,7 +560,7 @@
             null,
             "送信に失敗しました。時間をおいて再度お試しください。"
           );
-          trackEvent("tool_b_lead_form_submit_error", {});
+          trackEvent("lead_submit_error", { error_type: "api_error" });
         }
       })
       .catch(function () {
@@ -504,7 +571,7 @@
           null,
           "送信に失敗しました。時間をおいて再度お試しください。"
         );
-        trackEvent("tool_b_lead_form_submit_error", {});
+        trackEvent("lead_submit_error", { error_type: "network_error" });
       });
   }
 
@@ -524,15 +591,15 @@
     var formError = document.getElementById("form-error");
     var isSubmitting = false;
 
-    trackEvent("tool_b_start", {});
+    trackEvent("estimator_start", {});
 
-    // 各設問の回答変化を簡易的にstep_completeとして計測
+    // 各設問（fieldset）の回答変化をestimator_stepとして計測（step番号付き）
     var stepCounters = {};
     form.querySelectorAll("fieldset").forEach(function (fieldset, idx) {
       fieldset.addEventListener("change", function () {
         var stepNo = idx + 1;
         stepCounters[stepNo] = true;
-        trackEvent("tool_b_step_complete", { step: stepNo });
+        trackEvent("estimator_step", { step: stepNo });
       });
     });
 
@@ -550,7 +617,7 @@
 
       // ハニーポット：値が入っていればbotとみなし、UI上は何も起きていないように見せる
       if (isHoneypotFilled(form)) {
-        trackEvent("tool_b_bot_suspected", {});
+        trackEvent("estimator_bot_suspected", {});
         return;
       }
 
@@ -562,7 +629,7 @@
           emailInput,
           "メールアドレスの形式が正しくないようです（例：you@example.com）。未入力のままでも結果は表示できます。"
         );
-        trackEvent("tool_b_validation_error", { field: "email" });
+        trackEvent("estimator_validation_error", { field: "email" });
         return;
       }
 
@@ -570,6 +637,7 @@
         isSubmitting = true;
         submitBtn.disabled = true;
         var result = computeResult(data);
+        lastEstimate = { result: result, data: data };
         renderResult(result, data);
       } finally {
         isSubmitting = false;

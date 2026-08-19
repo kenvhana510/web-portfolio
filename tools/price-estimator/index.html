@@ -223,8 +223,8 @@
     <div id="lead-form-panel" class="lead-form-panel" hidden>
       <h3>詳細見積り・無料相談のお申し込み</h3>
       <p class="hint">
-        ※ フォームの送信機能は現在準備中です。送信ボタンを押すと入力内容の確認はできますが、
-        実際の送信はまだ有効化されていません。有効化までもうしばらくお待ちください。
+        ※ 送信いただいた内容は担当者が確認のうえご連絡します。送信に失敗した場合はエラーが
+        表示されますので、時間をおいて再度お試しいただくか、他の方法でお問い合わせください。
       </p>
       <form id="lead-form" novalidate>
         <div class="lead-field">
@@ -242,9 +242,9 @@
           <textarea id="lead-message" name="leadMessage" rows="4"></textarea>
         </div>
         <p class="field-error" id="lead-form-error" role="alert" hidden></p>
-        <button type="submit" class="btn-primary btn-cta" id="lead-submit-btn">送信内容を確認する（送信は準備中）</button>
+        <button type="submit" class="btn-primary btn-cta" id="lead-submit-btn">この内容で送信する</button>
         <p class="lead-success" id="lead-success" role="status" hidden>
-          ご入力ありがとうございます。内容を確認しました。実際の送信機能は現在準備中のため、この内容はどこにも送信・保存されていません。
+          送信しました。担当者が内容を確認のうえご連絡いたします。
         </p>
       </form>
     </div>
@@ -256,6 +256,41 @@
   <p>&copy; LEGACRAFT — Web制作費用シミュレーター</p>
 </footer>
 
+<!--
+  GA4 Measurement ID 注入ポイント（絶対ルール：実IDをこのファイルに直接ハードコードしない）。
+  実ID（G-xxxxxxxxxx）が提供されたら、下記のプレースホルダーを差し替え、
+  コメントアウトしてある gtag.js の読み込みを有効化する。
+  未設定の間は analytics.js が自動的に console.debug フォールバックで動作する。
+-->
+<script>
+  window.GA4_MEASUREMENT_ID = ""; // TODO: 実Measurement ID提供後にここへ設定する（環境ごとに差し替え可）
+</script>
+<!--
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', window.GA4_MEASUREMENT_ID);
+  window.gtag = gtag;
+</script>
+-->
+
+<!--
+  Lead API 接続先・実送信の切り替えポイント（Human Gate対象、Real Lead Release Preparation Wave）。
+  この2行は「デプロイ先を変える」ためだけの設定ではなく、二段階の安全ゲートを構成する：
+    1. LEAD_API_BASE_URL … 接続先URL。lead-system本番API（Render）は既にデプロイ・稼働確認済み
+       （Wave02 Lane2でCanary 2回PASS）のため、本番URLを設定済み。
+    2. LEAD_SUBMIT_ENABLED … 実送信そのものの有効/無効フラグ。Real Lead Release
+       Production Gate承認により true へ切り替え済み（本番公開版）。false に戻せば
+       フォーム送信は即座に安全な「準備中」表示のみへ復帰し、fetchは発生しなくなる
+       （Rollback手段としてこのファイル1点の変更のみで完結する）。
+-->
+<script>
+  window.LEAD_API_BASE_URL = "https://legacraft-lead-api.onrender.com"; // lead-system本番API（Render）デプロイ済み・稼働確認済み（Wave02 Lane2 Canary PASS）。
+  window.LEAD_SUBMIT_ENABLED = true; // Real Lead Release Production Gate承認済み（本番公開版）。
+</script>
+<script src="analytics.js"></script>
 <script src="logic.js"></script>
 </body>
 </html>
