@@ -8,68 +8,8 @@
  */
 const WORKS_DATA = [
   {
-    slug: "work-01",
-    number: "01",
-    status: "published",
-    title: "株式会社ミライテック 採用LP",
-    industry: "製造業（架空・自動車部品メーカー）",
-    siteType: "採用LP（1ページ）",
-    summary: "未経験求職者の不安に寄り添う構成の採用LP。全17セクション。",
-    url: "https://kenvhana510.github.io/portfolio-mirai-tech-lp/",
-    thumbnail: "images/works/work-01-pc.jpg",
-    period: "2026年7月",
-    disclosure: "掲載可（架空企業を想定した制作サンプル）",
-    purpose:
-      "製造業クライアントの採用LPを想定し、未経験求職者の不安に寄り添う構成・コピー・UXを設計。企画からレスポンシブ実装・実写真の選定・最適化まで一貫して制作。",
-    target: "未経験からの製造業就職を検討している求職者（20〜30代中心）。",
-    challenge:
-      "「未経験で挑戦していいのか」「体力的に続けられるか」といった求職者の不安に、情報を並べるだけでなく構成段階から向き合う必要があった。",
-    designConcept:
-      "ネイビー×ブルーを軸にした製造業らしい信頼感と、実写真・柔らかいコピーで若手求職者が応募しやすい親しみやすさを両立。",
-    informationArchitecture:
-      "FV→働きやすさ（数値カウントアップ）→求職者の不安Q&A→未経験でも始められる3つの理由→仕事内容→成長STEP→職場環境→社員インタビュー→1日の流れ→待遇・福利厚生→募集要項→FAQ→応募フォームの17セクション構成。",
-    designDecisions:
-      "職場環境セクションはネイビー背景で差別化。写真ごとの彩度差はCSSフィルター（saturate/brightness調整）で統一し、画像の再生成を避けた。モバイルはヒーロー画像に強めの上下グラデーション、PCは左右分割グラデーションと使い分け。",
-    wordpressImplementation:
-      "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要、外部依存はGoogle Fontsのみ）。",
-    mobileSupport:
-      "375px起点のモバイルファースト設計。375〜1440pxの主要ブレークポイントで検証し、横スクロールなし・タップ領域44px以上を確認。",
-    qa: "HTML/CSSの構文チェック、Chromiumでの主要ブレークポイント目視確認（320〜1440px）、JobPosting構造化データ・OGP・アクセシビリティ（skip link・aria属性・focus-visible）対応。画像は24MB→720KBまで最適化（WebP＋JPEGフォールバック）。実機（実機Safari等）での確認は未実施。",
-    technologies: "HTML5 / CSS3 / Vanilla JavaScript（ビルドツール不使用）",
-  },
-  {
-    slug: "work-02",
-    number: "02",
-    status: "published",
-    title: "AICHI CLEAN（ハウスクリーニング集客LP）",
-    industry: "ハウスクリーニング（架空・愛知県内サービス）",
-    siteType: "集客LP（1ページ＋フォーム）",
-    summary: "料金の不透明さで踏み出せない層に向けた、早期価格提示型の集客LP。",
-    url: "https://kenvhana510.github.io/aichi-clean-lp/",
-    thumbnail: "images/works/work-02-pc.jpg",
-    period: "2026年7月",
-    disclosure: "掲載可（架空企業を想定した制作サンプル）",
-    purpose:
-      "「頼みたい気持ちはあるが、料金が不透明で踏み出せない」というインサイトに対し、料金を早期提示し、追加費用が発生する理由まで説明することで問い合わせのハードルを下げる集客LP。",
-    target: "共働き・子育て世帯（掃除の時間が取れない層）、高齢者世帯、水回り・エアコンのプロクリーニングを求める層。",
-    challenge:
-      "第1作（採用LP）とは業種・目的の異なる2作目として、コンバージョン導線設計の再現性を証明する必要があった。",
-    designConcept:
-      "白基調＋ネイビーアクセントで清潔感・余白を重視。第1作の濃紺×実写真フルブリードとは意図的に差別化し、CTA色も暖色系の深いオレンジ（#c2410c）を採用して視覚的な書き分けを行った。",
-    informationArchitecture:
-      "HERO→PROBLEM→SOLUTION→WHY CHOOSE US→SERVICE（6カード）→PRICE→Before/After→FLOW（5ステップ）→VOICE→対応エリア→FAQ→最終CTA＋問い合わせフォームの12セクション構成。",
-    designDecisions:
-      "配色はWCAG AA基準でコントラスト比を実測（CTAオレンジ×白文字 5.18:1、ネイビー×白 12.60:1等）。フォントはZen Kaku Gothic Newを採用し第1作のNoto Sans JPと差別化。角丸をやや大きめ（8/16/24px）にして柔らかい印象に調整。",
-    wordpressImplementation:
-      "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要、外部依存はGoogle Fontsのみ）。",
-    mobileSupport:
-      "375px起点のモバイルファースト設計。375〜1440pxで検証し、タップ領域44px未満の箇所（7件）を含め発見した課題をすべて修正済み。",
-    qa: "複数フェーズでのレスポンシブ確認・第三者視点での再監査を実施。画像11枚すべてWebP＋JPEGフォールバックで配信、破損リンク0件、コンソールエラー0件、フォームバリデーション・ハンバーガーメニュー・FAQ開閉の動作確認済み。GitHub Pages公開後に本番URLでの実配信確認も実施済み。",
-    technologies: "HTML5 / CSS3 / Vanilla JavaScript（ビルドツール不使用）／GitHub Pagesで公開",
-  },
-  {
     slug: "work-03",
-    number: "03",
+    number: "01",
     status: "published",
     title: "NESTA ARCHITECTS（ネスタ建築設計）",
     industry: "建築設計（架空・注文住宅設計事務所）",
@@ -100,7 +40,7 @@ const WORKS_DATA = [
   },
   {
     slug: "work-04",
-    number: "04",
+    number: "02",
     status: "published",
     title: "LUMÉA SKIN CLINIC（ルメア スキンクリニック）",
     industry: "美容医療（架空・美容皮膚科クリニック）",
@@ -129,42 +69,74 @@ const WORKS_DATA = [
     technologies: "WordPress 7.0.2 / SWELL 2.17.1 / 子テーマ独自実装 / Contact Form 7",
   },
   {
-    slug: "work-05",
-    number: "05",
+    slug: "work-02",
+    number: "03",
     status: "published",
-    title: "ひだまり介護ステーション（訪問・通所・居宅介護支援）",
-    industry: "介護福祉（架空・訪問介護／通所介護／居宅介護支援）",
-    siteType: "企業サイト（1ページ、静的HTML/CSS/JS）",
-    summary: "訪問介護・通所介護・居宅介護支援をワンストップで紹介する地域密着型介護サービスサイト。",
-    thumbnail: "images/works/work-05-pc.jpg",
-    period: "2026年8月",
-    disclosure: "掲載可（架空の事業者を想定した制作サンプル。実在の法人・施設とは無関係。GitHub Pagesで本番公開済み）",
+    title: "AICHI CLEAN（ハウスクリーニング集客LP）",
+    industry: "ハウスクリーニング（架空・愛知県内サービス）",
+    siteType: "集客LP（1ページ＋フォーム）",
+    summary: "料金の不透明さで踏み出せない層に向けた、早期価格提示型の集客LP。",
+    url: "https://kenvhana510.github.io/aichi-clean-lp/",
+    thumbnail: "images/works/work-02-pc.jpg",
+    period: "2026年7月",
+    disclosure: "掲載可（架空企業を想定した制作サンプル）",
     purpose:
-      "介護福祉サービスの利用検討者・ご家族に向けて、サービス内容と信頼性を分かりやすく伝える1ページ構成の企業サイトを制作。コピー・構成・フォーム実装に加え、コンセプト写真の選定・実装まで一貫して対応。",
-    target: "訪問介護・通所介護・居宅介護支援の利用を検討しているご本人様・ご家族様、ケアマネジャー。",
+      "「頼みたい気持ちはあるが、料金が不透明で踏み出せない」というインサイトに対し、料金を早期提示し、追加費用が発生する理由まで説明することで問い合わせのハードルを下げる集客LP。",
+    target: "共働き・子育て世帯（掃除の時間が取れない層）、高齢者世帯、水回り・エアコンのプロクリーニングを求める層。",
     challenge:
-      "初期実装時点でHero・法人案内セクションに写真が一切なく、コピーや構成の完成度に対して「未完成のテンプレート」に見えるリスクがあった（imagery面のP0課題）。",
+      "第1作（採用LP）とは業種・目的の異なる2作目として、コンバージョン導線設計の再現性を証明する必要があった。",
     designConcept:
-      "ブランドカラー（テラコッタ×クリーム）に合わせたAIコンセプト写真をHero背景・法人案内セクションに実装し、既存のグラデーション演出を保ったまま温かみのあるビジュアルを追加。",
+      "白基調＋ネイビーアクセントで清潔感・余白を重視。第1作の濃紺×実写真フルブリードとは意図的に差別化し、CTA色も暖色系の深いオレンジ（#c2410c）を採用して視覚的な書き分けを行った。",
     informationArchitecture:
-      "TOP（Hero）→法人案内→サービス紹介→選ばれる理由→ご利用者様の声→施設案内→お問い合わせの1ページ構成。",
+      "HERO→PROBLEM→SOLUTION→WHY CHOOSE US→SERVICE（6カード）→PRICE→Before/After→FLOW（5ステップ）→VOICE→対応エリア→FAQ→最終CTA＋問い合わせフォームの12セクション構成。",
     designDecisions:
-      "Hero背景に既存グラデーションを半透明オーバーレイとして重ねたAI生成写真を追加し、テキスト可読性を確保。法人案内セクションに260px高のコンセプト写真カードを追加し、AI生成である旨のキャプションを明記。",
+      "配色はWCAG AA基準でコントラスト比を実測（CTAオレンジ×白文字 5.18:1、ネイビー×白 12.60:1等）。フォントはZen Kaku Gothic Newを採用し第1作のNoto Sans JPと差別化。角丸をやや大きめ（8/16/24px）にして柔らかい印象に調整。",
     wordpressImplementation:
-      "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要）。",
+      "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要、外部依存はGoogle Fontsのみ）。",
     mobileSupport:
-      "既存のモバイルファースト設計（1023px以下でナビ・グリッドを再構成）を踏襲。追加した写真はobject-fit: coverで実装しモバイル幅でも崩れないことを確認。",
-    qa: "Chromeヘッドレスによるデスクトップ（1600px）・モバイル（390px）のフルページ目視確認を実施。写真の表示・キャプション・レイアウト崩れなしを確認。フォーム送信・実機での確認は未実施。",
+      "375px起点のモバイルファースト設計。375〜1440pxで検証し、タップ領域44px未満の箇所（7件）を含め発見した課題をすべて修正済み。",
+    qa: "複数フェーズでのレスポンシブ確認・第三者視点での再監査を実施。画像11枚すべてWebP＋JPEGフォールバックで配信、破損リンク0件、コンソールエラー0件、フォームバリデーション・ハンバーガーメニュー・FAQ開閉の動作確認済み。GitHub Pages公開後に本番URLでの実配信確認も実施済み。",
+    technologies: "HTML5 / CSS3 / Vanilla JavaScript（ビルドツール不使用）／GitHub Pagesで公開",
+  },
+  {
+    slug: "work-01",
+    number: "04",
+    status: "published",
+    title: "株式会社ミライテック 採用LP",
+    industry: "製造業（架空・自動車部品メーカー）",
+    siteType: "採用LP（1ページ）",
+    summary: "未経験求職者の不安に寄り添う構成の採用LP。全17セクション。",
+    url: "https://kenvhana510.github.io/portfolio-mirai-tech-lp/",
+    thumbnail: "images/works/work-01-pc.jpg",
+    period: "2026年7月",
+    disclosure: "掲載可（架空企業を想定した制作サンプル）",
+    purpose:
+      "製造業クライアントの採用LPを想定し、未経験求職者の不安に寄り添う構成・コピー・UXを設計。企画からレスポンシブ実装・実写真の選定・最適化まで一貫して制作。",
+    target: "未経験からの製造業就職を検討している求職者（20〜30代中心）。",
+    challenge:
+      "「未経験で挑戦していいのか」「体力的に続けられるか」といった求職者の不安に、情報を並べるだけでなく構成段階から向き合う必要があった。",
+    designConcept:
+      "ネイビー×ブルーを軸にした製造業らしい信頼感と、実写真・柔らかいコピーで若手求職者が応募しやすい親しみやすさを両立。",
+    informationArchitecture:
+      "FV→働きやすさ（数値カウントアップ）→求職者の不安Q&A→未経験でも始められる3つの理由→仕事内容→成長STEP→職場環境→社員インタビュー→1日の流れ→待遇・福利厚生→募集要項→FAQ→応募フォームの17セクション構成。",
+    designDecisions:
+      "職場環境セクションはネイビー背景で差別化。写真ごとの彩度差はCSSフィルター（saturate/brightness調整）で統一し、画像の再生成を避けた。モバイルはヒーロー画像に強めの上下グラデーション、PCは左右分割グラデーションと使い分け。",
+    wordpressImplementation:
+      "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要、外部依存はGoogle Fontsのみ）。",
+    mobileSupport:
+      "375px起点のモバイルファースト設計。375〜1440pxの主要ブレークポイントで検証し、横スクロールなし・タップ領域44px以上を確認。",
+    qa: "HTML/CSSの構文チェック、Chromiumでの主要ブレークポイント目視確認（320〜1440px）、JobPosting構造化データ・OGP・アクセシビリティ（skip link・aria属性・focus-visible）対応。画像は24MB→720KBまで最適化（WebP＋JPEGフォールバック）。実機（実機Safari等）での確認は未実施。",
     technologies: "HTML5 / CSS3 / Vanilla JavaScript（ビルドツール不使用）",
   },
   {
     slug: "work-06",
-    number: "06",
+    number: "05",
     status: "published",
     title: "潮風ロジスティクス株式会社（幹線輸送・地域配送・倉庫保管）",
     industry: "物流（架空・幹線輸送／地域配送／倉庫保管・3PL）",
     siteType: "企業サイト（1ページ、静的HTML/CSS/JS）",
     summary: "幹線輸送・地域配送・倉庫保管/3PLをワンストップで紹介する物流会社の企業サイト。",
+    url: "https://kenvhana510.github.io/shiokaze-logistics/",
     thumbnail: "images/works/work-06-pc.jpg",
     period: "2026年8月",
     disclosure: "掲載可（架空の企業を想定した制作サンプル。実在の企業・団体とは無関係。GitHub Pagesで本番公開済み）",
@@ -179,6 +151,36 @@ const WORKS_DATA = [
       "TOP（Hero）→会社案内→事業内容→選ばれる理由→お客様の声→拠点・アクセス→お問い合わせの1ページ構成。",
     designDecisions:
       "Hero背景に既存グラデーションを半透明オーバーレイとして重ねたAI生成写真（夜間幹線輸送トラック）を追加。会社案内セクションに260px高の倉庫内コンセプト写真カードを追加し、AI生成である旨のキャプションを明記。",
+    wordpressImplementation:
+      "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要）。",
+    mobileSupport:
+      "既存のモバイルファースト設計（1023px以下でナビ・グリッドを再構成）を踏襲。追加した写真はobject-fit: coverで実装しモバイル幅でも崩れないことを確認。",
+    qa: "Chromeヘッドレスによるデスクトップ（1600px）・モバイル（390px）のフルページ目視確認を実施。写真の表示・キャプション・レイアウト崩れなしを確認。フォーム送信・実機での確認は未実施。",
+    technologies: "HTML5 / CSS3 / Vanilla JavaScript（ビルドツール不使用）",
+  },
+  {
+    slug: "work-05",
+    number: "06",
+    status: "published",
+    title: "ひだまり介護ステーション（訪問・通所・居宅介護支援）",
+    industry: "介護福祉（架空・訪問介護／通所介護／居宅介護支援）",
+    siteType: "企業サイト（1ページ、静的HTML/CSS/JS）",
+    summary: "訪問介護・通所介護・居宅介護支援をワンストップで紹介する地域密着型介護サービスサイト。",
+    url: "https://kenvhana510.github.io/hanamizuki-care/",
+    thumbnail: "images/works/work-05-pc.jpg",
+    period: "2026年8月",
+    disclosure: "掲載可（架空の事業者を想定した制作サンプル。実在の法人・施設とは無関係。GitHub Pagesで本番公開済み）",
+    purpose:
+      "介護福祉サービスの利用検討者・ご家族に向けて、サービス内容と信頼性を分かりやすく伝える1ページ構成の企業サイトを制作。コピー・構成・フォーム実装に加え、コンセプト写真の選定・実装まで一貫して対応。",
+    target: "訪問介護・通所介護・居宅介護支援の利用を検討しているご本人様・ご家族様、ケアマネジャー。",
+    challenge:
+      "初期実装時点でHero・法人案内セクションに写真が一切なく、コピーや構成の完成度に対して「未完成のテンプレート」に見えるリスクがあった（imagery面のP0課題）。",
+    designConcept:
+      "ブランドカラー（テラコッタ×クリーム）に合わせたAIコンセプト写真をHero背景・法人案内セクションに実装し、既存のグラデーション演出を保ったまま温かみのあるビジュアルを追加。",
+    informationArchitecture:
+      "TOP（Hero）→法人案内→サービス紹介→選ばれる理由→ご利用者様の声→施設案内→お問い合わせの1ページ構成。",
+    designDecisions:
+      "Hero背景に既存グラデーションを半透明オーバーレイとして重ねたAI生成写真を追加し、テキスト可読性を確保。法人案内セクションに260px高のコンセプト写真カードを追加し、AI生成である旨のキャプションを明記。",
     wordpressImplementation:
       "WordPressは不使用。HTML/CSS/JSのみ（ビルドツール不要）。",
     mobileSupport:

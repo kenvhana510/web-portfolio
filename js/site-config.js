@@ -25,6 +25,6 @@ const SITE_CONFIG = {
     crowdworks: null,
     lancers: null,
     coconala: null,
-    email: null,
+    email: "info@legacraft.jp",
   },
 };
