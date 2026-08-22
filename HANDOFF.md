@@ -5,6 +5,37 @@
 このリポジトリには README.md も HANDOFF.md も存在しなかったため、本ファイルを新規作成した。
 今後の引き継ぎ事項はこのファイルに追記していく。
 
+---
+
+## WEB PRODUCTION SSOT（2026-08-22 確定）
+
+**本番Web正本（Single Source of Truth）＝ このリポジトリ `~/web-portfolio` のみ。**
+
+`https://legacraft.jp/` は GitHub Pages（`github.com/kenvhana510/web-portfolio`）から配信されている。
+サイトのHTML/CSS/JSを変更する場合は、必ずこのリポジトリを編集する。
+
+### ARCHIVED / DO NOT EDIT
+
+`~/Desktop/web-business-launch/site/` にサイトHTMLの**古い重複コピー**が存在する。
+
+- 本番と乖離している（例：`index.html` の `<title>` が旧版の「… | Web制作ポートフォリオ」のまま。
+  本番は「… | LEGACRAFT」。canonical も `kenvhana510.github.io/web-portfolio/` を指したまま）
+- 旧コピー側にのみ `faq.html` が存在するが、**本番には存在しない**（`https://legacraft.jp/faq.html` は404）
+- **編集しても本番には一切反映されない**
+
+このため旧コピーは **ARCHIVED / DO NOT EDIT** として扱う。
+削除・移動はしない（履歴・経緯の参照用として残す）。
+
+### 判別方法（迷ったとき）
+
+```
+git remote -v   # → github.com/kenvhana510/web-portfolio.git であれば正本
+```
+
+canonical が `https://legacraft.jp/...` になっているかでも判別できる。
+
+---
+
 ## 直近の作業
 
 ### 1. LEGACRAFTブランド統一（コミット `b3512b5`）

@@ -88,7 +88,15 @@
   <section style="padding-top:2rem;">
     <div class="container">
       <h2 class="sr-only">お問い合わせ方法</h2>
-      <div class="contact-grid" id="contact-grid"></div>
+      <!-- 静的フォールバック：JavaScriptが無効・読み込み失敗の場合でも問い合わせ手段を確保する。
+           JS有効時は本ページ下部のスクリプトが innerHTML で全置換するため、重複表示は発生しない。 -->
+      <div class="contact-grid" id="contact-grid">
+        <a class="contact-card is-active" href="mailto:info@legacraft.jp">
+          <h3>メール</h3>
+          <p class="contact-mail">info@legacraft.jp</p>
+          <span class="contact-status is-live">対応中</span>
+        </a>
+      </div>
     </div>
   </section>
 </main>
@@ -140,7 +148,7 @@
     if (email) {
       grid.insertAdjacentHTML(
         "beforeend",
-        '<a class="contact-card reveal is-active" href="mailto:' + email + '"><h3>メール</h3><span class="contact-status is-live">対応中</span></a>'
+        '<a class="contact-card reveal is-active" href="mailto:' + email + '"><h3>メール</h3><p class="contact-mail">' + email + '</p><span class="contact-status is-live">対応中</span></a>'
       );
     }
 
