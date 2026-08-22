@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【無料】LP制作チェックリスト自動生成ツール｜業種・目的別 | LEGACRAFT</title>
+<meta name="description" content="業種と目的を選ぶだけで、あなたのLP（ランディングページ）に必要なチェック項目を自動生成。ファーストビュー・信頼性・CTA・フォーム・モバイル対応・表示速度など、成果につながる観点を網羅した無料チェックリストツールです。">
+<link rel="canonical" href="https://legacraft.jp/tools/lp-checklist/">
+<link rel="icon" href="../../images/favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LEGACRAFT">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="【無料】LP制作チェックリスト自動生成ツール｜業種・目的別">
+<meta property="og:description" content="業種と目的を選ぶだけで、あなたのLPに必要なチェック項目を自動生成。入力内容はサーバーに送信されません。">
+<meta property="og:url" content="https://legacraft.jp/tools/lp-checklist/">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【無料】LP制作チェックリスト自動生成ツール｜LEGACRAFT">
+<meta name="twitter:description" content="業種と目的を選ぶだけで、あなたのLPに必要なチェック項目を自動生成します。">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="eyebrow">FREE TOOL — LP CHECKLIST GENERATOR</p>
+  <h1>LP制作チェックリスト自動生成ツール</h1>
+  <p class="lead">業種と目的を選ぶだけで、あなたのLP（ランディングページ）に必要な<strong>チェック項目</strong>を自動生成します。所要時間 約1分。</p>
+  <p class="privacy-note">
+    🔒 入力内容はどこにも送信されません。生成はすべてお使いのブラウザ内で完結します。
+  </p>
+</header>
+
+<main>
+  <form id="checklist-form" novalidate>
+
+    <fieldset>
+      <legend><span class="step-no">1</span> 業種</legend>
+      <div class="options-grid" role="radiogroup" aria-label="業種">
+        <label class="opt"><input type="radio" name="industry" value="medical" checked> 医療・介護</label>
+        <label class="opt"><input type="radio" name="industry" value="logistics"> 物流・運送</label>
+        <label class="opt"><input type="radio" name="industry" value="ec"> EC・通販</label>
+        <label class="opt"><input type="radio" name="industry" value="legal"> 士業（弁護士・税理士等）</label>
+        <label class="opt"><input type="radio" name="industry" value="restaurant"> 飲食</label>
+        <label class="opt"><input type="radio" name="industry" value="beauty"> 美容・サロン</label>
+        <label class="opt"><input type="radio" name="industry" value="realestate"> 不動産</label>
+        <label class="opt"><input type="radio" name="industry" value="education"> 教育・スクール</label>
+        <label class="opt"><input type="radio" name="industry" value="saas"> IT・SaaS</label>
+        <label class="opt"><input type="radio" name="industry" value="other"> その他・汎用</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-no">2</span> LPの目的</legend>
+      <div class="options-grid" role="radiogroup" aria-label="LPの目的">
+        <label class="opt"><input type="radio" name="purpose" value="inquiry" checked> 問い合わせ獲得</label>
+        <label class="opt"><input type="radio" name="purpose" value="document"> 資料請求</label>
+        <label class="opt"><input type="radio" name="purpose" value="purchase"> 購入・カート</label>
+        <label class="opt"><input type="radio" name="purpose" value="reservation"> 予約獲得</label>
+        <label class="opt"><input type="radio" name="purpose" value="membership"> 会員登録・無料トライアル</label>
+        <label class="opt"><input type="radio" name="purpose" value="phone"> 電話問い合わせ</label>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn-primary" id="submit-btn">チェックリストを生成する</button>
+  </form>
+
+  <section id="result" class="result-section" hidden aria-live="polite">
+    <h2>あなたのLP制作チェックリスト</h2>
+
+    <div class="result-card">
+      <p class="result-plan-label" id="result-condition"></p>
+      <p class="result-range" id="result-count"></p>
+      <p class="result-note">チェックを入れると進捗が下部に反映されます（保存はブラウザ内のみ）。</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <p class="progress-label" id="progress-label"></p>
+    </div>
+
+    <div id="checklist-groups"></div>
+
+    <div class="cta-block">
+      <button type="button" id="btn-print" class="btn-secondary btn-cta">この内容を印刷・PDF保存する</button>
+      <button type="button" id="btn-reset" class="btn-secondary btn-cta">チェックをリセット</button>
+    </div>
+
+    <div class="result-block disclaimer-block">
+      <h3>このチェックリストについて</h3>
+      <p>
+        本チェックリストは業種・目的に応じた一般的な制作観点を機械的に組み合わせて生成した参考リストです。
+        実際のLP設計では、ターゲット顧客の状況や競合状況に応じた個別調整が必要になります。
+        より精度の高いLP設計をご希望の場合は、下記から無料相談をご利用ください。
+      </p>
+    </div>
+
+    <div class="cta-block">
+      <a href="../../contact.html" class="btn-primary btn-cta">LP制作について無料で相談する</a>
+      <a href="../price-estimator/index.html" class="btn-secondary btn-cta">制作費用の概算を3分でチェック</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../../index.html">&larr; LEGACRAFT トップページに戻る</a></p>
+  <p>&copy; LEGACRAFT — LP制作チェックリスト自動生成ツール</p>
+</footer>
+
+<script src="checklist-data.js"></script>
+<script src="logic.js"></script>
+</body>
+</html>
