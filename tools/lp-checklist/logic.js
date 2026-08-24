@@ -16,7 +16,21 @@
   const btnPrint = document.getElementById("btn-print");
   const btnReset = document.getElementById("btn-reset");
 
-  const STORAGE_KEY = "lp-checklist-generator:state";
+  const STORAGE_PREFIX = "lp-checklist-generator:state";
+
+  // Which checklist the saved ticks belong to.
+  //
+  // Item ids are only "chk-<category>-<index>", so a clinic checklist and a
+  // restaurant checklist both contain chk-trust-0 — pointing at different
+  // items. Sharing one storage key meant ticking boxes for one industry and
+  // seeing them reappear, attached to unrelated items, after generating for
+  // another. Namespacing by the two inputs that decide WHICH items exist
+  // keeps each combination's progress to itself.
+  let storageScope = null;
+
+  function storageKey() {
+    return storageScope ? STORAGE_PREFIX + ":" + storageScope : STORAGE_PREFIX;
+  }
 
   /**
    * 業種・目的の組み合わせから、カテゴリごとの項目配列を構築する。
@@ -61,7 +75,7 @@
 
   function loadCheckedState() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(storageKey());
       return raw ? JSON.parse(raw) : {};
     } catch (e) {
       return {};
@@ -70,7 +84,7 @@
 
   function saveCheckedState(state) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(storageKey(), JSON.stringify(state));
     } catch (e) {
       /* localStorage無効環境では保存をスキップ（機能自体は継続動作） */
     }
@@ -78,6 +92,9 @@
 
   function renderChecklist(grouped, industry, purpose) {
     groupsEl.innerHTML = "";
+    // Set BEFORE the first read: every load/save below resolves its key
+    // through storageKey(), so the scope has to be current first.
+    storageScope = industry + ":" + purpose;
     const checkedState = loadCheckedState();
 
     CHECKLIST_CATEGORIES.forEach(function (cat) {
