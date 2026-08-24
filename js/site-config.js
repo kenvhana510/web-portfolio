@@ -35,7 +35,7 @@ const SITE_CONFIG = {
   // プレースホルダー（G-XXXXXXXXXX 等）を入れてはいけない——実IDのつもりで
   // 誤って公開すると「計測している」と誤認したまま何も測れない状態になる。
   analytics: {
-    measurementId: "",
+    measurementId: "G-ZFSK3YRNJL",
   },
 };
 
