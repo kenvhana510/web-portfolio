@@ -178,6 +178,15 @@
   var LEAD_SUBMIT_ENABLED =
     typeof window !== "undefined" && window.LEAD_SUBMIT_ENABLED === true;
 
+  // Lead送信fetchのタイムアウト（ms）。接続先がスリープからの復帰（コールドスタート）に
+  // 20秒以上かかる実測があるため、余裕を持たせて40秒とする。短くしすぎると正常な送信を
+  // 取りこぼすため、これ以上短くしないこと。
+  var LEAD_SUBMIT_TIMEOUT_MS = 40000;
+
+  // 送信ボタンのラベル（送信中表示から復帰する際のフォールバック）。
+  var LEAD_SUBMIT_BTN_LABEL = "この内容で送信する";
+  var LEAD_SUBMIT_BTN_PENDING_LABEL = "送信中…";
+
   // 直近の概算診断結果（リード獲得フォーム送信時にplan情報を引き継ぐために保持）。
   // ユーザー入力値そのものではなく計算結果のみを保持し、フォーム送信前提の一時状態。
   var lastEstimate = null;
@@ -195,6 +204,23 @@
     } else {
       // eslint-disable-next-line no-console
       console.debug("[analytics stub]", eventName, params || {});
+    }
+  }
+
+  // 見積りツールへの流入元を判定する（estimator_viewのentry_source用）。
+  // GA4のpage_referrerでも近いことは分かるが、ファネル上で「サイト内のどのページから
+  // 来たか」を1つのパラメータで比較したいため、ページ名に正規化して持たせる。
+  // 計測のために例外を投げてはならないので、取得に失敗した場合は "direct" に倒す。
+  function resolveEntrySource() {
+    try {
+      var ref = document.referrer;
+      if (!ref) return "direct";
+      var url = new URL(ref);
+      if (url.host !== window.location.host) return "external";
+      var matched = url.pathname.match(/([^/]+)\.html$/);
+      return matched ? matched[1] : "internal";
+    } catch (e) {
+      return "direct";
     }
   }
 
@@ -452,18 +478,107 @@
    * 戻り値: Promise<{ ok: boolean }>（ネットワークエラー時はPromiseがreject）
    */
   function submitLeadToPipeline(leadData) {
-    return fetch(LEAD_API_BASE_URL + "/api/lead", {
+    var controller =
+      typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timeoutId = null;
+    var timedOut = false;
+
+    function clearTimer() {
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+    }
+
+    var options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(leadData),
-    }).then(function (response) {
-      if (!response.ok) {
-        return { ok: false };
-      }
-      return response.json().catch(function () {
-        return { ok: true };
+    };
+
+    if (controller) {
+      options.signal = controller.signal;
+      timeoutId = setTimeout(function () {
+        timedOut = true;
+        controller.abort();
+      }, LEAD_SUBMIT_TIMEOUT_MS);
+    }
+
+    return fetch(LEAD_API_BASE_URL + "/api/lead", options)
+      .then(function (response) {
+        clearTimer();
+        if (!response.ok) {
+          return { ok: false };
+        }
+        return response.json().catch(function () {
+          return { ok: true };
+        });
+      })
+      .catch(function (err) {
+        clearTimer();
+        // タイムアウト（AbortController起因）は通信断と区別できるようにして投げ直す。
+        if (timedOut || (err && err.name === "AbortError")) {
+          var timeoutError = new Error("lead submit timeout");
+          timeoutError.name = "LeadSubmitTimeoutError";
+          throw timeoutError;
+        }
+        throw err;
       });
-    });
+  }
+
+  /**
+   * Lead API プリウォーム（GET /health）。
+   *
+   * Lead送信そのもの（submitLeadToPipeline）とは無関係の、接続先を起こすためだけの
+   * fire-and-forget リクエスト。Leadデータは一切送らず、結果もUIに反映しない。
+   * 見積り入力の最初の操作時に1回だけ実行する（ページ表示だけでは実行しない）。
+   */
+  var leadApiPrewarmDone = false;
+  function prewarmLeadApi() {
+    if (leadApiPrewarmDone) return;
+    leadApiPrewarmDone = true;
+    if (!LEAD_SUBMIT_ENABLED) return; // 実送信無効時は接続先がローカル既定値のため実行しない
+    try {
+      fetch(LEAD_API_BASE_URL + "/health", {
+        method: "GET",
+        mode: "cors",
+        cache: "no-store",
+      }).catch(function () {
+        // プリウォーム失敗はユーザー操作を一切阻害しない（UIにも出さない）
+      });
+    } catch (err) {
+      // fetch未対応など。同上、何もしない。
+    }
+  }
+
+  // 送信中フィードバック（ボタンラベル差し替え＋所要時間の補足表示）。
+  function setLeadSubmitPending(leadSubmitBtn, leadSubmitStatus) {
+    if (leadSubmitBtn) {
+      if (!leadSubmitBtn.dataset.defaultLabel) {
+        leadSubmitBtn.dataset.defaultLabel =
+          (leadSubmitBtn.textContent || "").trim() || LEAD_SUBMIT_BTN_LABEL;
+      }
+      leadSubmitBtn.textContent = LEAD_SUBMIT_BTN_PENDING_LABEL;
+      leadSubmitBtn.setAttribute("aria-busy", "true");
+    }
+    if (leadSubmitStatus) {
+      leadSubmitStatus.textContent =
+        "送信中です。サーバーの状況により最大40秒ほどかかる場合があります。このまま画面を閉じずにお待ちください。";
+      leadSubmitStatus.hidden = false;
+    }
+  }
+
+  // 送信中フィードバックの解除（成功・失敗・タイムアウトのいずれでも必ず呼ぶ）。
+  function clearLeadSubmitPending(leadSubmitBtn, leadSubmitStatus) {
+    if (leadSubmitBtn) {
+      leadSubmitBtn.textContent =
+        leadSubmitBtn.dataset.defaultLabel || LEAD_SUBMIT_BTN_LABEL;
+      leadSubmitBtn.removeAttribute("aria-busy");
+    }
+    if (leadSubmitStatus) {
+      leadSubmitStatus.textContent = "";
+      leadSubmitStatus.hidden = true;
+    }
   }
 
   function handleLeadFormSubmit(e) {
@@ -471,6 +586,7 @@
 
     var leadForm = document.getElementById("lead-form");
     var leadSubmitBtn = document.getElementById("lead-submit-btn");
+    var leadSubmitStatus = document.getElementById("lead-submit-status");
     var leadSuccess = document.getElementById("lead-success");
 
     if (leadForm.dataset.submitting === "true") return; // 連打によるイベント多重発火防止
@@ -524,12 +640,14 @@
 
     leadForm.dataset.submitting = "true";
     leadSubmitBtn.disabled = true;
+    setLeadSubmitPending(leadSubmitBtn, leadSubmitStatus);
 
     trackEvent("lead_submit_start", { suspected_bot: suspectedBot });
 
     // 安全弁が無効（デフォルト）の間は、実際にはfetchを呼ばず、これまで通り
     // 「準備中」の確認表示のみ行う（Human Gate: lead-system本番APIデプロイ前の既定挙動）。
     if (!LEAD_SUBMIT_ENABLED) {
+      clearLeadSubmitPending(leadSubmitBtn, leadSubmitStatus);
       leadSuccess.hidden = false;
       leadForm.querySelectorAll("input, textarea, button").forEach(function (el) {
         el.disabled = true;
@@ -540,6 +658,8 @@
 
     submitLeadToPipeline(leadData)
       .then(function (res) {
+        // 成功・失敗いずれでも送信中表示は必ず解除する（finally相当）
+        clearLeadSubmitPending(leadSubmitBtn, leadSubmitStatus);
         if (res && res.ok) {
           // 実送信有効時のみ、静的HTMLの「準備中」文言を実送信完了の文言へ差し替える
           // （UI文言更新案：DIST_CANDIDATE_NOTES.md参照）。
@@ -563,13 +683,18 @@
           trackEvent("lead_submit_error", { error_type: "api_error" });
         }
       })
-      .catch(function () {
+      .catch(function (err) {
+        // 成功・失敗いずれでも送信中表示は必ず解除する（finally相当）
+        clearLeadSubmitPending(leadSubmitBtn, leadSubmitStatus);
         leadForm.dataset.submitting = "false";
         leadSubmitBtn.disabled = false;
+        var isTimeout = !!(err && err.name === "LeadSubmitTimeoutError");
         showError(
           document.getElementById("lead-form-error"),
           null,
-          "送信に失敗しました。時間をおいて再度お試しください。"
+          isTimeout
+            ? "時間内に応答がありませんでした。お手数ですが、もう一度送信していただくか、info@legacraft.jp まで直接ご連絡ください。"
+            : "送信に失敗しました。時間をおいて再度お試しください。"
         );
         trackEvent("lead_submit_error", { error_type: "network_error" });
       });
@@ -591,17 +716,34 @@
     var formError = document.getElementById("form-error");
     var isSubmitting = false;
 
-    trackEvent("estimator_start", {});
+    // ファネル3段目：見積りツールへの到達。
+    // 従来はここで estimator_start を発火していたが、ページ表示と同義であり
+    // 「見積もりを開始した」とは言えない（2段目と3段目が常に同数になりファネルとして
+    // 機能しない）。到達は estimator_view、開始は下の初回回答時へ分離した。
+    trackEvent("estimator_view", { entry_source: resolveEntrySource() });
 
     // 各設問（fieldset）の回答変化をestimator_stepとして計測（step番号付き）
     var stepCounters = {};
+    // ファネル4段目の発火済みフラグ。fieldsetごとにリスナーが付くため、
+    // これが無いと回答するたびに estimator_start が発火してしまう。
+    var startFired = false;
     form.querySelectorAll("fieldset").forEach(function (fieldset, idx) {
       fieldset.addEventListener("change", function () {
         var stepNo = idx + 1;
+        // ファネル4段目：実際に最初の設問へ回答した瞬間を「開始」とする。
+        if (!startFired) {
+          startFired = true;
+          trackEvent("estimator_start", { first_step: stepNo });
+        }
         stepCounters[stepNo] = true;
         trackEvent("estimator_step", { step: stepNo });
       });
     });
+
+    // 見積りフォームへの最初の操作（選択・入力）でLead APIを1回だけプリウォームする。
+    // ページ表示だけでは実行しない（見積りを触らない訪問者まで接続先を起こさないため）。
+    form.addEventListener("change", prewarmLeadApi);
+    form.addEventListener("input", prewarmLeadApi);
 
     // 入力中にエラー表示をクリア（再入力の摩擦を減らす）
     emailInput.addEventListener("input", function () {
