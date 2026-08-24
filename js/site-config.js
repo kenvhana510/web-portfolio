@@ -23,8 +23,8 @@ const SITE_CONFIG = {
   // 未確定の間は null のままにし、フロント側では「準備中」表示にする。
   contact: {
     crowdworks: null,
-    lancers: null,
-    coconala: null,
+    lancers: "https://www.lancers.jp/menu/detail/1337339",
+    coconala: "https://coconala.com/services/4361612",
     email: "info@legacraft.jp",
   },
 
