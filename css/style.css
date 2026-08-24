@@ -1065,3 +1065,54 @@ section + section {
   animation-duration: 0.4s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ==========================================================================
+   PROSE — 長文の本文ブロック（プライバシーポリシー等）
+   既存のセクション見出し（.section-head）配下に置く読み物用スタイル。
+   このページ以外に影響しないよう .prose 配下のみに限定する。
+   ========================================================================== */
+
+.prose {
+  max-width: 46rem;
+  margin: 0 auto;
+  line-height: 1.9;
+}
+
+.prose h2 {
+  margin: 3rem 0 1rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--color-line-strong);
+  padding-bottom: 0.5rem;
+}
+
+.prose h3 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.prose p {
+  margin: 0 0 1.25rem;
+}
+
+.prose ul {
+  margin: 0 0 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  word-break: break-all;
+}
+
+.prose .policy-updated {
+  margin-top: 3rem;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
