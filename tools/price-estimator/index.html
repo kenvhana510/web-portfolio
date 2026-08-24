@@ -60,6 +60,7 @@
   <p class="lead">9つの質問に答えるだけで、あなたのサイトの<strong>概算費用レンジ</strong>と考え方がわかります。所要時間 約3分。</p>
   <p class="privacy-note">
     🔒 診断の計算はすべてお使いのブラウザ内で完結します。お見積り相談フォームを送信された場合のみ、入力内容と診断結果が当方に送信されます。
+    取得する情報と利用目的は<a href="../../privacy.html">プライバシーポリシー</a>をご覧ください。
   </p>
 </header>
 
@@ -243,6 +244,10 @@
         </div>
         <p class="field-error" id="lead-form-error" role="alert" hidden></p>
         <button type="submit" class="btn-primary btn-cta" id="lead-submit-btn">この内容で送信する</button>
+        <p class="privacy-note">
+          送信前に<a href="../../privacy.html">プライバシーポリシー</a>をご確認ください。
+          お名前・メールアドレス・ご相談内容と診断結果が当方に送信されます。
+        </p>
         <p class="lead-success" id="lead-success" role="status" hidden>
           送信しました。担当者が内容を確認のうえご連絡いたします。
         </p>
@@ -253,6 +258,7 @@
 
 <footer class="site-footer">
   <p><a href="../../index.html">&larr; LEGACRAFT トップページに戻る</a></p>
+  <p><a href="../../privacy.html">プライバシーポリシー</a></p>
   <p>&copy; LEGACRAFT — Web制作費用シミュレーター</p>
 </footer>
 
@@ -262,18 +268,10 @@
   コメントアウトしてある gtag.js の読み込みを有効化する。
   未設定の間は analytics.js が自動的に console.debug フォールバックで動作する。
 -->
-<script>
-  window.GA4_MEASUREMENT_ID = ""; // TODO: 実Measurement ID提供後にここへ設定する（環境ごとに差し替え可）
-</script>
 <!--
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', window.GA4_MEASUREMENT_ID);
-  window.gtag = gtag;
-</script>
+  計測IDは js/site-config.js の analytics.measurementId 1箇所で管理する。
+  このページはそれを読み込むだけで、ここに実IDやプレースホルダーを書かない
+  （2箇所で gtag を起動すると同じイベントが二重計上される）。
 -->
 
 <!--
@@ -290,6 +288,7 @@
   window.LEAD_API_BASE_URL = "https://legacraft-lead-api.onrender.com"; // lead-system本番API（Render）デプロイ済み・稼働確認済み（Wave02 Lane2 Canary PASS）。
   window.LEAD_SUBMIT_ENABLED = true; // Real Lead Release Production Gate承認済み（本番公開版）。
 </script>
+<script src="../../js/site-config.js"></script>
 <script src="analytics.js"></script>
 <script src="logic.js"></script>
 </body>

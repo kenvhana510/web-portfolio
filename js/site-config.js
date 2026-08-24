@@ -27,4 +27,62 @@ const SITE_CONFIG = {
     coconala: null,
     email: "info@legacraft.jp",
   },
+
+  // アクセス解析。実Measurement ID（G-xxxxxxxxxx）を取得したら、
+  // **このファイルのこの1行だけ**を書き換える。他のページを触る必要はない。
+  //
+  // 空文字のうちは計測を一切行わない（gtag.jsも読み込まない）。
+  // プレースホルダー（G-XXXXXXXXXX 等）を入れてはいけない——実IDのつもりで
+  // 誤って公開すると「計測している」と誤認したまま何も測れない状態になる。
+  analytics: {
+    measurementId: "",
+  },
 };
+
+/* ==========================================================================
+   アクセス解析の読み込み
+   ==========================================================================
+   全ページがこのファイルを読み込んでいるため、ここに置くだけで対象ページ
+   すべてに適用される（tools配下の2ページも同様に読み込む）。
+
+   fail-safe: measurementId が空なら gtag.js を要求すらしない。未設定の状態で
+   ネットワークリクエストが飛ぶことも、window.gtag が半端に定義されることも
+   ない。tools/price-estimator/analytics.js は window.gtag の有無を見て
+   console.debug へフォールバックするので、未設定でも例外は起きない。
+   ========================================================================== */
+(function (window, document) {
+  "use strict";
+
+  var id =
+    (window.SITE_CONFIG &&
+      window.SITE_CONFIG.analytics &&
+      window.SITE_CONFIG.analytics.measurementId) ||
+    "";
+
+  // 既存の注入経路（ページ側で window.GA4_MEASUREMENT_ID を直接設定する形）
+  // との互換。どちらか一方が設定されていればよい。
+  if (!id && typeof window.GA4_MEASUREMENT_ID === "string") {
+    id = window.GA4_MEASUREMENT_ID;
+  }
+
+  // プレースホルダーは未設定として扱う。実IDと取り違えたまま公開されるのが
+  // 最悪の結果（計測できていないのに、できているつもりになる）。
+  if (!id || /^G-X+$/i.test(id) || id === "G-XXXXXXXXXX") {
+    window.GA4_MEASUREMENT_ID = "";
+    return;
+  }
+
+  window.GA4_MEASUREMENT_ID = id;
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    window.dataLayer.push(arguments);
+  }
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", id);
+
+  var tag = document.createElement("script");
+  tag.async = true;
+  tag.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+  document.head.appendChild(tag);
+})(window, document);
