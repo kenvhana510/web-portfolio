@@ -527,10 +527,59 @@
    * Human Review対象化まで一括実行される（lead-system/lib/connector.mjs）。
    * 本関数自体は通知メール送信・自動返信・見積送付・契約・決済を一切行わない。
    *
-   * 引数 leadData: { name, email, message, suspectedBot, planKey, planName,
-   *                  totalMin, totalMax, pageCountLabel, designLevelLabel }
+   * 引数 leadData: { name, email, message, suspectedBot, submissionId, planKey,
+   *                  planName, totalMin, totalMax, pageCountLabel, designLevelLabel }
    * 戻り値: Promise<{ ok: boolean }>（ネットワークエラー時はPromiseがreject）
    */
+  // ---------------------------------------------------------------------
+  // 冪等キー（submission_id）
+  // ---------------------------------------------------------------------
+  /**
+   * この送信操作を一意に指す値。contact.html 側の実装と同じ契約で、
+   * サーバーは同じ値の2回目を新しいLeadにせず1回目のlead_idを返す
+   * （status="already_saved"）。
+   *
+   * 一度作ったら消さない。タイムアウトやネットワーク断で「届いたか
+   * 分からない」状態のあと再送しても同じ値が乗り、サーバー側で1件に畳まれる。
+   * ここで作り直すと、防ぎたい重複Leadを自分で作ることになる。
+   *
+   * 送信成功時はフォーム内の要素が全て disabled になるため、同じページから
+   * 別の問い合わせを出す経路は無い。新しい問い合わせはページを開き直した
+   * 時点で新しい値になる。
+   */
+  function getSubmissionId(formEl) {
+    if (!formEl.dataset.submissionId) {
+      formEl.dataset.submissionId = "s-" + randomToken();
+    }
+    return formEl.dataset.submissionId;
+  }
+
+  function randomToken() {
+    try {
+      if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+        return crypto.randomUUID().replace(/-/g, "");
+      }
+      if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+        var buf = new Uint8Array(16);
+        crypto.getRandomValues(buf);
+        var out = "";
+        for (var i = 0; i < buf.length; i++) {
+          out += (buf[i] + 0x100).toString(16).slice(1);
+        }
+        return out;
+      }
+    } catch (e) {
+      // crypto が使えない環境は下のフォールバックへ
+    }
+    // 暗号強度は不要——衝突しなければよく、秘匿性も要らない。
+    // サーバーは英数-_の8文字以上しか受け付けないため、必ず長さを満たす形にする。
+    return (
+      Date.now().toString(36) +
+      Math.random().toString(36).slice(2, 12) +
+      Math.random().toString(36).slice(2, 12)
+    );
+  }
+
   function submitLeadToPipeline(leadData) {
     var controller =
       typeof AbortController !== "undefined" ? new AbortController() : null;
@@ -680,6 +729,7 @@
       email: email,
       message: messageInput.value.trim(),
       suspectedBot: suspectedBot,
+      submissionId: getSubmissionId(leadForm),
       planKey: estimate ? estimate.result.plan.key : null,
       planName: estimate ? estimate.result.plan.name : null,
       totalMin: estimate ? estimate.result.totalMin : null,

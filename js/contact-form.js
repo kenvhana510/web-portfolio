@@ -160,6 +160,56 @@
    *
    * @returns {Promise<{ok: boolean, errorType?: string, status?: number}>}
    */
+  // ---------------------------------------------------------------------
+  // 冪等キー（submission_id）
+  // ---------------------------------------------------------------------
+  /**
+   * この送信操作を一意に指す値。サーバーは同じ値の2回目を新しいLeadにせず、
+   * 1回目のlead_idを返す（status="already_saved"）。
+   *
+   * 一度作ったら**消さない**のが要点。タイムアウトやネットワーク断で
+   * 「届いたか分からない」状態になったあと再送しても同じ値が乗るので、
+   * サーバー側で1件に畳まれる。ここで値を作り直すと、まさに防ぎたい
+   * 重複Leadを自分で作ることになる。
+   *
+   * 成功後も消さない。送信成功時は lockForm() でフォームごと入力不能に
+   * なるため、同じページから別の問い合わせを出す経路は無い。逆に、
+   * 何かの拍子に再送信が起きても同じ値なら害がない。
+   * 新しい問い合わせはページを開き直した時点で新しい値になる。
+   */
+  function getSubmissionId(formEl) {
+    if (!formEl.dataset.submissionId) {
+      formEl.dataset.submissionId = "s-" + randomToken();
+    }
+    return formEl.dataset.submissionId;
+  }
+
+  function randomToken() {
+    try {
+      if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+        return crypto.randomUUID().replace(/-/g, "");
+      }
+      if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+        var buf = new Uint8Array(16);
+        crypto.getRandomValues(buf);
+        var out = "";
+        for (var i = 0; i < buf.length; i++) {
+          out += (buf[i] + 0x100).toString(16).slice(1);
+        }
+        return out;
+      }
+    } catch (e) {
+      // crypto が使えない環境（古いブラウザ・特殊な設定）は下のフォールバックへ
+    }
+    // 最終フォールバック。暗号強度は不要——衝突しなければよく、値の秘匿性も要らない。
+    // サーバー側は英数-_の8文字以上しか受け付けないため、必ず長さを満たす形にする。
+    return (
+      Date.now().toString(36) +
+      Math.random().toString(36).slice(2, 12) +
+      Math.random().toString(36).slice(2, 12)
+    );
+  }
+
   function submitLeadToPipeline(leadData) {
     var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
     var timedOut = false;
@@ -363,6 +413,7 @@
         email: email,
         message: buildMessage(typeLabel, message),
         suspectedBot: suspectedBot,
+        submissionId: getSubmissionId(form),
         planKey: null,
         planName: typeLabel || null,
         totalMin: null,
