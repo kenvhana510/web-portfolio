@@ -32,7 +32,7 @@
  * に加え、API側（lead-system/server.mjs）にも同一IPからの短時間大量リクエストを防ぐ
  * 簡易レート制限を実装している（多層防御）。
  *
- * 出典：C:\Users\unear\legacraft\site\06-price.md（最終更新 2026-08-01）
+ * 出典：legacraft リポジトリ site/06-price.md（最終更新 2026-08-01）
  */
 
 (function () {
