@@ -93,3 +93,106 @@ window.SITE_CONFIG = SITE_CONFIG;
   tag.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
   document.head.appendChild(tag);
 })(window, document);
+
+/* ==========================================================================
+   サイト全体の CTA クリック計測（cta_click）
+   ==========================================================================
+   全10ページがこのファイルを読み込むため、ここに1本置くだけで本体ページも
+   tools配下も同時にカバーできる（js/main.js は tools配下が読まないので不可）。
+
+   委譲（delegation）にしている理由は2つ。
+   1. contact.html の問い合わせカードは JS で後から生成されるため、
+      個別バインドでは取りこぼす。
+   2. リスナーが1本なら二重発火の検証が「1本かどうか」だけで済む。
+
+   既存の price-estimator 側 cta_click との重複はゼロ。理由は構造的で、
+   偶然そうなっているのではない：
+     - #cta-contact / #cta-email は <button> なので a[href] に一致しない
+     - #cta-line は href="#" なので、ページ内アンカーとして除外される
+   下の id 除外は、この構造が将来変わっても壊れないための保険。
+
+   除外に「#result の中は全部」という条件は使わない。tools/lp-checklist にも
+   同名の #result があり、そこにこのツールの主要CTA 2本（相談・見積り）が
+   入っているため、汎用的に切ると計測したい導線ごと落ちる。除外は estimator
+   固有のもの（#lead-form-panel と 3つの id）だけに絞る。
+
+   fail-safe: gtag が無い／GA4 未設定でも、ここで例外を出してリンク遷移を
+   妨げてはならない。preventDefault は一切呼ばず、送信の完了も待たない
+   （gtag は dataLayer への push で即座に返る）。全体を try/catch で包み、
+   計測の失敗がナビゲーションに波及しないようにしている。
+   ========================================================================== */
+(function (window, document) {
+  "use strict";
+
+  // 二重bind防止。同一ページで site-config.js が2回読まれても1本に保つ。
+  if (window.__ctaClickBound) return;
+  window.__ctaClickBound = true;
+
+  // href から CTA の種別を決める。クラス名ではなく href で判定するのは、
+  // 遷移先こそがユーザーの意図であり、デザイン変更で壊れないため。
+  function resolveCtaType(href, rawHref) {
+    if (/^mailto:/i.test(rawHref)) return "email";
+    if (/lancers\.jp/i.test(href)) return "lancers";
+    if (/coconala\.com/i.test(href)) return "coconala";
+    if (/tools\/price-estimator/i.test(href)) return "estimator";
+    if (/tools\/lp-checklist/i.test(href)) return "checklist";
+    if (/contact\.html/i.test(href)) return "contact";
+    if (/service\.html/i.test(href)) return "service";
+    if (/works\.html|case-study\.html/i.test(href)) return "works";
+    return "other";
+  }
+
+  // ヘッダー常設CTAとページ内CTAは意味が違うので分けて記録する。
+  function resolveCtaPosition(a) {
+    if (a.classList && a.classList.contains("nav-cta")) return "header";
+    if (a.closest("footer")) return "footer";
+    var section = a.closest("section");
+    if (section && section.id) return section.id;
+    return "body";
+  }
+
+  document.addEventListener(
+    "click",
+    function (event) {
+      try {
+        var target = event.target;
+        if (!target || typeof target.closest !== "function") return;
+
+        var a = target.closest("a[href]");
+        if (!a) return;
+
+        var rawHref = a.getAttribute("href") || "";
+
+        // ページ内アンカーと javascript: は「CTA」ではないので除外。
+        // #cta-line（href="#"）がここで落ちる。
+        if (!rawHref || rawHref.charAt(0) === "#") return;
+        if (/^javascript:/i.test(rawHref)) return;
+
+        // estimator が自前で cta_click を送る要素・領域だけを除外する。
+        // #lead-form-panel は estimator にしか存在しない。
+        if (a.id === "cta-line" || a.id === "cta-contact" || a.id === "cta-email") return;
+        if (a.closest("#lead-form-panel")) return;
+
+        // GA4 未設定・gtag 未ロード時は何もしない（console にも出さない）。
+        if (typeof window.gtag !== "function") return;
+
+        var text = (a.textContent || "").replace(/[→›»]/g, "");
+        text = text.replace(/\s+/g, " ").trim().slice(0, 100);
+
+        window.gtag("event", "cta_click", {
+          page:
+            (document.body && document.body.getAttribute("data-page")) ||
+            window.location.pathname,
+          href: a.href,
+          cta_type: resolveCtaType(a.href, rawHref),
+          cta_text: text,
+          cta_position: resolveCtaPosition(a),
+        });
+      } catch (e) {
+        // 計測の失敗は握りつぶす。ここで throw するとリンク遷移まで
+        // 巻き込む可能性があるため、意図的に何もしない。
+      }
+    },
+    false
+  );
+})(window, document);
