@@ -3,10 +3,16 @@
  *
  * Web制作費概算シミュレーター — ルールベース算出ロジック（外部通信なし）
  *
- * 価格の正本（source of truth）は常に site/06-price.md。
- * このファイルは06-price.mdの商品A/B/Cをそのままマッピングした「表示レイヤー」であり、
- * 独自に価格を決定しない。オプション加算額のみ、06-price.mdに定義がないため
- * 本ツールの暫定値（仮実装・要確認）として明示する。
+ * 価格の正本（source of truth）は js/site-config.js の SITE_CONFIG.pricing。
+ * このファイルは金額を一切持たず、常にそこから読む「表示レイヤー」である。
+ *
+ * 以前は site/06-price.md の商品A/B/C（8〜18万 / 25〜50万 / 50〜100万）を転記していたが、
+ * あれは「仮」価格であって営業価格ではなかった。結果として、service.html が 3〜6万と
+ * 表示している同じLPを、このツールが 8〜18万と提示していた（2026-08-24 発見。同一商品の
+ * 基本価格が最大4倍ずれていた）。同じことを繰り返さないために、ここには数値を書かない。
+ *
+ * オプション加算額（OPTION_ADDONS）だけは正本側に定義がないため、本ツールの
+ * 暫定値（仮実装・要確認）として残す。
  *
  * Privacy: 概算診断（診断結果シミュレーション）の計算は一切サーバー・外部サービスへ
  * 送信せず、ブラウザ内（クライアントサイド）で完結する。fetch/XHR等の通信コードが
@@ -32,22 +38,20 @@
  * に加え、API側（lead-system/server.mjs）にも同一IPからの短時間大量リクエストを防ぐ
  * 簡易レート制限を実装している（多層防御）。
  *
- * 出典：legacraft リポジトリ site/06-price.md（最終更新 2026-08-01）
+ * 出典：js/site-config.js の SITE_CONFIG.pricing（service.html の料金表示と同一の正本）
  */
 
 (function () {
   "use strict";
 
   // ---------------------------------------------------------------------
-  // 1. プランマスタ（06-price.md 2-2〜2-4 をそのまま転記。価格帯は仮説値）
+  // 1. プランマスタ。金額は持たない——key は SITE_CONFIG.pricing のキーと一致させる。
+  //    名前・価格帯は resolvePlanPricing() が正本から解決して差し込む。
   // ---------------------------------------------------------------------
   var PLANS = {
-    A: {
-      key: "A",
-      name: "商品A｜LP制作",
+    lp: {
+      key: "lp",
       pageDesc: "1ページ完結のランディングページ（目安8〜12セクション）",
-      min: 80000,
-      max: 180000,
       includes: [
         "構成案作成",
         "デザイン",
@@ -65,12 +69,9 @@
         "コピーライティングの一から企画",
       ],
     },
-    B: {
-      key: "B",
-      name: "商品B｜WordPress企業サイト制作",
-      pageDesc: "5〜8ページ（TOP・会社概要・事業内容・実績・採用・お問い合わせ 等）",
-      min: 250000,
-      max: 500000,
+    small: {
+      key: "small",
+      pageDesc: "3〜5ページ（TOP・会社概要・事業内容・お問い合わせ 等）",
       includes: [
         "構成設計",
         "デザイン",
@@ -89,12 +90,9 @@
         "既存システム連携開発",
       ],
     },
-    C: {
-      key: "C",
-      name: "商品C｜高品質WordPressサイト制作（ハイエンド）",
-      pageDesc: "8〜12ページ＋CASE STUDY／実績詳細ページ等",
-      min: 500000,
-      max: 1000000,
+    wordpress: {
+      key: "wordpress",
+      pageDesc: "WordPress（SWELL）による5〜8ページのコーポレートサイト",
       includes: [
         "ヒアリング深掘り",
         "デザインコンセプト設計",
@@ -226,30 +224,59 @@
 
   // ---------------------------------------------------------------------
   // 4. プラン判定ロジック
-  //    ベースはページ数で決定。仕上がり方向性「ブランディング重視」を
-  //    選んだ場合は1段階上のプランへ引き上げる
-  //    （FREE_TOOL_MVP_SPEC.md 1章：「8〜12以上」または「ブランディング重視」→商品C系）。
+  //    ページ数とCMS要否で、service.html が売っている3商品のどれに当たるかを決める。
+  //    「5〜8ページ」だけは静的サイトでも足りるため、WordPress希望かどうかで
+  //    small と wordpress に分かれる（cms 設問がこのために存在する）。
+  //
+  //    仕上がり方向性「ブランディング重視」は従来どおり1段階引き上げる
+  //    （FREE_TOOL_MVP_SPEC.md 1章）。ただし wordpress が最上位なので、そこで頭打ち。
   // ---------------------------------------------------------------------
-  function resolvePlanKey(pageCount, designLevel) {
+  var PLAN_ORDER = ["lp", "small", "wordpress"];
+
+  function resolvePlanKey(pageCount, designLevel, cms) {
     var key;
     if (pageCount === "1") {
-      key = "A";
+      key = "lp";
     } else if (pageCount === "5-8") {
-      key = "B";
+      // cms="self" = 自分で更新したい（WordPress希望）
+      key = cms === "self" ? "wordpress" : "small";
     } else {
-      key = "C"; // "8plus"
+      key = "wordpress"; // "8plus"（上限側。実際は個別見積りになる）
     }
 
     if (designLevel === "branding") {
-      if (key === "A") key = "B";
-      else key = "C";
+      var i = PLAN_ORDER.indexOf(key);
+      if (i > -1 && i < PLAN_ORDER.length - 1) key = PLAN_ORDER[i + 1];
     }
 
     return key;
   }
 
+  // 価格の解決はここ1箇所だけ。SITE_CONFIG が読めない場合は「金額を出さない」を
+  // 選ぶ——古い値や 0 を表示するくらいなら、個別見積りへ誘導したほうが害がない。
+  function resolvePlanPricing(key) {
+    var pricing =
+      (typeof window !== "undefined" &&
+        window.SITE_CONFIG &&
+        window.SITE_CONFIG.pricing) ||
+      null;
+    var entry = pricing && pricing[key];
+    if (!entry || typeof entry.min !== "number" || typeof entry.max !== "number") {
+      return null;
+    }
+    return { name: entry.label, min: entry.min, max: entry.max };
+  }
+
   function formatYen(n) {
     return Math.round(n / 10000) + "万円";
+  }
+
+  // 価格が解決できない場合と、8ページ以上で上限を超える場合の表示を1箇所に集約する。
+  function formatRange(result) {
+    if (result.totalMin === null || result.totalMax === null) {
+      return "個別お見積り";
+    }
+    return formatYen(result.totalMin) + "〜" + formatYen(result.totalMax);
   }
 
   function collectFormData(form) {
@@ -269,8 +296,21 @@
   }
 
   function computeResult(data) {
-    var planKey = resolvePlanKey(data.pageCount, data.designLevel);
-    var plan = PLANS[planKey];
+    var planKey = resolvePlanKey(data.pageCount, data.designLevel, data.cms);
+    var base = PLANS[planKey];
+    var pricing = resolvePlanPricing(planKey);
+
+    // PLANS 側の静的な説明と、正本から来た名前・価格帯を1つのオブジェクトに合成する。
+    // 以降の描画は今までどおり plan.name / plan.min / plan.max を読めばよい。
+    var plan = {
+      key: base.key,
+      name: pricing ? pricing.name : base.pageDesc,
+      pageDesc: base.pageDesc,
+      includes: base.includes,
+      excludes: base.excludes,
+      min: pricing ? pricing.min : null,
+      max: pricing ? pricing.max : null,
+    };
 
     // seo=boost もオプション加算に含める
     var addonKeys = data.addons.slice();
@@ -294,21 +334,37 @@
     return {
       plan: plan,
       addonDetails: addonDetails,
-      totalMin: plan.min + addonMin,
-      totalMax: plan.max + addonMax,
+      totalMin: plan.min === null ? null : plan.min + addonMin,
+      totalMax: plan.max === null ? null : plan.max + addonMax,
+      // 8ページ以上は正本に対応する商品がなく、wordpress の上限を超える。
+      // 金額は出すが「そのまま受注できる額ではない」ことを画面で明示する。
+      needsQuote: data.pageCount === "8plus",
     };
   }
 
   function buildReasoningText(data, result) {
     var pageLabel = PAGE_COUNT_LABELS[data.pageCount] || data.pageCount;
     var designLabel = DESIGN_LEVEL_LABELS[data.designLevel] || data.designLevel;
+    // プラン名は正本（SITE_CONFIG.pricing）から来るので、ここでも一覧を
+    // ハードコードせずに組み立てる。料金ページと必ず同じ名前・同じ並びになる。
+    var planNames = PLAN_ORDER.map(function (key) {
+      var p = resolvePlanPricing(key);
+      return p ? p.name : null;
+    }).filter(Boolean);
+
     var text =
-      "希望ページ数「" + pageLabel + "」と、希望の仕上がり方向性「" + designLabel +
-      "」から、LEGACRAFTの3プラン（商品A｜LP制作／商品B｜WordPress企業サイト制作／商品C｜高品質WordPress" +
-      "サイト制作）のうち「" + result.plan.name + "」が最も近いと判定し、そのプランの価格帯を表示しています。";
+      "希望ページ数「" + pageLabel + "」と、希望の仕上がり方向性「" + designLabel + "」から、" +
+      (planNames.length
+        ? "LEGACRAFTの3プラン（" + planNames.join("／") + "）のうち「" + result.plan.name + "」"
+        : "「" + result.plan.name + "」") +
+      "が最も近いと判定し、そのプランの価格帯を表示しています。";
     if (data.designLevel === "branding") {
       text +=
         "「ブランディング重視」を選択されたため、ページ数のみで判定する場合より1段階上のプランを目安として表示しています。";
+    }
+    if (result.needsQuote) {
+      text +=
+        "8ページ以上は標準プランの範囲を超えるため、表示額は下限の目安です。実際の金額はページ数と要件をうかがったうえで個別にお見積りします。";
     }
     if (result.addonDetails.length > 0) {
       text += "選択いただいたオプションの参考加算額を、プランの価格帯に上乗せして表示しています。";
@@ -362,8 +418,7 @@
   function renderResult(result, data) {
     document.getElementById("result-plan-name").textContent =
       result.plan.name + "（" + result.plan.pageDesc + "）相当";
-    document.getElementById("result-range").textContent =
-      formatYen(result.totalMin) + "〜" + formatYen(result.totalMax);
+    document.getElementById("result-range").textContent = formatRange(result);
     document.getElementById("result-reasoning").textContent = buildReasoningText(data, result);
 
     var includesEl = document.getElementById("result-includes");
@@ -401,8 +456,7 @@
     var leadPanel = document.getElementById("lead-form-panel");
     var leadMessage = document.getElementById("lead-message");
     var summaryText =
-      "【概算診断結果】" + result.plan.name + " / " +
-      formatYen(result.totalMin) + "〜" + formatYen(result.totalMax) +
+      "【概算診断結果】" + result.plan.name + " / " + formatRange(result) +
       "（ページ数：" + (PAGE_COUNT_LABELS[data.pageCount] || data.pageCount) +
       "、仕上がり方向性：" + (DESIGN_LEVEL_LABELS[data.designLevel] || data.designLevel) + "）\n\n";
 

@@ -10,14 +10,23 @@ const SITE_CONFIG = {
   // 2026-07-31確定：実績構築期（初回受注獲得優先）の正式価格。
   // 事業が軌道に乗った後の本来価格帯は sales/application-ready-kit.md 4章・
   // strategy/service-design.md を参照（本サイトには現時点では掲載しない）。
+  // 価格の正本（source of truth）はここ。金額を変えるときはこの min/max だけを
+  // 触る。service.html の表示も price-estimator の概算も、ここから導出される。
+  //
+  // `price`（表示文字列）は下で min/max から自動生成する。手で書かないのは、
+  // 表示と計算が別々に書かれていると必ず片方だけ更新されるため——実際に
+  // price-estimator が legacraft/site/06-price.md の旧「仮」価格を参照し続け、
+  // 公開価格の最大4倍を提示していた（2026-08-24 に発見）。
   pricing: {
-    lp: { label: "LP制作", price: "30,000円〜60,000円" },
-    small: { label: "小規模Webサイト制作", price: "80,000円〜120,000円" },
-    wordpress: { label: "WordPressサイト制作", price: "150,000円〜250,000円" },
+    lp: { label: "LP制作", min: 30000, max: 60000 },
+    small: { label: "小規模Webサイト制作", min: 80000, max: 120000 },
+    wordpress: { label: "WordPressサイト制作", min: 150000, max: 250000 },
   },
 
   // 旧価格（参考・履歴。現在の営業価格としては使用しない）：
   // lp 80,000円〜 / corporate 150,000円〜 / highend 300,000円〜
+  // legacraft/site/06-price.md の 8〜18万 / 25〜50万 / 50〜100万 も「仮」価格で、
+  // 営業価格ではない。参照しないこと。
 
   // 各プラットフォームのアカウント登録・URL確定後にここへ入力する。
   // 未確定の間は null のままにし、フロント側では「準備中」表示にする。
@@ -44,6 +53,19 @@ const SITE_CONFIG = {
 // ため裸の SITE_CONFIG で参照できるが、window 経由で読む下の読み込み処理からは
 // undefined に見えてしまい、Measurement IDを設定しても gtag.js が永久に読まれない。
 // window へ明示的に載せて、両方の参照方法で同じ値が見えるようにする。
+// 表示文字列を min/max から導出する。Intl に依存しないのは、桁区切りの結果を
+// 環境やロケール設定に左右させないため（"30,000円〜60,000円" は既存表示と
+// バイト単位で一致する）。
+(function (config) {
+  function comma(n) {
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  Object.keys(config.pricing).forEach(function (key) {
+    var p = config.pricing[key];
+    p.price = comma(p.min) + "円〜" + comma(p.max) + "円";
+  });
+})(SITE_CONFIG);
+
 window.SITE_CONFIG = SITE_CONFIG;
 
 /* ==========================================================================
