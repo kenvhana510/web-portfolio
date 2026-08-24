@@ -554,6 +554,15 @@
     return formEl.dataset.submissionId;
   }
 
+  /**
+   * 保存が確定したときだけ呼ぶ。次の問い合わせは別の送信なので新しいキーを使う。
+   * 失敗・タイムアウト・通信断では**呼ばない**——そこで作り直すと再送が別の送信に
+   * 見えてしまい、まさに防ぎたい重複Leadを自分で作ることになる。
+   */
+  function clearSubmissionId(formEl) {
+    delete formEl.dataset.submissionId;
+  }
+
   function randomToken() {
     try {
       if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -773,6 +782,10 @@
           leadForm.querySelectorAll("input, textarea, button").forEach(function (el) {
             el.disabled = true;
           });
+          // 保存が確定した時点で冪等キーを手放す。次の問い合わせは別の送信であり、
+          // 同じキーを持ち回るとサーバー側で「同じ送信の再送」として畳まれてしまう。
+          // 失敗・タイムアウト時は**呼ばない**（再送に同じキーを乗せるため）。
+          clearSubmissionId(leadForm);
           trackEvent("lead_submit_success", {
             plan: estimate ? estimate.result.plan.key : null,
           });

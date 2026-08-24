@@ -184,6 +184,15 @@
     return formEl.dataset.submissionId;
   }
 
+  /**
+   * 保存が確定したときだけ呼ぶ。次の問い合わせは別の送信なので新しいキーを使う。
+   * 失敗・タイムアウト・通信断では**呼ばない**——そこで作り直すと、再送が
+   * 別の送信に見えてしまい、まさに防ぎたい重複Leadを自分で作ることになる。
+   */
+  function clearSubmissionId(formEl) {
+    delete formEl.dataset.submissionId;
+  }
+
   function randomToken() {
     try {
       if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -446,6 +455,11 @@
             "送信しました。内容を確認のうえ、通常1〜2営業日以内にご入力のメールアドレス宛にご返信いたします。";
           formSuccess.focus();
           lockForm(); // 送信済みフォームは再送信できない状態にする
+          // 保存が確定した時点で冪等キーを手放す。次に問い合わせがあれば別の送信
+          // なので、同じキーを持ち回ると本物の2件目がサーバー側で「同じ送信の再送」
+          // として畳まれてしまう。lockForm() があるので今日この経路は踏まないが、
+          // 「成功したキーは再利用しない」という契約自体をコードに残しておく。
+          clearSubmissionId(form);
           trackEvent("contact_form_submit_success", {});
           return;
         }
