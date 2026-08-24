@@ -213,9 +213,18 @@
       <button type="button" id="cta-contact" class="btn-primary btn-cta" aria-expanded="false" aria-controls="lead-form-panel">
         この概算でお見積り相談する
       </button>
-      <button type="button" id="cta-email" class="btn-secondary btn-cta">概算結果をメールで受け取る（準備中）</button>
-      <a href="#" id="cta-line" class="btn-line btn-cta">LINE公式アカウントを友だち追加（準備中）</a>
-      <p class="hint">
+      <!--
+        Hidden, not deleted. logic.js assigns to these elements by id as soon
+        as a result renders (ctaLine.href = ..., ctaEmail.onclick = ...), so
+        removing them would throw and take the whole result panel down with
+        them. `hidden` keeps the wiring intact while taking two buttons that
+        do nothing off the screen at the moment a visitor has just seen a
+        price and is deciding whether to talk to us. The note below explains
+        only these two, so it goes with them.
+      -->
+      <button type="button" id="cta-email" class="btn-secondary btn-cta" hidden>概算結果をメールで受け取る（準備中）</button>
+      <a href="#" id="cta-line" class="btn-line btn-cta" hidden>LINE公式アカウントを友だち追加（準備中）</a>
+      <p class="hint" hidden>
         ※ メール受け取り・LINE連携は現在準備中の機能です。有効化まで今しばらくお待ちください。
       </p>
     </div>

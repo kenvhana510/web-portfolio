@@ -434,3 +434,11 @@ legend {
   .site-header h1 { font-size: 1.35rem; }
   .result-range { font-size: 1.5rem; }
 }
+
+/*
+  .btn-line and .btn-secondary both set `display: block`, and a class selector
+  beats the UA stylesheet's `[hidden] { display: none }`. Without this rule the
+  hidden attribute on those buttons is silently ignored and they stay on screen
+  - the failure looks exactly like forgetting to hide them.
+*/
+[hidden] { display: none !important; }

@@ -94,6 +94,13 @@
       csStep("実装", work.wordpressImplementation + "　" + work.technologies) +
       csStep("品質確認", work.qa) +
       csStep("完成", work.mobileSupport) +
+      // Someone who has read a case study to the end is as close to enquiring
+      // as this site ever gets, and until now their only exits were the demo
+      // site and the previous/next work. One CTA, on every case study, using
+      // the same wording and classes as the rest of the site.
+      '<div class="reveal" style="text-align:center;margin:2.5rem 0 1rem;">' +
+      '<a class="btn btn-primary" href="contact.html">CONTACTへ <span class="btn-arrow">→</span></a>' +
+      "</div>" +
       '<div class="cs-nav reveal">' +
       '<a class="btn btn-ghost" href="case-study.html?work=' + prev.slug + '">← WORK ' + prev.number + "</a>" +
       '<a class="btn btn-ghost" href="case-study.html?work=' + next.slug + '">WORK ' + next.number + " →</a>" +
