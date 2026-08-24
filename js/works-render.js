@@ -68,6 +68,15 @@
 
     document.title = "WORK " + work.number + "｜" + work.title + " | CASE STUDY";
 
+    // Every ?work= slug used to report the same canonical, so all six case
+    // studies collapsed into one indexable page. Point canonical and og:url
+    // at the work actually being shown.
+    var csUrl = "https://legacraft.jp/case-study.html?work=" + work.slug;
+    var canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (canonicalEl) canonicalEl.setAttribute("href", csUrl);
+    var ogUrlEl = document.querySelector('meta[property="og:url"]');
+    if (ogUrlEl) ogUrlEl.setAttribute("content", csUrl);
+
     root.innerHTML =
       '<div class="container cs-hero">' +
       '<div class="eyebrow reveal">WORK ' + work.number + '</div>' +

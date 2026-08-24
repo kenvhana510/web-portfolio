@@ -83,7 +83,35 @@
   <section>
     <div class="container">
       <h2 class="sr-only">作品一覧</h2>
-      <div class="works-grid" id="works-grid-all"></div>
+      <!-- renderWorksGrid() replaces the cards below with identical markup on load.
+           They are written out here so a crawler that does not run JavaScript can
+           still reach all six case studies. Keep in sync with js/works-data.js. -->
+      <div class="works-grid" id="works-grid-all">
+        <a class="work-card reveal" href="case-study.html?work=work-03">
+          <div class="work-thumb"><img src="images/works/work-03-pc.jpg" alt="NESTA ARCHITECTS（ネスタ建築設計）（企業サイト（全7ページ、WordPress + SWELL））のスクリーンショット" width="800" height="500" loading="eager" fetchpriority="high" decoding="async"><span class="work-status">公開中</span><span class="work-number">WORK 01</span></div>
+          <div class="work-body"><div class="work-industry">建築設計（架空・注文住宅設計事務所）</div><h3>NESTA ARCHITECTS（ネスタ建築設計）</h3><p>「Quiet Luxury」を軸にしたWordPress＋SWELLの高デザイン企業サイト。</p></div>
+        </a>
+        <a class="work-card reveal" href="case-study.html?work=work-04">
+          <div class="work-thumb"><img src="images/works/work-04-pc.jpg" alt="LUMÉA SKIN CLINIC（ルメア スキンクリニック）（コーポレート＋集客サイト（全11ページ、WordPress + SWELL））のスクリーンショット" width="800" height="500" loading="lazy" decoding="async"><span class="work-status">公開中</span><span class="work-number">WORK 02</span></div>
+          <div class="work-body"><div class="work-industry">美容医療（架空・美容皮膚科クリニック）</div><h3>LUMÉA SKIN CLINIC（ルメア スキンクリニック）</h3><p>「Soft Luxury」を軸にした、20〜40代女性向け美容クリニックサイト。</p></div>
+        </a>
+        <a class="work-card reveal" href="case-study.html?work=work-02">
+          <div class="work-thumb"><img src="images/works/work-02-pc.jpg" alt="AICHI CLEAN（ハウスクリーニング集客LP）（集客LP（1ページ＋フォーム））のスクリーンショット" width="800" height="500" loading="lazy" decoding="async"><span class="work-status">公開中</span><span class="work-number">WORK 03</span></div>
+          <div class="work-body"><div class="work-industry">ハウスクリーニング（架空・愛知県内サービス）</div><h3>AICHI CLEAN（ハウスクリーニング集客LP）</h3><p>料金の不透明さで踏み出せない層に向けた、早期価格提示型の集客LP。</p></div>
+        </a>
+        <a class="work-card reveal" href="case-study.html?work=work-01">
+          <div class="work-thumb"><img src="images/works/work-01-pc.jpg" alt="株式会社ミライテック 採用LP（採用LP（1ページ））のスクリーンショット" width="800" height="500" loading="lazy" decoding="async"><span class="work-status">公開中</span><span class="work-number">WORK 04</span></div>
+          <div class="work-body"><div class="work-industry">製造業（架空・自動車部品メーカー）</div><h3>株式会社ミライテック 採用LP</h3><p>未経験求職者の不安に寄り添う構成の採用LP。全17セクション。</p></div>
+        </a>
+        <a class="work-card reveal" href="case-study.html?work=work-06">
+          <div class="work-thumb"><img src="images/works/work-06-pc.jpg" alt="潮風ロジスティクス株式会社（幹線輸送・地域配送・倉庫保管）（企業サイト（1ページ、静的HTML/CSS/JS））のスクリーンショット" width="800" height="500" loading="lazy" decoding="async"><span class="work-status">公開中</span><span class="work-number">WORK 05</span></div>
+          <div class="work-body"><div class="work-industry">物流（架空・幹線輸送／地域配送／倉庫保管・3PL）</div><h3>潮風ロジスティクス株式会社（幹線輸送・地域配送・倉庫保管）</h3><p>幹線輸送・地域配送・倉庫保管/3PLをワンストップで紹介する物流会社の企業サイト。</p></div>
+        </a>
+        <a class="work-card reveal" href="case-study.html?work=work-05">
+          <div class="work-thumb"><img src="images/works/work-05-pc.jpg" alt="ひだまり介護ステーション（訪問・通所・居宅介護支援）（企業サイト（1ページ、静的HTML/CSS/JS））のスクリーンショット" width="800" height="500" loading="lazy" decoding="async"><span class="work-status">公開中</span><span class="work-number">WORK 06</span></div>
+          <div class="work-body"><div class="work-industry">介護福祉（架空・訪問介護／通所介護／居宅介護支援）</div><h3>ひだまり介護ステーション（訪問・通所・居宅介護支援）</h3><p>訪問介護・通所介護・居宅介護支援をワンストップで紹介する地域密着型介護サービスサイト。</p></div>
+        </a>
+      </div>
     </div>
   </section>
 
