@@ -7,18 +7,22 @@
  * 概算シミュレーター（9問）を経由せずに、その場で相談を送れる導線を用意する。
  * 既存の外部チャネル・メール導線・price-estimatorへのCTAは置き換えず、併存させる。
  *
- * Lead Pipeline接続：送信先は price-estimator（tools/price-estimator/logic.js の
- * submitLeadToPipeline）とまったく同一のAPI契約を用いる。
+ * Lead Pipeline接続：エンドポイントと冪等キーの契約は price-estimator
+ * （tools/price-estimator/logic.js の submitLeadToPipeline）と共有するが、
+ * ボディは経路ごとに分かれている。
  *   エンドポイント : POST {LEAD_API_BASE_URL}/api/lead
  *   ヘッダー       : Content-Type: application/json
- *   ボディ         : { name, email, message, suspectedBot, planKey, planName,
- *                      totalMin, totalMax, pageCountLabel, designLevelLabel }
+ *   ボディ         : { source: "ContactForm", name, email, requestType, message,
+ *                      suspectedBot, submissionId }
  *   成功判定       : HTTPステータスが ok かつ レスポンスJSONの ok === true
- * サーバー側（lead-system/lib/connector.mjs の mapPriceEstimatorPayload）が
- * request_type = planName || planKey || "不明"、budget_range = totalMin/totalMax から
- * 算出するため、本フォームは「相談種別」を planName へマッピングして送る。
- * 診断由来の項目（totalMin/totalMax/pageCountLabel/designLevelLabel/planKey）は
- * 本フォームでは収集しないため、値を捏造せず null のまま送る。
+ * サーバー側は payload.source で振り分ける（lead-system/lib/connector.mjs）。
+ * "ContactForm" は mapContactFormPayload() が受け、request_type = requestType、
+ * budget_range = "不明"（本フォームは予算を尋ねていないため捏造しない）となる。
+ *
+ * 以前は source を送る手段が無く、相談種別を planName に載せて診断由来の項目を null で
+ * 埋めていた。その結果、問い合わせ由来のLeadまで source=FreeTool かつ
+ * lead_source_detail.free_tool="price-estimator" として保存されていた（20260825-001 で実測）。
+ * source を明示することでこの取り違えを解消している。
  *
  * 本番安全弁：price-estimatorと同じ二段階ゲート（window.LEAD_API_BASE_URL /
  * window.LEAD_SUBMIT_ENABLED）を共有する。LEAD_SUBMIT_ENABLED !== true の間は
@@ -415,20 +419,17 @@
       }
 
       var suspectedBot = isHoneypotFilled(form);
-      // サーバー側（mapPriceEstimatorPayload）の期待するキー構造に厳密に合わせる。
-      // 本フォームが収集しない診断由来の項目は「不明」等を捏造せずnullで送る。
+      // source でサーバー側の経路を指定する（mapContactFormPayload へ振り分けられる）。
+      // これを送らないとAPIは price-estimator 用のマッパーへ落ち、問い合わせ由来のLeadまで
+      // source=FreeTool として保存される。
       var leadData = {
+        source: "ContactForm",
         name: name,
         email: email,
+        requestType: typeLabel || "",
         message: buildMessage(typeLabel, message),
         suspectedBot: suspectedBot,
         submissionId: getSubmissionId(form),
-        planKey: null,
-        planName: typeLabel || null,
-        totalMin: null,
-        totalMax: null,
-        pageCountLabel: null,
-        designLevelLabel: null,
       };
 
       setSubmitting(true);
