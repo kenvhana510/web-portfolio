@@ -22,9 +22,18 @@
     );
   }
 
+  // The card used to be one <a> wrapping everything, which left the live demo
+  // two clicks away: nobody browsing WORKS could see the actual site without
+  // first opening a case study. A second <a> could not simply be added — an
+  // anchor inside an anchor is invalid and browsers split the DOM — so the
+  // card is a <div> now, with the case-study link wrapping thumb + body (the
+  // whole-card click is unchanged) and the demo link as its sibling.
+  // Cards without a url render no demo row, same condition renderCaseStudy()
+  // uses to decide between the live link and the DEMO note.
   function workCardHTML(work, index) {
     return (
-      '<a class="work-card reveal" href="case-study.html?work=' + work.slug + '">' +
+      '<div class="work-card reveal">' +
+      '<a class="work-card-main" href="case-study.html?work=' + work.slug + '">' +
       '<div class="work-thumb">' +
       thumbImg(work, index === 0) +
       '<span class="work-status">' + STATUS_LABEL[work.status] + '</span>' +
@@ -35,7 +44,14 @@
       '<h3>' + work.title + '</h3>' +
       '<p>' + work.summary + '</p>' +
       '</div>' +
-      '</a>'
+      '</a>' +
+      (work.url
+        ? '<div class="work-card-actions">' +
+          '<a href="' + work.url + '" target="_blank" rel="noopener">' +
+          'デモを見る <span class="btn-arrow">→</span>' +
+          '</a></div>'
+        : "") +
+      '</div>'
     );
   }
 
