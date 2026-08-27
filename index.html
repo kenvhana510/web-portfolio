@@ -131,6 +131,10 @@
     <div class="chero__stage">
 
       <!-- 背景演出（装飾のみ。読み上げ対象にしない） -->
+
+      <!-- 最奥の層。遠くの光点だけを置き、カメラの前進はこの層の拡大で表す -->
+      <div class="chero__layer chero__depth" aria-hidden="true"></div>
+
       <div class="chero__layer chero__glow" aria-hidden="true"></div>
 
       <div class="chero__layer chero__rays" aria-hidden="true">
@@ -143,22 +147,45 @@
 
       <!-- 領域の接続（WEB / DESIGN / GROWTH / AI / AUTOMATION） -->
       <div class="chero__layer chero__network" aria-hidden="true">
-        <!-- preserveAspectRatio="none" にして SVG 座標(x/10 %, y/10 %) と
-             HTML側のノード・ラベル座標を完全に一致させる。線幅は歪ませない。 -->
-        <svg class="chero__net" viewBox="0 0 1000 1000" preserveAspectRatio="none" focusable="false">
-          <g vector-effect="non-scaling-stroke">
-            <line class="chero__net-line" x1="500" y1="500" x2="185" y2="300" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="830" y2="265" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="865" y2="700" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="500" y2="810" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="140" y2="690" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="185" y1="300" x2="830" y2="265" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="830" y1="265" x2="865" y2="700" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="865" y1="700" x2="500" y2="810" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="500" y1="810" x2="140" y2="690" vector-effect="non-scaling-stroke"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="140" y1="690" x2="185" y2="300" vector-effect="non-scaling-stroke"></line>
+        <!-- viewBox は js/cinematic-hero.js が stage の実寸へ毎回合わせる。
+             等方スケール（1:1）になるので線が歪まず、破線長も画面座標と一致する。
+             線の端点も同スクリプトが HTML 側のノード座標から計算して上書きする。 -->
+        <svg class="chero__net" viewBox="0 0 1000 1000" focusable="false">
+          <g>
+            <line class="chero__net-line" x1="500" y1="500" x2="185" y2="300"></line>
+            <line class="chero__net-line" x1="500" y1="500" x2="830" y2="265"></line>
+            <line class="chero__net-line" x1="500" y1="500" x2="865" y2="700"></line>
+            <line class="chero__net-line" x1="500" y1="500" x2="500" y2="810"></line>
+            <line class="chero__net-line" x1="500" y1="500" x2="140" y2="690"></line>
+            <line class="chero__net-line chero__net-line--soft" x1="185" y1="300" x2="830" y2="265"></line>
+            <line class="chero__net-line chero__net-line--soft" x1="830" y1="265" x2="865" y2="700"></line>
+            <line class="chero__net-line chero__net-line--soft" x1="865" y1="700" x2="500" y2="810"></line>
+            <line class="chero__net-line chero__net-line--soft" x1="500" y1="810" x2="140" y2="690"></line>
+            <line class="chero__net-line chero__net-line--soft" x1="140" y1="690" x2="185" y2="300"></line>
+          </g>
+          <!-- 接続後、線の上を情報が流れていることを示す光 -->
+          <g class="chero__net-flows">
+            <line class="chero__net-flow" x1="500" y1="500" x2="185" y2="300"></line>
+            <line class="chero__net-flow" x1="500" y1="500" x2="830" y2="265"></line>
+            <line class="chero__net-flow" x1="500" y1="500" x2="865" y2="700"></line>
+            <line class="chero__net-flow" x1="500" y1="500" x2="500" y2="810"></line>
+            <line class="chero__net-flow" x1="500" y1="500" x2="140" y2="690"></line>
+            <line class="chero__net-flow" x1="185" y1="300" x2="830" y2="265"></line>
+            <line class="chero__net-flow" x1="830" y1="265" x2="865" y2="700"></line>
+            <line class="chero__net-flow" x1="865" y1="700" x2="500" y2="810"></line>
+            <line class="chero__net-flow" x1="500" y1="810" x2="140" y2="690"></line>
+            <line class="chero__net-flow" x1="140" y1="690" x2="185" y2="300"></line>
           </g>
         </svg>
+        <!-- CORE: 接続のたびにここから六角形の波紋が広がる -->
+        <div class="chero__core">
+          <span class="chero__core-halo"></span>
+          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
+          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
+          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
+          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
+          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
+        </div>
         <div class="chero__labels">
           <span class="chero__node" data-node="web"></span>
           <span class="chero__node" data-node="design"></span>
@@ -173,6 +200,9 @@
         </div>
       </div>
 
+      <!-- IGNITION の引き金。奥の一点から手前へ光が抜ける -->
+      <div class="chero__streak" aria-hidden="true"></div>
+
       <!-- ブランドシード（LEGACRAFTマークの六角形） -->
       <div class="chero__seed" aria-hidden="true">
         <svg viewBox="0 0 200 200" focusable="false">
@@ -180,6 +210,9 @@
           <circle class="chero__seed-core" cx="100" cy="100" r="5"></circle>
         </svg>
       </div>
+
+      <!-- FORMATION の頂点で一度だけ強く光る層 -->
+      <div class="chero__layer chero__flash" aria-hidden="true"></div>
 
       <!-- 通常サイトへの接続用フェード -->
       <div class="chero__layer chero__fade" aria-hidden="true"></div>

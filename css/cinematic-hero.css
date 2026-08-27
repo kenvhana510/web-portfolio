@@ -57,11 +57,14 @@
 
 /* 背景演出レイヤーは静的時には出さない */
 .chero__hint,
+.chero__depth,
+.chero__streak,
 .chero__glow,
 .chero__rays,
 .chero__grid,
 .chero__network,
 .chero__particles,
+.chero__flash,
 .chero__fade {
   opacity: 0;
 }
@@ -209,6 +212,52 @@ html.chero-live .chero__message {
   visibility: hidden;
 }
 
+/* --- 最奥の層 ---
+   遠くの光点を背景1枚で描く。DOM は増やさず、拡大と微細な漂流だけで
+   「巨大な空間の中にいる」奥行きを作る。 */
+.chero__depth {
+  position: absolute;
+  inset: -12%;
+  opacity: 0;
+  will-change: transform, opacity;
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(2.2px 2.2px at 11% 19%, rgba(237, 228, 206, 0.74), transparent),
+    radial-gradient(1.6px 1.6px at 27% 71%, rgba(216, 180, 99, 0.68), transparent),
+    radial-gradient(1.4px 1.4px at 39% 33%, rgba(237, 228, 206, 0.54), transparent),
+    radial-gradient(2.4px 2.4px at 53% 84%, rgba(216, 180, 99, 0.57), transparent),
+    radial-gradient(1.5px 1.5px at 61% 12%, rgba(237, 228, 206, 0.61), transparent),
+    radial-gradient(1.9px 1.9px at 72% 58%, rgba(216, 180, 99, 0.68), transparent),
+    radial-gradient(1.4px 1.4px at 84% 27%, rgba(237, 228, 206, 0.51), transparent),
+    radial-gradient(2.2px 2.2px at 91% 76%, rgba(216, 180, 99, 0.59), transparent),
+    radial-gradient(1.6px 1.6px at 18% 47%, rgba(237, 228, 206, 0.46), transparent),
+    radial-gradient(1.4px 1.4px at 46% 61%, rgba(216, 180, 99, 0.49), transparent),
+    radial-gradient(1.8px 1.8px at 67% 89%, rgba(237, 228, 206, 0.43), transparent),
+    radial-gradient(1.5px 1.5px at 79% 41%, rgba(216, 180, 99, 0.51), transparent),
+    radial-gradient(2.0px 2.0px at 33% 8%, rgba(237, 228, 206, 0.41), transparent),
+    radial-gradient(1.4px 1.4px at 6% 62%, rgba(216, 180, 99, 0.46), transparent);
+}
+
+/* --- IGNITION の引き金。奥の一点から手前へ抜ける光 --- */
+.chero__streak {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: 34vmax;
+  aspect-ratio: 1;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 251, 238, 0.95) 0%,
+    rgba(243, 224, 170, 0.55) 16%,
+    rgba(216, 180, 99, 0.18) 34%,
+    transparent 58%
+  );
+}
+
 /* --- 中心の光 --- */
 .chero__glow {
   position: absolute;
@@ -282,6 +331,12 @@ html.chero-live .chero__message {
   inset: 0;
 }
 
+/* FORMATION で回転・縮小するため、演出中だけ合成レイヤーに固定する。
+   SVG を毎フレーム再ラスタライズさせないための指定。 */
+html.chero-live .chero__network {
+  will-change: transform, opacity;
+}
+
 .chero__net {
   position: absolute;
   inset: 0;
@@ -299,13 +354,75 @@ html.chero-live .chero__message {
   stroke: rgba(237, 228, 206, 0.16);
 }
 
+/* --- CORE: 接続のたびに六角形の波紋を放つ中心 ------------------------------
+   位置指定だけ CSS が持ち、opacity / scale は GSAP が握る。            */
+
+.chero__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.chero__core-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(280px, 38vw, 560px);
+  aspect-ratio: 1;
+  opacity: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(216, 180, 99, 0.30) 0%,
+    rgba(176, 141, 63, 0.11) 38%,
+    transparent 70%
+  );
+}
+
+.chero__pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(150px, 20vw, 260px);
+  aspect-ratio: 1;
+  opacity: 0;
+}
+
+.chero__pulse svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.chero__pulse polygon {
+  fill: none;
+  stroke: var(--chero-gold-lit);
+  /* non-scaling-stroke（HTML側）と組で、波紋が広がっても線は細いまま保つ */
+  stroke-width: 1.6;
+}
+
+/* --- 接続線を流れる光 --- */
+.chero__net-flow {
+  fill: none;
+  stroke: var(--chero-gold-lit);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 30 192;
+  opacity: 0;
+}
+
 .chero__node {
   position: absolute;
-  width: 7px;
-  height: 7px;
-  margin: -3.5px 0 0 -3.5px;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
   background: var(--chero-gold-lit);
   border-radius: 50%;
+  /* 奥から飛来する間も光の粒として見えるようにする */
+  box-shadow:
+    0 0 10px rgba(216, 180, 99, 0.85),
+    0 0 26px rgba(176, 141, 63, 0.45);
 }
 
 /* --- 領域ラベル --- */
@@ -349,6 +466,25 @@ html.chero-live .chero__message {
   border-radius: 50%;
 }
 
+/* --- FORMATION 頂点の閃光 ---
+   opacity だけを動かす。全画面のグラデーションを毎フレーム描き直させないよう
+   合成レイヤーへ載せておく。 */
+.chero__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 0;
+  will-change: opacity;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 248, 228, 0.96) 0%,
+    rgba(240, 218, 158, 0.72) 20%,
+    rgba(196, 160, 82, 0.30) 42%,
+    rgba(176, 141, 63, 0.08) 60%,
+    transparent 74%
+  );
+}
+
 /* --- 通常サイトへのフェード --- */
 .chero__fade {
   position: absolute;
@@ -384,8 +520,59 @@ html.chero-live body.chero-immersive .site-header {
     display: none;
   }
 
+  /* 最奥の層はモバイルでは作り方を変える。
+     全画面へ背景グラデーションを敷くと、dpr 3 の合成レイヤーを描き直す
+     コストが大きく、実測で iOS WebKit の p95 が 40ms → 77ms、
+     長フレームが 0 → 28 件に増えた。
+     そこで要素そのものを 3px にし、6点だけを box-shadow で置く。
+     描画面積は点の合計ぶんだけで済み、奥に空間があることは伝わる。 */
+  .chero__depth {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: none;
+    background-image: none;
+    will-change: auto;
+    box-shadow:
+      -34vw -26vh 0 -0.6px rgba(237, 228, 206, 0.6),
+       27vw -31vh 0 -0.9px rgba(216, 180, 99, 0.55),
+      -29vw  17vh 0 -0.7px rgba(216, 180, 99, 0.5),
+       33vw  23vh 0 -0.5px rgba(237, 228, 206, 0.55),
+      -13vw  34vh 0 -1px   rgba(237, 228, 206, 0.45),
+       15vw -13vh 0 -0.8px rgba(216, 180, 99, 0.48);
+  }
+
+  .chero__streak {
+    width: 40vmax;
+  }
+
   .chero__seed {
     width: clamp(104px, 34vw, 150px);
+  }
+
+  .chero__core-halo {
+    width: clamp(200px, 62vw, 300px);
+  }
+
+  .chero__pulse {
+    width: clamp(120px, 40vw, 190px);
+  }
+
+  .chero__pulse polygon {
+    stroke-width: 1.9;
+  }
+
+  /* 影は1段だけにする。ぼかしの再描画が収束中のコマ落ちに直結するため。 */
+  .chero__node {
+    box-shadow: 0 0 9px rgba(216, 180, 99, 0.9);
+  }
+
+  /* 流光は中心から伸びる5本だけ。外周ぶんの描画を落とす。 */
+  .chero__net-flow:nth-child(n + 6) {
+    display: none;
   }
 
   .chero__label {
@@ -429,6 +616,9 @@ html.chero-calm .chero__rays,
 html.chero-calm .chero__grid,
 html.chero-calm .chero__network,
 html.chero-calm .chero__particles,
+html.chero-calm .chero__depth,
+html.chero-calm .chero__streak,
+html.chero-calm .chero__flash,
 html.chero-calm .chero__hint {
   display: none;
 }
@@ -466,6 +656,9 @@ html.chero-calm .chero__message {
   html:not(.chero-calm) .chero__grid,
   html:not(.chero-calm) .chero__network,
   html:not(.chero-calm) .chero__particles,
+  html:not(.chero-calm) .chero__depth,
+  html:not(.chero-calm) .chero__streak,
+  html:not(.chero-calm) .chero__flash,
   html:not(.chero-calm) .chero__fade,
   html:not(.chero-calm) .chero__hint {
     display: none !important;
