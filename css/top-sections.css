@@ -248,3 +248,223 @@
     transition: none;
   }
 }
+
+/* ==========================================================================
+   PHASE 3 — FINAL CTA / FOOTER
+
+   ページの終わりを、別の部品ではなくブランド体験の終着点にする。
+   FLOW からの 1px 罫線を外し、余白と光だけで受け渡す。
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   FINAL CTA
+   -------------------------------------------------------------------------- */
+
+#final-cta.tcta {
+  position: relative;
+  overflow: hidden;
+  /* FLOW との間を線で切らない。ページはここまで一続き。 */
+  border-top: none;
+  padding-top: clamp(6rem, 12vw, 11rem);
+  padding-bottom: clamp(6rem, 12vw, 11rem);
+  text-align: center;
+  /* 終着点だけ、Deep Green の底をわずかに持ち上げる。 */
+  background: linear-gradient(180deg, var(--color-paper) 0%, #1F352B 46%, #1A2C24 100%);
+}
+
+/* 中央に置くごく弱い光。CTA を照らすだけで、模様にはしない。 */
+#final-cta.tcta::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 120%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(48% 42% at 50% 42%, rgba(176, 141, 63, 0.1) 0%, transparent 70%);
+}
+
+.tcta__inner {
+  position: relative;
+  z-index: 1;
+  /* 見出しが1文字だけ折り返さない幅を確保する */
+  max-width: 54rem;
+  margin: 0 auto;
+}
+
+.tcta__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  /* 他セクションの見出しと同じ設計。終着点なので少しだけ大きく取る。 */
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+  line-height: 1.45;
+  letter-spacing: 0.09em;
+  text-indent: 0.09em;
+  color: var(--color-ink);
+}
+
+.tcta__text {
+  max-width: 32em;
+  margin: clamp(1.4rem, 2.6vw, 2rem) auto 0;
+  font-size: clamp(0.92rem, 1.1vw, 1rem);
+  line-height: 2.1;
+  color: var(--color-ink-soft);
+}
+
+.tcta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.9rem, 1.6vw, 1.3rem);
+  margin-top: clamp(2.4rem, 4.5vw, 3.6rem);
+}
+
+/* ボタンの見え方は既存 .btn のまま。TOP では hover の反転をやめ、
+   枠と色味と矢印だけが動くようにする（他セクションの hover と揃える）。 */
+.tcta__actions .btn-primary:hover,
+.tcta__actions .btn-primary:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border-color: var(--color-ink);
+}
+
+.tcta__actions .btn-ghost:hover,
+.tcta__actions .btn-ghost:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER — 静かに終える。作品化はしない。
+   -------------------------------------------------------------------------- */
+
+.site-footer--top {
+  /* CTA の底から続く。線で区切らない。 */
+  border-top: none;
+  background: #1A2C24;
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(2rem, 4vw, 3rem);
+}
+
+.site-footer--top .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.2rem, 4vw, 3.5rem);
+  align-items: start;
+  justify-content: initial;
+}
+
+@media (min-width: 760px) {
+  .site-footer--top .container {
+    grid-template-columns: auto 1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+}
+
+.tfoot__brand .footer-brand {
+  margin-bottom: clamp(0.9rem, 1.6vw, 1.2rem);
+}
+
+.site-footer--top .brand-word {
+  font-size: 0.92rem;
+  letter-spacing: 0.16em;
+}
+
+/* Hero の一行をここでもう一度置き、ページを同じ言葉で閉じる。 */
+.tfoot__tagline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  line-height: 1.7;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+  opacity: 0.9;
+}
+
+.site-footer--top .footer-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(1.5rem, 3vw, 2.5rem);
+  justify-self: start;
+}
+
+@media (min-width: 760px) {
+  .site-footer--top .footer-nav {
+    grid-template-columns: repeat(4, auto);
+    justify-self: end;
+    column-gap: clamp(1.6rem, 3vw, 3rem);
+  }
+}
+
+.site-footer--top .footer-nav a {
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--color-ink-soft);
+  min-height: 44px;
+}
+
+.site-footer--top .footer-nav a:hover,
+.site-footer--top .footer-nav a:focus-visible {
+  color: var(--color-accent-text);
+}
+
+.site-footer--top .copyright {
+  grid-column: 1 / -1;
+  width: auto;
+  text-align: left;
+  /* 罫線を二重に引かない。余白だけで切り分ける。 */
+  border-top: none;
+  padding-top: clamp(2rem, 4vw, 3.2rem);
+  font-family: var(--font-en);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--color-ink-soft);
+  opacity: 0.72;
+}
+
+/* --------------------------------------------------------------------------
+   PHASE 3 の動き — ここが一番静か
+   -------------------------------------------------------------------------- */
+
+.tcta .reveal {
+  opacity: 0;
+  transform: translateY(7px);
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+
+.tcta .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 899px) {
+  /* 狭い画面では背景のグラデーションを持たせない（WORKS / VALUE と同じ理由）。 */
+  #final-cta.tcta {
+    background: var(--color-paper);
+  }
+
+  #final-cta.tcta::before {
+    display: none;
+  }
+
+  .site-footer--top {
+    background: var(--color-paper);
+  }
+
+  .site-footer--top .copyright {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tcta .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

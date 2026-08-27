@@ -247,25 +247,37 @@
     </div>
   </section>
 
-  <section id="final-cta" style="text-align:center;">
-    <div class="container reveal">
-      <h2>まずは気軽にご相談ください</h2>
-      <p class="sub" style="margin:0 auto 2rem;">料金や納期のご相談だけでも構いません。プラットフォーム経由でお気軽にお問い合わせください。</p>
-      <div class="hero-actions">
-        <a href="contact.html" class="btn btn-primary">CONTACTへ <span class="btn-arrow">→</span></a>
-        <a href="tools/price-estimator/index.html" class="btn btn-ghost">まずは概算費用をチェック（無料） <span class="btn-arrow">→</span></a>
+  <!-- ======================================================================
+       FINAL CTA — ページの終着点。FLOW から罫線で切らず、余白と光で受ける。
+       文言は既存のまま。eyebrow はナビと同じ語（CONTACT）を使っている。
+       ====================================================================== -->
+  <section id="final-cta" class="tsec tcta">
+    <div class="container">
+      <div class="tcta__inner reveal">
+        <span class="tsec__eyebrow">CONTACT</span>
+        <h2 class="tcta__title">まずは気軽にご相談ください</h2>
+        <p class="tcta__text">料金や納期のご相談だけでも構いません。プラットフォーム経由でお気軽にお問い合わせください。</p>
+        <div class="tcta__actions">
+          <a href="contact.html" class="btn btn-primary">CONTACTへ <span class="btn-arrow">&rarr;</span></a>
+          <a href="tools/price-estimator/index.html" class="btn btn-ghost">まずは概算費用をチェック（無料） <span class="btn-arrow">&rarr;</span></a>
+        </div>
       </div>
     </div>
   </section>
 
 </main>
 
-<footer class="site-footer">
+<!-- TOP のフッターだけ site-footer--top を足して上書きする。
+     他ページの .site-footer は css/style.css のまま変わらない。 -->
+<footer class="site-footer site-footer--top">
   <div class="container">
-    <a href="index.html" class="footer-brand brand" aria-label="LEGACRAFT トップページ">
-      <img src="images/brand/icon.svg" alt="" width="24" height="24" class="brand-mark">
-      <span class="brand-word">LEGACRAFT</span>
-    </a>
+    <div class="tfoot__brand">
+      <a href="index.html" class="footer-brand brand" aria-label="LEGACRAFT トップページ">
+        <img src="images/brand/icon.svg" alt="" width="24" height="24" class="brand-mark">
+        <span class="brand-word">LEGACRAFT</span>
+      </a>
+      <p class="tfoot__tagline">未来へ、遺す。</p>
+    </div>
     <nav class="footer-nav" aria-label="フッターナビゲーション">
       <a href="index.html">TOP</a>
       <a href="works.html">WORKS</a>
@@ -275,7 +287,7 @@
       <a href="contact.html">CONTACT</a>
       <a href="privacy.html">PRIVACY</a>
     </nav>
-    <div class="copyright">&copy; 2026 LEGACRAFT — 未来へ、遺す。</div>
+    <div class="copyright">&copy; 2026 LEGACRAFT</div>
   </div>
 </footer>
 
