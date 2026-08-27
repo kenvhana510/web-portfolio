@@ -54,22 +54,22 @@
 <!-- lc-inline-css:end -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/cinematic-hero.css">
+<link rel="stylesheet" href="css/ambient-hero.css">
 <script>
-/* CINEMATIC HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
-   prefers-reduced-motion では低モーション版(chero-calm)を選ぶ。
+/* AMBIENT HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
+   prefers-reduced-motion では動かさないモード(ahero-calm)を選ぶ。
 
-   watchdog: js/cinematic-hero.js が届かないと演出クラスが付いたまま残り、
-   Heroが操作できない暗闇領域になる。初期化フラグが立たなければクラスを外して
-   静的Heroへ復旧する。正常時は cinematic-hero.js が初期化完了時点で即解除する。 */
+   watchdog: js/ambient-hero.js が届かないと演出クラスが付いたまま残る。
+   初期化フラグが立たなければクラスを外して静止 Hero へ復旧する。
+   正常時は ambient-hero.js が初期化完了時点で即解除する。 */
 (function () {
   try {
     var root = document.documentElement;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    root.className += reduced ? " chero-calm" : " chero-live";
-    window.__cheroWatchdog = setTimeout(function () {
-      if (!window.__cheroReady) {
-        root.className = root.className.replace(/\s*chero-(live|calm)\b/g, "");
+    root.className += reduced ? " ahero-calm" : " ahero-live";
+    window.__aheroWatchdog = setTimeout(function () {
+      if (!window.__aheroReady) {
+        root.className = root.className.replace(/\s*ahero-(live|calm)\b/g, "");
       }
     }, 3000);
   } catch (e) {}
@@ -123,115 +123,36 @@
 <main id="main">
 
   <!-- ======================================================================
-       CINEMATIC HERO v1
-       VOID → IGNITION → CONNECTION → FORMATION → MESSAGE → TRANSITION
-       JS無効 / GSAP読込失敗 / reduced motion のときは静的Heroとして表示される。
+       AMBIENT HERO v1
+       開いた時点で完成している Hero。スクロールには一切ぶら下がらない。
+       動くのは背景だけで、コピーと CTA は最初から固定で出ている。
+       JS無効 / GSAP読込失敗 / reduced motion では静止した Hero になる。
        ====================================================================== -->
-  <section class="chero" id="hero" aria-label="LEGACRAFT — 未来へ、遺す。">
-    <div class="chero__stage">
+  <section class="ahero" id="hero" aria-label="LEGACRAFT — 未来へ、遺す。">
+    <div class="ahero__stage">
 
-      <!-- 背景演出（装飾のみ。読み上げ対象にしない） -->
+      <!-- 背景（装飾のみ。読み上げ対象にしない） -->
+      <canvas class="ahero__layer ahero__space" aria-hidden="true"></canvas>
+      <div class="ahero__layer ahero__depth" aria-hidden="true"></div>
+      <div class="ahero__layer ahero__glow" aria-hidden="true"></div>
+      <div class="ahero__layer ahero__pass" aria-hidden="true"></div>
 
-      <!-- 奥行きのある粒子空間。WebGL が使えるときだけ描かれ、
-           使えないときは下の chero__depth（CSS版）がそのまま残る -->
-      <canvas class="chero__layer chero__space" aria-hidden="true"></canvas>
-
-      <!-- 最奥の層（CSS版）。WebGL が動いた場合は JS が畳む -->
-      <div class="chero__layer chero__depth" aria-hidden="true"></div>
-
-      <div class="chero__layer chero__glow" aria-hidden="true"></div>
-
-      <div class="chero__layer chero__rays" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </div>
-
-      <div class="chero__layer chero__grid" aria-hidden="true"></div>
-
-      <div class="chero__layer chero__particles" aria-hidden="true"></div>
-
-      <!-- 領域の接続（WEB / DESIGN / GROWTH / AI / AUTOMATION） -->
-      <div class="chero__layer chero__network" aria-hidden="true">
-        <!-- viewBox は js/cinematic-hero.js が stage の実寸へ毎回合わせる。
-             等方スケール（1:1）になるので線が歪まず、破線長も画面座標と一致する。
-             線の端点も同スクリプトが HTML 側のノード座標から計算して上書きする。 -->
-        <svg class="chero__net" viewBox="0 0 1000 1000" focusable="false">
-          <g>
-            <line class="chero__net-line" x1="500" y1="500" x2="185" y2="300"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="830" y2="265"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="865" y2="700"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="500" y2="810"></line>
-            <line class="chero__net-line" x1="500" y1="500" x2="140" y2="690"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="185" y1="300" x2="830" y2="265"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="830" y1="265" x2="865" y2="700"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="865" y1="700" x2="500" y2="810"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="500" y1="810" x2="140" y2="690"></line>
-            <line class="chero__net-line chero__net-line--soft" x1="140" y1="690" x2="185" y2="300"></line>
-          </g>
-          <!-- 接続後、線の上を情報が流れていることを示す光 -->
-          <g class="chero__net-flows">
-            <line class="chero__net-flow" x1="500" y1="500" x2="185" y2="300"></line>
-            <line class="chero__net-flow" x1="500" y1="500" x2="830" y2="265"></line>
-            <line class="chero__net-flow" x1="500" y1="500" x2="865" y2="700"></line>
-            <line class="chero__net-flow" x1="500" y1="500" x2="500" y2="810"></line>
-            <line class="chero__net-flow" x1="500" y1="500" x2="140" y2="690"></line>
-            <line class="chero__net-flow" x1="185" y1="300" x2="830" y2="265"></line>
-            <line class="chero__net-flow" x1="830" y1="265" x2="865" y2="700"></line>
-            <line class="chero__net-flow" x1="865" y1="700" x2="500" y2="810"></line>
-            <line class="chero__net-flow" x1="500" y1="810" x2="140" y2="690"></line>
-            <line class="chero__net-flow" x1="140" y1="690" x2="185" y2="300"></line>
-          </g>
-        </svg>
-        <!-- CORE: 接続のたびにここから六角形の波紋が広がる -->
-        <div class="chero__core">
-          <span class="chero__core-halo"></span>
-          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
-          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
-          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
-          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
-          <span class="chero__pulse"><svg viewBox="0 0 200 200" focusable="false"><polygon points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70" vector-effect="non-scaling-stroke"></polygon></svg></span>
-        </div>
-        <div class="chero__labels">
-          <span class="chero__node" data-node="web"></span>
-          <span class="chero__node" data-node="design"></span>
-          <span class="chero__node" data-node="growth"></span>
-          <span class="chero__node" data-node="ai"></span>
-          <span class="chero__node" data-node="automation"></span>
-          <span class="chero__label" data-node="web">WEB</span>
-          <span class="chero__label" data-node="design">DESIGN</span>
-          <span class="chero__label" data-node="growth">GROWTH</span>
-          <span class="chero__label" data-node="ai">AI</span>
-          <span class="chero__label" data-node="automation">AUTOMATION</span>
-        </div>
-      </div>
-
-      <!-- IGNITION の引き金。奥の一点から手前へ光が抜ける -->
-      <div class="chero__streak" aria-hidden="true"></div>
-
-      <!-- ブランドシード（LEGACRAFTマークの六角形） -->
-      <div class="chero__seed" aria-hidden="true">
+      <div class="ahero__seed" aria-hidden="true">
         <svg viewBox="0 0 200 200" focusable="false">
-          <polygon class="chero__seed-hex" points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70"></polygon>
-          <circle class="chero__seed-core" cx="100" cy="100" r="5"></circle>
+          <polygon class="ahero__seed-hex" points="100,40 151.96,70 151.96,130 100,160 48.04,130 48.04,70"></polygon>
+          <circle class="ahero__seed-core" cx="100" cy="100" r="4"></circle>
         </svg>
       </div>
 
-      <!-- FORMATION の頂点で一度だけ強く光る層 -->
-      <div class="chero__layer chero__flash" aria-hidden="true"></div>
-
-      <!-- 通常サイトへの接続用フェード -->
-      <div class="chero__layer chero__fade" aria-hidden="true"></div>
-
-      <div class="chero__message">
-        <p class="chero__brand">LEGACRAFT</p>
-        <h1 class="chero__headline">未来へ、遺す。</h1>
-        <p class="chero__sub">高品質なWordPressサイトを、スマホでも美しく。個人事業主・中小企業のためのWeb制作 ― WordPress（SWELL）専門。構成設計からデザイン、実装、QAまで一貫して担当します。</p>
-        <div class="chero__actions">
+      <div class="ahero__message">
+        <p class="ahero__brand">LEGACRAFT</p>
+        <h1 class="ahero__headline">未来へ、遺す。</h1>
+        <p class="ahero__sub">高品質なWordPressサイトを、スマホでも美しく。個人事業主・中小企業のためのWeb制作 ― WordPress（SWELL）専門。構成設計からデザイン、実装、QAまで一貫して担当します。</p>
+        <div class="ahero__actions">
           <a href="works.html" class="btn btn-primary">WORKSを見る <span class="btn-arrow">&rarr;</span></a>
           <a href="contact.html" class="btn btn-ghost">相談する</a>
         </div>
       </div>
-
-      <div class="chero__hint" aria-hidden="true">SCROLL</div>
 
     </div>
   </section>
@@ -334,8 +255,7 @@
 <script src="js/works-data.js"></script>
 <script src="js/hero-space.js" defer></script>
 <script src="js/vendor/gsap.min.js" defer></script>
-<script src="js/vendor/ScrollTrigger.min.js" defer></script>
-<script src="js/cinematic-hero.js" defer></script>
+<script src="js/ambient-hero.js" defer></script>
 <script src="js/main.js"></script>
 <script src="js/works-render.js"></script>
 <script>renderWorksGrid("#works-grid-top");</script>

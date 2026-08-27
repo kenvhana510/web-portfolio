@@ -1,0 +1,302 @@
+/* ==========================================================================
+   LEGACRAFT — AMBIENT HERO v1
+
+   スクロールで進む映像ではなく、開いた時点で完成していて、
+   そのあとも静かに生き続けている Hero。
+
+   設計方針:
+   - Hero の高さは1画面ぶん。1回スクロールすれば WORKS へ抜けられる。
+   - コピーと CTA は最初から読める。表示のためにスクロールを要求しない。
+   - 動くのは背景だけ。文字と CTA は動かさない。
+   - 演出用のスタイルは html.ahero-live が付いたときだけ効く。
+     付かない場合（JS無効・GSAP読込失敗・CSS未達）は静止した Hero になる。
+   - prefers-reduced-motion では html.ahero-calm。背景の動きを全部止める。
+   - ブランド基準（brand/brand-guidelines.md v1.0）: Deep Green / Gold / Ivory、
+     セリフ体、角丸なし、左右対称、余白重視。
+   ========================================================================== */
+
+.ahero {
+  --ahero-void: #060B09;
+  --ahero-deep: #0C1611;
+  --ahero-gold: #B08D3F;
+  --ahero-gold-lit: #D8B463;
+
+  position: relative;
+  /* section の共通 padding は使わない（stage 側が余白を持つ） */
+  padding: 0;
+  background: var(--ahero-void);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+
+/* 通常サイトへの接続部。section + section の罫線で切れ目を作らない */
+.ahero + section {
+  border-top: none;
+}
+
+.ahero__stage {
+  /* js/ambient-hero.js がスタイルシートの到達をこの値で確かめる。
+     消さないこと。 */
+  --ahero-css: 1;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* ヘッダー(77px)を差し引いても1画面に収まり、
+     1スクロールで次のセクションへ抜けられる高さ。 */
+  min-height: 92vh;
+  min-height: 92svh;
+  padding: clamp(3rem, 7vw, 5rem) 0;
+  overflow: hidden;
+  background:
+    radial-gradient(118% 88% at 50% 44%, rgba(176, 141, 63, 0.14) 0%, rgba(176, 141, 63, 0.035) 34%, transparent 68%),
+    linear-gradient(180deg, var(--ahero-void) 0%, var(--ahero-deep) 58%, var(--color-paper) 100%);
+}
+
+.ahero__layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   背景 — 粒子空間（WebGL, デスクトップのみ）
+   -------------------------------------------------------------------------- */
+
+.ahero__space {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   背景 — 遠くの光点（CSS版）
+   モバイルではこちらだけを使う。3px の要素に box-shadow で 6 点。
+   全画面へグラデーションを敷くと iOS WebKit の描画コストが跳ね上がるため。
+   -------------------------------------------------------------------------- */
+
+.ahero__depth {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow:
+    -34vw -26vh 0 -0.6px rgba(237, 228, 206, 0.6),
+     27vw -31vh 0 -0.9px rgba(216, 180, 99, 0.55),
+    -29vw  17vh 0 -0.7px rgba(216, 180, 99, 0.5),
+     33vw  23vh 0 -0.5px rgba(237, 228, 206, 0.55),
+    -13vw  34vh 0 -1px   rgba(237, 228, 206, 0.45),
+     15vw -13vh 0 -0.8px rgba(216, 180, 99, 0.48);
+}
+
+/* --------------------------------------------------------------------------
+   背景 — 中央の光
+   -------------------------------------------------------------------------- */
+
+.ahero__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(118vh, 108vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(216, 180, 99, 0.26) 0%,
+    rgba(176, 141, 63, 0.13) 24%,
+    rgba(176, 141, 63, 0.045) 46%,
+    transparent 70%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   背景 — たまに横切る光
+   十数秒に一度だけ、遠くを細い光が通る。
+   -------------------------------------------------------------------------- */
+
+.ahero__pass {
+  position: absolute;
+  top: 38%;
+  left: 0;
+  width: 34vw;
+  height: 1px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(216, 180, 99, 0.5), transparent);
+}
+
+/* --------------------------------------------------------------------------
+   ブランドシード（六角形マーク）
+   -------------------------------------------------------------------------- */
+
+/* コピーの後ろに大きく薄く置く。マークを潰さず、文字も邪魔しない。 */
+.ahero__seed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(340px, 46vw, 620px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ahero__seed svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ahero__seed-hex {
+  fill: none;
+  stroke: var(--ahero-gold);
+  stroke-width: 1.1;
+  opacity: 0.17;
+}
+
+/* 中心の光点はコピーと重なる位置なので出さない。
+   中央の明かりは .ahero__glow が受け持つ。 */
+.ahero__seed-core {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   コピーと CTA — 最初から読める。動かさない。
+   -------------------------------------------------------------------------- */
+
+.ahero__message {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.ahero__brand {
+  margin: 0 0 clamp(1rem, 2.4vw, 1.6rem);
+  font-family: var(--font-en);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: var(--color-accent-text);
+}
+
+.ahero__headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 8.4vw, 5.4rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-indent: 0.06em;
+}
+
+.ahero__sub {
+  max-width: 34em;
+  margin: clamp(1.4rem, 3vw, 2.2rem) auto 0;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  line-height: 2;
+  color: var(--color-ink-soft);
+}
+
+.ahero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: clamp(2rem, 4vw, 2.8rem);
+}
+
+/* --------------------------------------------------------------------------
+   初回だけの立ち上がり
+   スクロールとは無関係。0.8 秒で一度だけ。以降は動かさない。
+   -------------------------------------------------------------------------- */
+
+html.ahero-live .ahero__message > * {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: ahero-rise 0.8s var(--ease-out) forwards;
+}
+
+html.ahero-live .ahero__message > *:nth-child(1) { animation-delay: 0.05s; }
+html.ahero-live .ahero__message > *:nth-child(2) { animation-delay: 0.14s; }
+html.ahero-live .ahero__message > *:nth-child(3) { animation-delay: 0.24s; }
+html.ahero-live .ahero__message > *:nth-child(4) { animation-delay: 0.34s; }
+
+@keyframes ahero-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   演出モード時だけ、背景レイヤーの初期値を JS に渡す
+   -------------------------------------------------------------------------- */
+
+html.ahero-live .ahero__stage,
+html.ahero-calm .ahero__stage {
+  /* 背景の明るさは JS が持つので、ここでは何もしない */
+  background-image:
+    radial-gradient(118% 88% at 50% 44%, rgba(176, 141, 63, 0.14) 0%, rgba(176, 141, 63, 0.035) 34%, transparent 68%),
+    linear-gradient(180deg, var(--ahero-void) 0%, var(--ahero-deep) 58%, var(--color-paper) 100%);
+}
+
+/* --------------------------------------------------------------------------
+   モバイル
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .ahero__stage {
+    min-height: 88vh;
+    min-height: 88svh;
+  }
+
+  /* 画面が狭いぶん文字と重なりやすい。さらに薄く、少し小さく。 */
+  .ahero__seed {
+    width: clamp(250px, 66vw, 340px);
+  }
+
+  .ahero__seed-hex {
+    stroke-width: 1.1;
+    opacity: 0.1;
+  }
+
+  .ahero__glow {
+    width: min(128vh, 132vw);
+  }
+
+  /* WebGL はモバイルでは初期化しない */
+  .ahero__space {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — 背景の動きは全部止める。
+   コピーと CTA は最初から出ている。
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html.ahero-live .ahero__message > *,
+  html.ahero-calm .ahero__message > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .ahero__space,
+  .ahero__pass {
+    display: none;
+  }
+}

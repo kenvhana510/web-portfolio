@@ -26,6 +26,8 @@
     "uniform float uSize;",
     "uniform float uSizeMax;",
     "uniform float uSpread;",
+    "uniform vec2 uMouse;",
+    "uniform float uCam;",
     "varying float vAlpha;",
     "varying float vTint;",
     "void main() {",
@@ -34,6 +36,10 @@
     "  float depth = mix(0.06, 1.0, z);",
     "  vec2 drift = vec2(sin(uTime * 0.06 + aSeed * 31.4), cos(uTime * 0.045 + aSeed * 21.7)) * 0.02;",
     "  vec2 p = (aPos.xy * uSpread + drift) / depth;",
+    /* カメラがごく小さく揺れる。周期はおよそ 15 秒と 19 秒。 */
+    "  p += vec2(sin(uTime * 0.42), cos(uTime * 0.33)) * 0.012 * uCam / depth;",
+    /* マウス視差。手前の層ほど大きく動くので奥行きが強調される。 */
+    "  p += uMouse * 0.055 / depth;",
     "  p.x /= uAspect;",
     "  gl_Position = vec4(p, 0.0, 1.0);",
     "  gl_PointSize = min(uSize * aLayer.x / depth, uSizeMax);",
@@ -171,6 +177,11 @@
     var uSize = gl.getUniformLocation(prog, "uSize");
     var uSizeMax = gl.getUniformLocation(prog, "uSizeMax");
     var uSpread = gl.getUniformLocation(prog, "uSpread");
+    var uMouse = gl.getUniformLocation(prog, "uMouse");
+    var uCam = gl.getUniformLocation(prog, "uCam");
+
+    gl.uniform2f(uMouse, 0, 0);
+    gl.uniform1f(uCam, opts.mode === "ambient" ? 1 : 0);
 
     gl.uniform3f(gl.getUniformLocation(prog, "uGold"), 0.847, 0.706, 0.388);
     gl.uniform3f(gl.getUniformLocation(prog, "uIvory"), 0.929, 0.894, 0.808);
@@ -206,7 +217,14 @@
     /* --- スクロール量を前進量へ ---------------------------------------
        VOID はほとんど進まず、IGNITION で一気に手前へ抜け、
        CONNECTION の手前で減速して既存の network へ主役を渡す。   */
+    var ambientMode = opts.mode === "ambient";
+
     function pushFor(p, elapsed) {
+      /* アンビエントではスクロールを見ない。時間だけで、ごくゆっくり進む。
+         層ごとの速度差（0.42 / 1.0 / 2.15）が掛かるので、
+         いちばん手前の層でも一周およそ 40 秒。飛んでくる速さにはしない。 */
+      if (ambientMode) return elapsed * 0.0115;
+
       var ambient = elapsed * 0.009;   /* 止まっていても空間は生きている */
       var scroll;
       if (p <= 0.18) {
@@ -261,8 +279,22 @@
 
     canvas.addEventListener("webglcontextlost", handleLost, false);
 
+    var mouseX = 0, mouseY = 0;
+
     return {
+      /* アンビエント用。背景だけをマウスへ弱く寄せる。 */
+      setMouse: function (x, y) {
+        mouseX = x;
+        mouseY = y;
+        gl.useProgram(prog);
+        gl.uniform2f(uMouse, mouseX, mouseY);
+      },
+      /* Hero が見えていない / タブが非表示のときに描画を止めるための入口 */
+      setActive: function (on) {
+        if (on) { start(); } else { stop(); }
+      },
       setProgress: function (p) {
+        if (ambientMode) return;   /* アンビエントではスクロールに従属しない */
         progress = p;
         /* 空間が主役なのは CONNECTION の手前まで。以降は描かない。 */
         if (p < 0.5) { start(); } else { stop(); }
@@ -274,6 +306,7 @@
         canvas.removeEventListener("webglcontextlost", handleLost, false);
       },
       info: {
+        mode: ambientMode ? "ambient" : "scroll",
         particles: count,
         layers: { background: "60% x0.62 speed0.42", midground: "30% x1.0 speed1.0", foreground: "10% x1.92 speed2.15" },
         dprCap: dprCap,
