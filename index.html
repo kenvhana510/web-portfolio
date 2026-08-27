@@ -132,7 +132,11 @@
 
       <!-- 背景演出（装飾のみ。読み上げ対象にしない） -->
 
-      <!-- 最奥の層。遠くの光点だけを置き、カメラの前進はこの層の拡大で表す -->
+      <!-- 奥行きのある粒子空間。WebGL が使えるときだけ描かれ、
+           使えないときは下の chero__depth（CSS版）がそのまま残る -->
+      <canvas class="chero__layer chero__space" aria-hidden="true"></canvas>
+
+      <!-- 最奥の層（CSS版）。WebGL が動いた場合は JS が畳む -->
       <div class="chero__layer chero__depth" aria-hidden="true"></div>
 
       <div class="chero__layer chero__glow" aria-hidden="true"></div>
@@ -328,6 +332,7 @@
 
 <script src="js/site-config.js"></script>
 <script src="js/works-data.js"></script>
+<script src="js/hero-space.js" defer></script>
 <script src="js/vendor/gsap.min.js" defer></script>
 <script src="js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="js/cinematic-hero.js" defer></script>

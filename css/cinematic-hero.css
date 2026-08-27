@@ -57,6 +57,7 @@
 
 /* 背景演出レイヤーは静的時には出さない */
 .chero__hint,
+.chero__space,
 .chero__depth,
 .chero__streak,
 .chero__glow,
@@ -210,6 +211,17 @@ html.chero-live .chero__rays {
 html.chero-live .chero__message {
   opacity: 0;
   visibility: hidden;
+}
+
+/* --- 粒子空間（WebGL） ---
+   描画は js/hero-space.js が持つ。ここは置き場所だけを決める。 */
+.chero__space {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* --- 最奥の層 ---
@@ -616,6 +628,7 @@ html.chero-calm .chero__rays,
 html.chero-calm .chero__grid,
 html.chero-calm .chero__network,
 html.chero-calm .chero__particles,
+html.chero-calm .chero__space,
 html.chero-calm .chero__depth,
 html.chero-calm .chero__streak,
 html.chero-calm .chero__flash,
@@ -656,6 +669,7 @@ html.chero-calm .chero__message {
   html:not(.chero-calm) .chero__grid,
   html:not(.chero-calm) .chero__network,
   html:not(.chero-calm) .chero__particles,
+  html:not(.chero-calm) .chero__space,
   html:not(.chero-calm) .chero__depth,
   html:not(.chero-calm) .chero__streak,
   html:not(.chero-calm) .chero__flash,

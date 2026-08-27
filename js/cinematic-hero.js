@@ -83,6 +83,7 @@
   var fade = $(".chero__fade");
   var particleWrap = $(".chero__particles");
 
+  var spaceCanvas = $(".chero__space");
   var depth = $(".chero__depth");
   var streak = $(".chero__streak");
   var flash = $(".chero__flash");
@@ -221,6 +222,7 @@
     gsap.set(flowLines, { opacity: 0, strokeDashoffset: 0 });
     gsap.set(flash, { opacity: 0 });
     gsap.set(depth, { opacity: 0.42, scale: 1, x: 0, y: 0 });
+    gsap.set(spaceCanvas, { opacity: space ? 0.55 : 0 });
     gsap.set(streak, { x: 0, y: 0, xPercent: -50, yPercent: -50, opacity: 0, scale: 0.04 });
     gsap.set(labels, { x: 0, xPercent: -50, yPercent: -50, opacity: 0, y: 10 });
     gsap.set(particles, { opacity: 0, scale: 0.6 });
@@ -268,6 +270,7 @@
     return function cleanup() {
       setFlow(false);
       setAmbient(false);
+      if (space) space.stop();
       tl.scrollTrigger && tl.scrollTrigger.kill();
       tl.kill();
     };
@@ -286,13 +289,47 @@
 
   var flowPlaying = false;
 
+  /* --- 粒子空間（WebGL） --------------------------------------------------
+     VOID / IGNITION の「空間」だけを WebGL に任せる。
+     生成できない・途中でコンテキストを失った場合は CSS 版（chero__depth）へ
+     そのまま戻す。WebGL が動かなくても Hero は壊れない。            */
+  var space = null;
+
+  /* 粒子空間はデスクトップ級の環境だけで使う。
+     UA は見ない。既存の演出分岐と同じ幅の条件に、粗いポインタ（＝タッチ主体の
+     端末）の除外を足しただけにしてある。モバイルではこの下の create() を
+     呼ばないので、WebGL コンテキストもシェーダーも描画ループも作られない。 */
+  var spaceAllowed = window.matchMedia("(min-width: 768px)").matches &&
+    !window.matchMedia("(pointer: coarse)").matches;
+
+  function dropSpace() {
+    space = null;
+    if (spaceCanvas) spaceCanvas.style.display = "none";
+    if (depth) depth.style.display = "";
+  }
+
+  if (!reduced && spaceAllowed && spaceCanvas && window.LegacraftHeroSpace) {
+    space = window.LegacraftHeroSpace.create(spaceCanvas, { onLost: dropSpace });
+  }
+
+  if (space) {
+    /* WebGL が受け持つので、CSS 版の光点は二重に出さない */
+    if (depth) depth.style.display = "none";
+    /* ScrollTrigger の onUpdate は progress 0 では発火しない。
+       最初の一画面から空間が生きているよう、ここで描き始める。 */
+    space.setProgress(0);
+  } else if (spaceCanvas) {
+    spaceCanvas.style.display = "none";
+  }
+
   /* --- 前半の常時微動 ------------------------------------------------------
      VOID が止め絵に見えないよう、最奥の層をごくゆっくり漂わせる。
      スクロールとは独立させ、見えている区間だけ動かす。            */
   var ambient = null;
 
-  if (depth) {
-    /* 数px の漂流だけ。モバイルでは 6 点の光がわずかに揺れる。 */
+  if (depth && !space) {
+    /* 数px の漂流だけ。モバイルでは 6 点の光がわずかに揺れる。
+       WebGL 版はシェーダー側で漂うので、こちらは動かさない。 */
     ambient = gsap.timeline({ repeat: -1, yoyo: true, paused: true, defaults: { ease: "sine.inOut" } })
       .to(depth, { x: 5, y: -3.5, duration: 11 }, 0);
   }
@@ -342,9 +379,10 @@
           );
           setFlow(self.progress > 0.54 && self.progress < 0.8);
           setAmbient(self.progress < 0.46);
+          if (space) space.setProgress(self.progress);
         },
-        onLeave: function () { document.body.classList.remove("chero-immersive"); setFlow(false); setAmbient(false); },
-        onLeaveBack: function () { document.body.classList.remove("chero-immersive"); setFlow(false); setAmbient(false); }
+        onLeave: function () { document.body.classList.remove("chero-immersive"); setFlow(false); setAmbient(false); if (space) space.stop(); },
+        onLeaveBack: function () { document.body.classList.remove("chero-immersive"); setFlow(false); setAmbient(false); if (space) space.stop(); }
       }
     });
 
@@ -356,10 +394,12 @@
        毎フレーム描き直すため、寄りはデスクトップだけで使う。
        モバイルの前進感はシードと中心光の拡大が担う。            */
     var PUSH = 1.16;
+    /* WebGL が動いているときは前進もシェーダー側が持つ。
+       CSS の拡大は使わず、canvas の明るさだけを動かす。 */
+    var farField = space ? spaceCanvas : depth;
 
-    tl.to(depth, { opacity: 0.62, duration: 9, ease: "power1.out" }, 0);
-    /* 最初の一画面から光点が見えていないと、ただの暗い帯に見えてしまう */
-    if (isDesktop) tl.to(depth, { scale: PUSH, duration: 18, ease: "power1.in" }, 0);
+    tl.to(farField, { opacity: space ? 0.9 : 0.62, duration: 9, ease: "power1.out" }, 0);
+    if (isDesktop && !space) tl.to(depth, { scale: PUSH, duration: 18, ease: "power1.in" }, 0);
 
     tl.to(seed, { opacity: 1, scale: 1, duration: 14 }, 0)
       .to(glow, { opacity: 0.07, duration: 12 }, 3)
@@ -376,9 +416,9 @@
     /* 光が抜けた瞬間から中心が灯り、奥行きがさらに寄る */
     tl.to(glow, { opacity: 1, scale: 1, duration: 21 }, 19)
       .to(seed, { scale: 1.18, duration: 21 }, 19)
-      .to(depth, { opacity: 0.85, duration: 21 }, 19);
+      .to(farField, { opacity: space ? 1 : 0.85, duration: 21 }, 19);
 
-    if (isDesktop) {
+    if (isDesktop && !space) {
       tl.to(depth, { scale: PUSH * 1.14, duration: 21, ease: "power1.in" }, 19);
     }
 
@@ -403,9 +443,9 @@
     }
 
     /* CONNECTION 直前でひと押し。速度が乗ったまま接続へ渡す */
-    if (isDesktop) {
+    if (isDesktop && !space) {
       tl.to(depth, { scale: PUSH * 1.26, duration: 5, ease: "power2.in" }, 35);
-    } else {
+    } else if (!isDesktop) {
       tl.to(glow, { scale: 1.12, duration: 5, ease: "power2.in" }, 35);
     }
 
@@ -417,6 +457,11 @@
 
     tl.to(network, { opacity: 1, duration: 4 }, 40)
       .to(coreHalo, { opacity: 0.5, duration: 16 }, 40);
+
+    if (space) {
+      /* ここから先の主役は CORE と network。空間は背景へ引く。 */
+      tl.to(spaceCanvas, { opacity: 0.34, duration: 10, ease: "power1.out" }, 40);
+    }
 
     NODE_KEYS.forEach(function (key, i) {
       var node = nodeOf(key);
@@ -523,7 +568,7 @@
       tl.set(pulses, { display: "none" }, 68);
     }
 
-    tl.to(depth, { opacity: 0, duration: 10 }, 64);
+    tl.to(farField, { opacity: 0, duration: 10 }, 64);
 
     tl.to([rayH, rayV], { opacity: 0, duration: 9 }, 66);
 
