@@ -3,8 +3,10 @@
    VOID → IGNITION → CONNECTION → FORMATION → MESSAGE → TRANSITION
 
    設計方針:
-   - 既定（JSなし / GSAP読込失敗 / prefers-reduced-motion）は「静的Hero」として
-     完全に成立する。演出用のスタイルは html.chero-live が付いたときだけ効く。
+   - 既定（JSなし / GSAP読込失敗）は「静的Hero」として完全に成立する。
+     演出用のスタイルは html.chero-live / html.chero-calm が付いたときだけ効く。
+   - prefers-reduced-motion: reduce では html.chero-calm の低モーション版を出す。
+     こちらは opacity のみで、translate / scale / rotation を使わない。
    - アニメーションは transform / opacity / filter のみ。レイアウトは再計算しない。
    - ブランド基準（brand/brand-guidelines.md v1.0）: Deep Green / Gold / Ivory、
      セリフ体、角丸なし、左右対称、余白重視。
@@ -38,6 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: min(76vh, 640px);
   min-height: min(76svh, 640px);
   padding: clamp(4rem, 10vw, 7rem) 0 clamp(3rem, 8vw, 5rem);
   overflow: hidden;
@@ -104,7 +107,7 @@
 }
 
 /* 静的フォールバック時はコピーと重なるのでシードを出さない */
-html:not(.chero-live) .chero__seed {
+html:not(.chero-live):not(.chero-calm) .chero__seed {
   display: none;
 }
 
@@ -180,12 +183,16 @@ html:not(.chero-live) .chero__seed {
    -------------------------------------------------------------------------- */
 
 html.chero-live .chero {
+  /* svh 非対応ブラウザ用のフォールバックを必ず前置する。
+     対応ブラウザは後段の svh 宣言で上書きされ、挙動は変わらない。 */
+  height: calc(var(--chero-scenes) * 100vh);
   height: calc(var(--chero-scenes) * 100svh);
 }
 
 html.chero-live .chero__stage {
   position: sticky;
   top: 0;
+  height: 100vh;
   height: 100svh;
   min-height: 0;
   padding: 0;
@@ -394,33 +401,73 @@ html.chero-live body.chero-immersive .site-header {
 }
 
 /* --------------------------------------------------------------------------
-   Reduced motion: 演出を一切行わない静的Heroに固定
+   低モーション版（prefers-reduced-motion: reduce かつ JS 稼働時）
+
+   opacity のクロスフェードだけで VOID → IGNITION → MESSAGE → 通常サイト を通す。
+   translate / scale / rotation / parallax / 粒子移動は一切使わない。
+   スクロール尺も 5画面 → 2画面へ短縮する。
+   -------------------------------------------------------------------------- */
+
+html.chero-calm .chero {
+  --chero-scenes: 2;
+  height: calc(var(--chero-scenes) * 100vh);
+  height: calc(var(--chero-scenes) * 100svh);
+}
+
+html.chero-calm .chero__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  min-height: 0;
+  padding: 0;
+}
+
+/* 低モーション版が使うのは 光・シード・コピー・フェードだけ。
+   動きを伴うレイヤー（光条・グリッド・接続線・粒子）は出さない。 */
+html.chero-calm .chero__rays,
+html.chero-calm .chero__grid,
+html.chero-calm .chero__network,
+html.chero-calm .chero__particles,
+html.chero-calm .chero__hint {
+  display: none;
+}
+
+html.chero-calm .chero__message {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion かつ JS 不在: 演出を一切行わない静的Heroに固定
+   （JS が動く場合は上の低モーション版 html.chero-calm が担当する）
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .chero {
+  html:not(.chero-calm) .chero {
     height: auto !important;
   }
 
-  .chero__stage {
+  html:not(.chero-calm) .chero__stage {
     position: relative !important;
     height: auto !important;
+    min-height: min(76vh, 640px);
     min-height: min(76svh, 640px);
     padding: clamp(4rem, 10vw, 7rem) 0 clamp(3rem, 8vw, 5rem);
   }
 
-  .chero__message {
+  html:not(.chero-calm) .chero__message {
     opacity: 1 !important;
     visibility: visible !important;
   }
 
-  .chero__glow,
-  .chero__rays,
-  .chero__grid,
-  .chero__network,
-  .chero__particles,
-  .chero__fade,
-  .chero__hint {
+  html:not(.chero-calm) .chero__glow,
+  html:not(.chero-calm) .chero__rays,
+  html:not(.chero-calm) .chero__grid,
+  html:not(.chero-calm) .chero__network,
+  html:not(.chero-calm) .chero__particles,
+  html:not(.chero-calm) .chero__fade,
+  html:not(.chero-calm) .chero__hint {
     display: none !important;
   }
 }

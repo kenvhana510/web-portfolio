@@ -57,13 +57,21 @@
 <link rel="stylesheet" href="css/cinematic-hero.css">
 <script>
 /* CINEMATIC HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
-   GSAPの読み込みに失敗した場合は js/cinematic-hero.js がこのクラスを外し、
-   静的Heroへフォールバックする。 */
+   prefers-reduced-motion では低モーション版(chero-calm)を選ぶ。
+
+   watchdog: js/cinematic-hero.js が届かないと演出クラスが付いたまま残り、
+   Heroが操作できない暗闇領域になる。初期化フラグが立たなければクラスを外して
+   静的Heroへ復旧する。正常時は cinematic-hero.js が初期化完了時点で即解除する。 */
 (function () {
   try {
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.documentElement.className += " chero-live";
-    }
+    var root = document.documentElement;
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    root.className += reduced ? " chero-calm" : " chero-live";
+    window.__cheroWatchdog = setTimeout(function () {
+      if (!window.__cheroReady) {
+        root.className = root.className.replace(/\s*chero-(live|calm)\b/g, "");
+      }
+    }, 3000);
   } catch (e) {}
 })();
 </script>

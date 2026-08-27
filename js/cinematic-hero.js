@@ -1,9 +1,15 @@
 /* ==========================================================================
-   LEGACRAFT — CINEMATIC HERO v1
+   LEGACRAFT — CINEMATIC HERO v1.1
    スクロール量を GSAP のタイムラインへマッピングする（自動再生はしない）。
 
-   このスクリプトが動かない場合（GSAP読込失敗・JS無効・reduced motion）は
-   html.chero-live が外れ、CSS側の静的Heroへ確実に戻る。
+   モードは3つ:
+     html.chero-live  通常演出（6 Scene / v1 のまま。変更しない）
+     html.chero-calm  低モーション版（prefers-reduced-motion: reduce）
+                      opacity のクロスフェードのみ。translate/scale/rotation は使わない
+     クラス無し        静的Hero（JS無効・GSAP読込失敗・CSS未適用）
+
+   このスクリプトが動かない場合は head 側の watchdog が両クラスを外し、
+   静的Heroへ確実に戻る。
    ========================================================================== */
 
 (function () {
@@ -12,22 +18,43 @@
   var html = document.documentElement;
   var root = document.querySelector(".chero");
 
-  function fallbackToStatic() {
-    html.classList.remove("chero-live");
-    document.body && document.body.classList.remove("chero-immersive");
+  /* head 側の watchdog を止める。以降の復旧はこのスクリプトの責任になる。 */
+  function settleWatchdog() {
+    window.__cheroReady = true;
+    if (window.__cheroWatchdog) {
+      clearTimeout(window.__cheroWatchdog);
+      window.__cheroWatchdog = null;
+    }
   }
 
-  if (!root) return;
+  function fallbackToStatic() {
+    html.classList.remove("chero-live");
+    html.classList.remove("chero-calm");
+    document.body && document.body.classList.remove("chero-immersive");
+    settleWatchdog();
+  }
+
+  if (!root) { settleWatchdog(); return; }
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (reduced || !window.gsap || !window.ScrollTrigger) {
+  if (!window.gsap || !window.ScrollTrigger) {
+    fallbackToStatic();
+    return;
+  }
+
+  var stageEl = root.querySelector(".chero__stage");
+
+  /* CSS が届いていない場合は演出モードに入らない（暗闇Heroを作らない）。
+     html に演出クラスが付いていれば stage は sticky になっているはず。 */
+  html.classList.add(reduced ? "chero-calm" : "chero-live");
+
+  if (!stageEl || getComputedStyle(stageEl).position !== "sticky") {
     fallbackToStatic();
     return;
   }
 
   gsap.registerPlugin(ScrollTrigger);
-  html.classList.add("chero-live");
 
   var $ = function (sel) { return root.querySelector(sel); };
   var $$ = function (sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); };
@@ -116,11 +143,54 @@
     });
   }
 
+  /* --- 低モーション版タイムライン（opacity のみ） ------------------------
+     VOID → IGNITION → MESSAGE → 通常サイト。
+     位置・大きさ・角度は一切動かさない。中心合わせの translate は
+     アニメーションではなく固定値としてだけ使う。
+     ---------------------------------------------------------------------- */
+  function buildCalmTimeline() {
+    gsap.set([seed, glow], { x: 0, y: 0, xPercent: -50, yPercent: -50, scale: 1 });
+    gsap.set(seed, { opacity: 0.25 });
+    gsap.set(glow, { opacity: 0 });
+    gsap.set(message, { opacity: 0, visibility: "visible", y: 0 });
+    gsap.set(fade, { opacity: 0 });
+
+    var tl = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: {
+        trigger: root,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.4,
+        invalidateOnRefresh: true
+      }
+    });
+
+    tl.to(seed, { opacity: 1, duration: 30 }, 0)          /* VOID     */
+      .to(glow, { opacity: 0.9, duration: 32 }, 26)       /* IGNITION */
+      .to(seed, { opacity: 0, duration: 24 }, 50)         /* cross-fade */
+      .to(message, { opacity: 1, duration: 28 }, 58)      /* MESSAGE  */
+      .to(glow, { opacity: 0.4, duration: 22 }, 68)
+      .to(fade, { opacity: 1, duration: 16 }, 82)         /* TRANSITION */
+      .set({}, {}, 100);
+
+    return function cleanup() {
+      tl.scrollTrigger && tl.scrollTrigger.kill();
+      tl.kill();
+    };
+  }
+
   /* --- スクロール連動タイムライン --------------------------------------- */
   var mm = gsap.matchMedia();
 
-  mm.add("(min-width: 768px)", function () { return buildTimeline(true); });
-  mm.add("(max-width: 767px)", function () { return buildTimeline(false); });
+  if (reduced) {
+    mm.add("(prefers-reduced-motion: reduce)", buildCalmTimeline);
+  } else {
+    mm.add("(min-width: 768px)", function () { return buildTimeline(true); });
+    mm.add("(max-width: 767px)", function () { return buildTimeline(false); });
+  }
+
+  settleWatchdog();
 
   function buildTimeline(isDesktop) {
     setInitialState();
