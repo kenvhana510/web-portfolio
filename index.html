@@ -55,6 +55,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/ambient-hero.css">
+<link rel="stylesheet" href="css/works-gallery.css">
 <script>
 /* AMBIENT HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
    prefers-reduced-motion では動かさないモード(ahero-calm)を選ぶ。
@@ -157,15 +158,22 @@
     </div>
   </section>
 
-  <section id="works">
+  <!-- ======================================================================
+       WORKS — 作品を並べる場所。カードの箱をやめ、画像そのものを展示する。
+       このセクション用の CSS は css/works-gallery.css。works.html の
+       既存グリッドとは別実装で、あちらには影響しない。
+       ====================================================================== -->
+  <section id="works" class="works-gallery">
     <div class="container">
-      <div class="section-head reveal">
-        <div class="eyebrow">WORKS</div>
-        <h2>制作実績</h2>
-        <p>WordPress（SWELL）を中心に制作した6作品です。各作品の詳細はCASE STUDYでご覧いただけます。</p>
+      <div class="wgal-head reveal">
+        <span class="wgal-eyebrow">SELECTED WORKS</span>
+        <h2 class="wgal-title">つくったものが、<br>そのまま実績になる。</h2>
+        <p class="wgal-statement">WordPress（SWELL）を中心に制作した6作品です。構成設計からデザイン、実装、QAまで一貫して担当しています。各作品の詳細はCASE STUDYでご覧いただけます。</p>
       </div>
-      <div class="works-grid" id="works-grid-top"></div>
-      <p class="reveal" style="margin-top:2rem;"><a href="works.html" class="btn btn-ghost">すべての作品を見る <span class="btn-arrow">→</span></a></p>
+
+      <div class="wgal" id="works-gallery-top"></div>
+
+      <p class="wgal-foot reveal"><a href="works.html" class="btn btn-ghost">すべての作品を見る <span class="btn-arrow">&rarr;</span></a></p>
     </div>
   </section>
 
@@ -258,6 +266,6 @@
 <script src="js/ambient-hero.js" defer></script>
 <script src="js/main.js"></script>
 <script src="js/works-render.js"></script>
-<script>renderWorksGrid("#works-grid-top");</script>
+<script>renderWorksGallery("#works-gallery-top");</script>
 </body>
 </html>

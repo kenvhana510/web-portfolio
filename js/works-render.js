@@ -55,6 +55,83 @@
     );
   }
 
+  /* --- TOP のギャラリー表示 --------------------------------------------
+     works.html が使う renderWorksGrid() は変更しない。TOP だけがこちらを
+     呼ぶ。カードの箱をやめ、作品画像そのものを並べるための別レンダラ。
+
+     6点を同じ大きさで並べると一覧表になってしまうので、1番目と4番目を
+     大きく取り、残りを2列に置いて視覚的な序列を作る。            */
+  var GALLERY_SIZE = ["lg", "md", "md", "lg", "md", "md"];
+
+  function galleryYear(work) {
+    var m = String(work.period || "").match(/\d{4}/);
+    return m ? m[0] : "";
+  }
+
+  function galleryCategory(work) {
+    /* industry は「建築設計（架空・注文住宅設計事務所）」のように括弧で
+       但し書きが付く。ギャラリーでは頭の業種だけを出す。 */
+    var industry = String(work.industry || "").split("（")[0].trim();
+    var parts = [industry, galleryYear(work)];
+    var label = STATUS_LABEL[work.status];
+    if (label) parts.push(label);
+    return parts.filter(Boolean).join(" ／ ");
+  }
+
+  function galleryItemHTML(work, index) {
+    var size = GALLERY_SIZE[index] || "md";
+    var isLarge = size === "lg";
+    var img = "";
+
+    if (work.thumbnail) {
+      var alt = escapeAttr(work.title + "（" + work.siteType + "）のスクリーンショット");
+      img =
+        '<img src="' + work.thumbnail + '" alt="' + alt + '" width="1440" height="900"' +
+        (index === 0 ? ' loading="eager" fetchpriority="high"' : ' loading="lazy"') +
+        ' decoding="async">';
+    }
+
+    /* 見出し行。番号のあとに罫線を引くのは情報を整理するためで、
+       作品を枠で囲うためではない。大きい2点だけラベルを添える。 */
+    var label =
+      '<p class="wgal__label">' +
+      '<span class="wgal__num">' + work.number + '</span>' +
+      (isLarge ? '<span class="wgal__labeltext">SELECTED WORK</span>' : "") +
+      '<span class="wgal__rule" aria-hidden="true"></span>' +
+      '</p>';
+
+    return (
+      '<article class="wgal__item wgal__item--' + size + ' reveal">' +
+      '<a class="wgal__link" href="case-study.html?work=' + work.slug + '">' +
+      label +
+      '<div class="wgal__frame">' + img + '</div>' +
+      '<div class="wgal__meta">' +
+      '<h3 class="wgal__title">' + work.title + '</h3>' +
+      '<p class="wgal__cat">' + galleryCategory(work) + '</p>' +
+      '<p class="wgal__desc">' + work.summary + '</p>' +
+      '<span class="wgal__more">VIEW CASE <span class="wgal__arrow">&rarr;</span></span>' +
+      '</div>' +
+      '</a>' +
+      (work.url
+        ? '<a class="wgal__demo" href="' + work.url + '" target="_blank" rel="noopener">' +
+          'デモを見る <span class="btn-arrow">&rarr;</span></a>'
+        : "") +
+      '</article>'
+    );
+  }
+
+  function renderWorksGallery(selector) {
+    var el = document.querySelector(selector);
+    if (!el) return;
+    el.innerHTML = WORKS_DATA.map(galleryItemHTML).join("");
+    el.querySelectorAll("img").forEach(function (img) {
+      img.addEventListener("error", function () {
+        img.remove();
+      });
+    });
+    if (window.__initReveal) window.__initReveal();
+  }
+
   function renderWorksGrid(selector) {
     var el = document.querySelector(selector);
     if (!el) return;
@@ -145,5 +222,6 @@
   }
 
   window.renderWorksGrid = renderWorksGrid;
+  window.renderWorksGallery = renderWorksGallery;
   window.renderCaseStudy = renderCaseStudy;
 })();

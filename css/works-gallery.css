@@ -1,0 +1,403 @@
+/* ==========================================================================
+   LEGACRAFT — WORKS GALLERY (TOP EXPERIENCE v1 / PHASE 1)
+
+   WORKS を「商品カード」から「作品を展示する場所」へ変える。
+   このファイルは index.html だけが読む。works.html の既存グリッドには影響しない。
+
+   Hero から引き継ぐ設計言語:
+   - 領域は罫線ではなく、余白と光とトーンで分ける
+   - 見出しは太らせず、細く広く（Hero の h1 は weight 500 / 字間 0.06em）
+   - 箱を作らない。画像そのものを置く
+   - 動きは情報より後ろ。読む速度を邪魔しない
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   セクション — Hero から続く暗さを保ち、境界を作らない
+   -------------------------------------------------------------------------- */
+
+#works.works-gallery {
+  position: relative;
+  overflow: hidden;
+  /* Hero の下端と同じ Deep Green から始め、下へ向けてわずかに沈める。
+     色が切り替わったのではなく、同じ空間が続いているように見せる。 */
+  /* Hero より動きも光も落とす。上端は Hero の下端と同じ Deep Green から始める。 */
+  background:
+    radial-gradient(130% 40% at 50% 0%, rgba(176, 141, 63, 0.035) 0%, transparent 60%),
+    linear-gradient(180deg, var(--color-paper) 0%, #1D3128 56%, var(--color-paper) 100%);
+  padding-top: clamp(5rem, 10vw, 9rem);
+  padding-bottom: clamp(5rem, 10vw, 9rem);
+}
+
+/* --------------------------------------------------------------------------
+   見出し — Hero と同じ世界に属させる。ただし主張は Hero より弱く。
+   -------------------------------------------------------------------------- */
+
+.works-gallery .wgal-head {
+  max-width: 46rem;
+  margin: 0 auto clamp(3.5rem, 7vw, 6rem);
+  text-align: center;
+}
+
+.works-gallery .wgal-eyebrow {
+  display: block;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  color: var(--color-accent-text);
+}
+
+.works-gallery .wgal-title {
+  margin: 0;
+  font-family: var(--font-display);
+  /* Hero の h1 は weight 500。ここも同じ細さにして、大きさだけで序列をつける。 */
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  line-height: 1.45;
+  letter-spacing: 0.09em;
+  text-indent: 0.09em;
+  color: var(--color-ink);
+}
+
+.works-gallery .wgal-statement {
+  max-width: 34em;
+  margin: clamp(1.4rem, 2.6vw, 2rem) auto 0;
+  font-size: clamp(0.92rem, 1.1vw, 1rem);
+  line-height: 2.1;
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   ギャラリー本体
+   -------------------------------------------------------------------------- */
+
+.wgal {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  /* 作品どうしの間は「詰める」のではなく「置く」。 */
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  row-gap: clamp(4rem, 8vw, 8rem);
+}
+
+.wgal {
+  align-items: start;
+}
+
+.wgal__item {
+  grid-column: 1 / -1;
+  position: relative;
+}
+
+@media (min-width: 860px) {
+  /* 6点を同じ大きさで並べない。大が2点、中が4点。 */
+  .wgal__item--lg { grid-column: span 12; }
+  .wgal__item--md { grid-column: span 6; }
+
+  /* 大きい作品の前後は、行間よりさらに間を取る。
+     空白ではなく、展示の前で足を止めるための間。 */
+  .wgal__item--lg {
+    margin-block: clamp(1.5rem, 3.2vw, 3.2rem);
+  }
+
+  /* 左右を揃えきらない。右側だけを少し下げて誌面のリズムを作る。
+     DOM 順は変えていないので、読み上げ順も操作順もそのまま。 */
+  .wgal__item--md:nth-of-type(3),
+  .wgal__item--md:nth-of-type(6) {
+    margin-top: clamp(1.5rem, 3vw, 3.5rem);
+  }
+
+  /* 大きい作品の背後にだけ、ごく弱い光を置く。影の代用ではない。 */
+  .wgal__item--lg::before {
+    content: "";
+    position: absolute;
+    inset: -6% -10% -12%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(58% 46% at 50% 38%, rgba(176, 141, 63, 0.085) 0%, transparent 72%);
+  }
+}
+
+.wgal__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --- 作品画像 ---
+   枠で囲わない。極細の線と、ほとんど見えない落ち影だけ。 */
+
+.wgal__frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(140deg, #16261F, #0F1C17);
+  border: 1px solid rgba(237, 228, 206, 0.1);
+  box-shadow: 0 30px 60px -44px rgba(0, 0, 0, 0.75);
+  transition:
+    border-color 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
+}
+
+.wgal__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transform: scale(1);
+  transition: transform 0.7s var(--ease-out);
+}
+
+/* --- 見出し行 ---
+   番号・ラベル・罫線。罫線は情報を整理するためだけに引く。
+   作品を囲うためには使わない。 */
+
+.wgal__label {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.7rem, 1.2vw, 1.1rem);
+  margin: 0 0 clamp(0.9rem, 1.6vw, 1.4rem);
+  font-family: var(--font-en);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  color: var(--color-ink-soft);
+}
+
+.wgal__num {
+  flex: none;
+  color: var(--color-accent-text);
+}
+
+.wgal__labeltext {
+  flex: none;
+  opacity: 0.72;
+}
+
+.wgal__rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(237, 228, 206, 0.22), rgba(237, 228, 206, 0.02));
+}
+
+/* --- 作品の情報 --- */
+
+.wgal__meta {
+  padding-top: clamp(1.4rem, 2.4vw, 2.1rem);
+}
+
+/* 業種・年・状態。本文より小さく、装飾寄りの一行として置く。 */
+.wgal__cat {
+  margin: clamp(0.5rem, 0.9vw, 0.75rem) 0 0;
+  font-family: var(--font-body);
+  font-size: 0.73rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-text);
+  opacity: 0.9;
+}
+
+.wgal__title {
+  margin: 0;
+  /* カード見出しも太らせない。Hero と同じ細さで、字間で品位を出す。 */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+}
+
+.wgal__item--lg .wgal__title {
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+}
+
+.wgal__desc {
+  max-width: 40em;
+  margin: clamp(0.7rem, 1.2vw, 1rem) 0 0;
+  font-size: clamp(0.88rem, 1vw, 0.95rem);
+  line-height: 2;
+  color: var(--color-ink-soft);
+}
+
+.wgal__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: clamp(1rem, 1.6vw, 1.4rem);
+  font-family: var(--font-en);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--color-accent-text);
+}
+
+.wgal__arrow {
+  display: inline-block;
+  transition: transform 0.45s var(--ease-out);
+}
+
+/* --- 実サイトへの導線（case study リンクの外側） --- */
+
+.wgal__demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.wgal__demo .btn-arrow {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.wgal__demo:hover .btn-arrow,
+.wgal__demo:focus-visible .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   ホバー — カードごと浮かせない。画像と線と矢印だけが反応する。
+   目的は「押せる」と伝えること。演出を見せることではない。
+   -------------------------------------------------------------------------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .wgal__link:hover .wgal__frame,
+  .wgal__link:focus-visible .wgal__frame {
+    border-color: rgba(176, 141, 63, 0.42);
+    box-shadow: 0 34px 66px -42px rgba(0, 0, 0, 0.8);
+  }
+
+  .wgal__link:hover .wgal__frame img,
+  .wgal__link:focus-visible .wgal__frame img {
+    transform: scale(1.018);
+  }
+
+  .wgal__link:hover .wgal__arrow,
+  .wgal__link:focus-visible .wgal__arrow {
+    transform: translateX(5px);
+  }
+}
+
+.wgal__link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   すべての作品へ
+   -------------------------------------------------------------------------- */
+
+.works-gallery .wgal-foot {
+  margin-top: clamp(4rem, 8vw, 7rem);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   立ち上がり — 情報表示を遅らせない範囲で。
+   -------------------------------------------------------------------------- */
+
+.wgal__item.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.65s var(--ease-out),
+    transform 0.65s var(--ease-out);
+}
+
+.wgal__item.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* 大きい作品はわずかにゆっくり。中は軽く。 */
+.wgal__item--lg.reveal {
+  transition-duration: 0.8s;
+}
+
+/* 同時に出さない。ただし遅延は最大 0.12s まで。 */
+.wgal__item--md:nth-of-type(odd).reveal { transition-delay: 0.06s; }
+.wgal__item--md:nth-of-type(even).reveal { transition-delay: 0.12s; }
+
+/* --------------------------------------------------------------------------
+   モバイル — 縮小版にしない。作品を大きく、情報は簡潔に。
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 859px) {
+  /* 背景のグラデーションと落ち影は、iOS のスクロール中に効いてくる。
+     実測（WORKS 通過 / WebKit iPhone 13）:
+       両方あり  p50 52-57ms / 50ms超 19件
+       背景を単色 p50 37ms   / 5-7件
+       影を外す   p50 39-41ms / 2-6件
+       両方外す   p50 28-30ms / 0件  ← 現行 Production と同水準
+     Hero の下端はもともと Deep Green で終わるので、単色でも境目は出ない。
+     奥行きは極細の枠線と余白で十分に出せる。 */
+  #works.works-gallery {
+    background: var(--color-paper);
+  }
+
+  .wgal__frame {
+    box-shadow: none;
+  }
+
+  /* 段差はデスクトップだけのもの。狭い画面では素直に流す。 */
+  .wgal__item--lg,
+  .wgal__item--md:nth-of-type(3),
+  .wgal__item--md:nth-of-type(6) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .wgal__item--lg::before {
+    display: none;
+  }
+
+  .wgal {
+    row-gap: clamp(3.5rem, 13vw, 5.5rem);
+  }
+
+  /* 切り出しは全幅で統一する。4:3 まで縦を伸ばすと、同じ画像から
+     取り出す面積が 1.2 倍になり、iOS のスクロール中に単発の重い
+     フレームが出た（p95 67ms → 167ms）。箱を外したぶん画像は
+     すでに主役になっているので、比率は変えない。 */
+  .wgal__frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .wgal__desc {
+    font-size: 0.9rem;
+    line-height: 1.95;
+  }
+
+  /* 遅延はさらに詰める */
+  .wgal__item.reveal { transition-delay: 0s !important; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .wgal__item.reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .wgal__frame img,
+  .wgal__arrow,
+  .wgal__demo .btn-arrow {
+    transition: none;
+  }
+
+  .wgal__link:hover .wgal__frame img {
+    transform: none;
+  }
+}
