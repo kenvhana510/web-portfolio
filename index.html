@@ -56,6 +56,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/ambient-hero.css">
 <link rel="stylesheet" href="css/works-gallery.css">
+<link rel="stylesheet" href="css/top-sections.css">
 <script>
 /* AMBIENT HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
    prefers-reduced-motion では動かさないモード(ahero-calm)を選ぶ。
@@ -177,52 +178,71 @@
     </div>
   </section>
 
-  <section id="value" style="background:var(--color-paper-alt);">
+  <!-- ======================================================================
+       VALUE — カードを並べず、左に主題、右に理由を縦へ流す。
+       文言は既存のまま。見せ方だけ WORKS のデザイン言語に合わせている。
+       ====================================================================== -->
+  <section id="value" class="tsec">
     <div class="container">
-      <div class="section-head reveal">
-        <div class="eyebrow">VALUE</div>
-        <h2>選ばれる理由</h2>
-      </div>
-      <div class="value-grid">
-        <div class="value-item reveal">
-          <div class="num">01</div>
-          <h3>デザイン品質へのこだわり</h3>
-          <p>テンプレ感のない、業種に合わせた情報設計とビジュアルを設計します。</p>
+      <div class="tval">
+        <div class="tval__head reveal">
+          <span class="tsec__eyebrow">WHY LEGACRAFT</span>
+          <h2 class="tsec__title">選ばれる理由</h2>
         </div>
-        <div class="value-item reveal">
-          <div class="num">02</div>
-          <h3>更新しやすいWordPress実装</h3>
-          <p>SWELLを活用し、公開後もお客様ご自身で更新できる実装にこだわります。</p>
-        </div>
-        <div class="value-item reveal">
-          <div class="num">03</div>
-          <h3>構成からQAまで一貫工程</h3>
-          <p>ヒアリング・構成・デザイン・実装・QAまで一気通貫で対応し、認識のズレを防ぎます。</p>
-        </div>
-        <div class="value-item reveal">
-          <div class="num">04</div>
-          <h3>崩れないスマホ表示</h3>
-          <p>スマホでの閲覧を前提に、あらゆる画面幅で快適に見られるよう調整します。</p>
+
+        <div class="tval__list">
+          <div class="tval__item reveal">
+            <span class="tval__num">01</span>
+            <div>
+              <h3 class="tval__title">デザイン品質へのこだわり</h3>
+              <p class="tval__text">テンプレ感のない、業種に合わせた情報設計とビジュアルを設計します。</p>
+            </div>
+          </div>
+          <div class="tval__item reveal">
+            <span class="tval__num">02</span>
+            <div>
+              <h3 class="tval__title">更新しやすいWordPress実装</h3>
+              <p class="tval__text">SWELLを活用し、公開後もお客様ご自身で更新できる実装にこだわります。</p>
+            </div>
+          </div>
+          <div class="tval__item reveal">
+            <span class="tval__num">03</span>
+            <div>
+              <h3 class="tval__title">構成からQAまで一貫工程</h3>
+              <p class="tval__text">ヒアリング・構成・デザイン・実装・QAまで一気通貫で対応し、認識のズレを防ぎます。</p>
+            </div>
+          </div>
+          <div class="tval__item reveal">
+            <span class="tval__num">04</span>
+            <div>
+              <h3 class="tval__title">崩れないスマホ表示</h3>
+              <p class="tval__text">スマホでの閲覧を前提に、あらゆる画面幅で快適に見られるよう調整します。</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="flow">
+  <!-- ======================================================================
+       FLOW — 横並びの図をやめ、上から下へ読むだけで順番が分かる形にする。
+       ====================================================================== -->
+  <section id="flow" class="tsec">
     <div class="container">
-      <div class="section-head reveal">
-        <div class="eyebrow">FLOW</div>
-        <h2>ご依頼の流れ</h2>
-        <p>お問い合わせから公開まで、シンプルな7ステップで進めます。詳細はABOUTページをご覧ください。</p>
+      <div class="tsec__head reveal">
+        <span class="tsec__eyebrow">HOW WE WORK</span>
+        <h2 class="tsec__title">ご依頼の流れ</h2>
+        <p class="tsec__statement">お問い合わせから公開まで、シンプルな7ステップで進めます。詳細はABOUTページをご覧ください。</p>
       </div>
-      <div class="flow-list reveal reveal-stagger">
-        <div class="flow-item"><span class="flow-index">01</span><h3>問い合わせ</h3></div>
-        <div class="flow-item"><span class="flow-index">02</span><h3>ヒアリング</h3></div>
-        <div class="flow-item"><span class="flow-index">03</span><h3>見積・提案</h3></div>
-        <div class="flow-item"><span class="flow-index">04</span><h3>制作</h3></div>
-        <div class="flow-item"><span class="flow-index">05</span><h3>確認・修正</h3></div>
-        <div class="flow-item"><span class="flow-index">06</span><h3>QA</h3></div>
-        <div class="flow-item"><span class="flow-index">07</span><h3>納品・公開</h3></div>
+
+      <div class="tflow">
+        <div class="tflow__item reveal"><span class="tflow__num">01</span><h3 class="tflow__label">問い合わせ</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+        <div class="tflow__item reveal"><span class="tflow__num">02</span><h3 class="tflow__label">ヒアリング</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+        <div class="tflow__item reveal"><span class="tflow__num">03</span><h3 class="tflow__label">見積・提案</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+        <div class="tflow__item reveal"><span class="tflow__num">04</span><h3 class="tflow__label">制作</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+        <div class="tflow__item reveal"><span class="tflow__num">05</span><h3 class="tflow__label">確認・修正</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+        <div class="tflow__item reveal"><span class="tflow__num">06</span><h3 class="tflow__label">QA</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+        <div class="tflow__item reveal"><span class="tflow__num">07</span><h3 class="tflow__label">納品・公開</h3><span class="tflow__rule" aria-hidden="true"></span></div>
       </div>
     </div>
   </section>
