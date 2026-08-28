@@ -78,6 +78,24 @@
     return parts.filter(Boolean).join(" ／ ");
   }
 
+  /* 計測用の作品識別。表示には一切使わない（DOM順・リンク先・見た目は不変）。
+     title は「NESTA ARCHITECTS（ネスタ建築設計）」のように括弧付きなので、
+     GA4 側で読める短い名前に落としてから渡す。個人情報は含まない。 */
+  function workName(work) {
+    return String(work.title || "").split("（")[0].trim().slice(0, 40);
+  }
+
+  function workAttrs(work, index, action) {
+    return (
+      ' data-work-id="' + escapeAttr(work.slug) + '"' +
+      ' data-work-name="' + escapeAttr(workName(work)) + '"' +
+      ' data-work-position="' + (index + 1) + '"' +
+      ' data-cta-action="' + action + '"' +
+      ' data-cta-id="' + escapeAttr(work.slug).replace(/-/g, "_") + "_" + action + '"' +
+      ' data-cta-label="' + escapeAttr(workName(work)) + '"'
+    );
+  }
+
   function galleryItemHTML(work, index) {
     var size = GALLERY_SIZE[index] || "md";
     var isLarge = size === "lg";
@@ -102,7 +120,8 @@
 
     return (
       '<article class="wgal__item wgal__item--' + size + ' reveal">' +
-      '<a class="wgal__link" href="case-study.html?work=' + work.slug + '">' +
+      '<a class="wgal__link" href="case-study.html?work=' + work.slug + '"' +
+      ' data-cta-type="case_study"' + workAttrs(work, index, "case_study") + '>' +
       label +
       '<div class="wgal__frame">' + img + '</div>' +
       '<div class="wgal__meta">' +
@@ -113,7 +132,8 @@
       '</div>' +
       '</a>' +
       (work.url
-        ? '<a class="wgal__demo" href="' + work.url + '" target="_blank" rel="noopener">' +
+        ? '<a class="wgal__demo" href="' + work.url + '" target="_blank" rel="noopener"' +
+          ' data-cta-type="demo"' + workAttrs(work, index, "demo") + '>' +
           'デモを見る <span class="btn-arrow">&rarr;</span></a>'
         : "") +
       '</article>'

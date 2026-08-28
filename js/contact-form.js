@@ -462,6 +462,15 @@
           // 「成功したキーは再利用しない」という契約自体をコードに残しておく。
           clearSubmissionId(form);
           trackEvent("contact_form_submit_success", {});
+          /* Lead API が保存を確定した地点でだけ発火させる。
+             ボタンを押した時点・validation を通った時点・送信を開始した時点
+             では発火させない（それらは submit_start が担当する）。
+             パラメータは非個人情報のみ。氏名・メール・本文は一切送らない。 */
+          trackEvent("generate_lead", {
+            method: "contact_form",
+            source_page: "contact",
+            request_type: leadData.requestType || "",
+          });
           return;
         }
 

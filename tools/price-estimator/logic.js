@@ -205,6 +205,27 @@
     }
   }
 
+  /* 直近の概算結果を、遷移先へ持っていける非個人情報のパラメータに落とす。
+     メールアドレス・自由入力は一切含めない。 */
+  function estimateParams() {
+    if (!lastEstimate || !lastEstimate.result) return null;
+    return {
+      plan: lastEstimate.result.plan.key,
+      range_min: lastEstimate.result.totalMin,
+      range_max: lastEstimate.result.totalMax,
+    };
+  }
+
+  /* ページ遷移をまたぐイベントは site-config.js の預け先を通す。
+     gtag は約5秒のバッチ送信のため、ここで直接送ると遷移で消える。 */
+  function trackAcrossNavigation(eventName, params) {
+    if (window.LEGACRAFT_TRACK && typeof window.LEGACRAFT_TRACK.defer === "function") {
+      window.LEGACRAFT_TRACK.defer(eventName, params || {});
+      return;
+    }
+    trackEvent(eventName, params);
+  }
+
   // 見積りツールへの流入元を判定する（estimator_viewのentry_source用）。
   // GA4のpage_referrerでも近いことは分かるが、ファネル上で「サイト内のどのページから
   // 来たか」を1つのパラメータで比較したいため、ページ名に正規化して持たせる。
@@ -465,8 +486,22 @@
       var willOpen = leadPanel.hidden;
       leadPanel.hidden = !willOpen;
       ctaContact.setAttribute("aria-expanded", String(willOpen));
-      trackEvent("cta_click", { cta_type: "consult", plan: result.plan.key });
+      trackEvent("cta_click", {
+        cta_type: "consult",
+        cta_id: "estimator_contact",
+        cta_position: "result",
+        source_page: "price-estimator",
+        plan: result.plan.key,
+      });
       if (willOpen) {
+        /* 概算結果を見たうえで問い合わせへ進んだ瞬間。
+           estimator_start → estimator_complete → ここ、で追える。 */
+        trackEvent("estimate_to_contact", {
+          method: "lead_form",
+          plan: result.plan.key,
+          range_min: result.totalMin,
+          range_max: result.totalMax,
+        });
         if (!leadMessage.value) {
           leadMessage.value = summaryText;
         }
@@ -839,6 +874,31 @@
     // 機能しない）。到達は estimator_view、開始は下の初回回答時へ分離した。
     trackEvent("estimator_view", { entry_source: resolveEntrySource() });
 
+    /* 概算結果を見たあとに、ページ内リンクから問い合わせページへ移動した場合も
+       同じファネルの終点として数える。遷移で消えないよう預けて送る。 */
+    document.addEventListener("click", function (event) {
+      try {
+        var a = event.target && event.target.closest && event.target.closest('a[href*="contact.html"]');
+        if (!a) return;
+        var params = estimateParams();
+        if (!params) return; // 結果を見ていない訪問はファネルに載せない
+        params.method = "contact_page";
+        trackAcrossNavigation("estimate_to_contact", params);
+      } catch (e) {
+        /* 計測の失敗でリンク遷移を止めない */
+      }
+    }, false);
+
+    /* legend から設問名を取り出す。「1 事業種別」の先頭番号は step が持つので落とす。
+       どの設問で離脱したかをGA4上で名前で読めるようにするためのもの。 */
+    function stepName(fieldset) {
+      var legend = fieldset.querySelector("legend");
+      if (!legend) return "";
+      var text = (legend.textContent || "").replace(/\s+/g, " ").trim();
+      text = text.replace(/^\d+\s*/, "").replace(/必須・プラン判定に影響/g, "").trim();
+      return text.slice(0, 40);
+    }
+
     // 各設問（fieldset）の回答変化をestimator_stepとして計測（step番号付き）
     var stepCounters = {};
     // ファネル4段目の発火済みフラグ。fieldsetごとにリスナーが付くため、
@@ -853,7 +913,7 @@
           trackEvent("estimator_start", { first_step: stepNo });
         }
         stepCounters[stepNo] = true;
-        trackEvent("estimator_step", { step: stepNo });
+        trackEvent("estimator_step", { step: stepNo, step_name: stepName(fieldset) });
       });
     });
 

@@ -127,21 +127,24 @@ window.SITE_CONFIG = SITE_CONFIG;
       個別バインドでは取りこぼす。
    2. リスナーが1本なら二重発火の検証が「1本かどうか」だけで済む。
 
-   既存の price-estimator 側 cta_click との重複はゼロ。理由は構造的で、
-   偶然そうなっているのではない：
-     - #cta-contact / #cta-email は <button> なので a[href] に一致しない
-     - #cta-line は href="#" なので、ページ内アンカーとして除外される
-   下の id 除外は、この構造が将来変わっても壊れないための保険。
+   ── 送信が消えていた問題（2026-08-28 実測）────────────────────────────
+   gtag.js はイベントを即座には送らず、約5秒のバッチにまとめて送信する。
+   内部リンクをクリックすると、その5秒を待たずにページが破棄されるため、
+   cta_click は GA4 へ届かずに消えていた（本番でcontextレベル監視により確認。
+   外部 target="_blank" のときだけページが残るので届いていた）。
 
-   除外に「#result の中は全部」という条件は使わない。tools/lp-checklist にも
-   同名の #result があり、そこにこのツールの主要CTA 2本（相談・見積り）が
-   入っているため、汎用的に切ると計測したい導線ごと落ちる。除外は estimator
-   固有のもの（#lead-form-panel と 3つの id）だけに絞る。
+   これを「同一オリジンへ遷移するクリックは、いま送らずに sessionStorage へ
+   預け、遷移先ページの読み込み直後に送る」方式で解決する。
 
-   fail-safe: gtag が無い／GA4 未設定でも、ここで例外を出してリンク遷移を
-   妨げてはならない。preventDefault は一切呼ばず、送信の完了も待たない
-   （gtag は dataLayer への push で即座に返る）。全体を try/catch で包み、
-   計測の失敗がナビゲーションに波及しないようにしている。
+   この方式を選んだ理由:
+   - 遷移を1msも遅らせない（event_callback で待つ方式は体感が悪化する）
+   - Measurement Protocol を自前実装しない（cid/sid の再現は壊れやすい）
+   - 二重送信が構造的に起きない。「いま送る」か「預けて次で送る」かは
+     クリック時点で排他的に決まり、両方を実行する経路が存在しない。
+
+   預けたイベントは遷移先の page_view と同じセッション・同じバッチで届く。
+   page_location は遷移先になるため、どこで押されたかは page_location では
+   なく source_page / cta_position パラメータで判断する。
    ========================================================================== */
 (function (window, document) {
   "use strict";
@@ -150,10 +153,110 @@ window.SITE_CONFIG = SITE_CONFIG;
   if (window.__ctaClickBound) return;
   window.__ctaClickBound = true;
 
+  var PENDING_KEY = "legacraft_pending_events";
+  // 預けたイベントの有効期限。タブを閉じずに何時間も後で復帰した場合まで
+  // 送ると、実際の行動とかけ離れた時刻のイベントになる。
+  var PENDING_TTL_MS = 120000;
+
+  function session() {
+    try {
+      var s = window.sessionStorage;
+      s.getItem(PENDING_KEY); // private mode 等でここが投げる
+      return s;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function sendNow(name, params) {
+    if (typeof window.gtag !== "function") return false;
+    try {
+      window.gtag("event", name, params || {});
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /* 遷移をまたいで送るイベントを預ける。送れなければ静かに諦める
+     （計測のためにリンク遷移を止めることはしない）。 */
+  function defer(name, params) {
+    var s = session();
+    if (!s) return sendNow(name, params); // 預けられない環境では従来どおり即送信
+    try {
+      var queue = JSON.parse(s.getItem(PENDING_KEY) || "[]");
+      if (!Array.isArray(queue)) queue = [];
+      queue.push({ n: name, p: params || {}, t: Date.now() });
+      // 異常時に無限に溜まらないよう上限を持たせる
+      if (queue.length > 5) queue = queue.slice(-5);
+      s.setItem(PENDING_KEY, JSON.stringify(queue));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /* 預かっていたイベントを送る。読み出しより先に消すのは、送信に失敗しても
+     同じイベントが次のページで再送され続けないようにするため。 */
+  function flushPending() {
+    var s = session();
+    if (!s) return;
+    var raw;
+    try {
+      raw = s.getItem(PENDING_KEY);
+      if (!raw) return;
+      s.removeItem(PENDING_KEY);
+    } catch (e) {
+      return;
+    }
+    var queue;
+    try {
+      queue = JSON.parse(raw);
+    } catch (e) {
+      return;
+    }
+    if (!Array.isArray(queue)) return;
+    var now = Date.now();
+    for (var i = 0; i < queue.length; i++) {
+      var item = queue[i];
+      if (!item || !item.n) continue;
+      if (typeof item.t === "number" && now - item.t > PENDING_TTL_MS) continue;
+      sendNow(item.n, item.p);
+    }
+  }
+
+  // 他のスクリプト（price-estimator の logic.js など）からも同じ仕組みを
+  // 使えるようにしておく。遷移で消えるイベントはここを通す。
+  window.LEGACRAFT_TRACK = {
+    send: sendNow,
+    defer: defer,
+  };
+
+  // gtag('config') は同ファイルの上のブロックで既に実行済み。ここで流すと
+  // 遷移先の page_view と同じバッチに乗る。
+  flushPending();
+
+  // ------------------------------------------------------------------
+  // CTA の意味づけ
+  // ------------------------------------------------------------------
+
+  /* セクション id をそのまま使うと final_cta_contact のように冗長になる。
+     計測名は短く読める形に寄せる（見た目・DOM は変えない）。 */
+  var POSITION_ALIAS = { "final-cta": "final" };
+
+  function attr(a, name) {
+    var v = a.getAttribute(name);
+    return v ? v.trim() : "";
+  }
+
   // href から CTA の種別を決める。クラス名ではなく href で判定するのは、
   // 遷移先こそがユーザーの意図であり、デザイン変更で壊れないため。
-  function resolveCtaType(href, rawHref) {
+  // data-cta-type があればそちらを優先する（WORKS の case_study など）。
+  function resolveCtaType(a, href, rawHref) {
+    var explicit = attr(a, "data-cta-type");
+    if (explicit) return explicit;
     if (/^mailto:/i.test(rawHref)) return "email";
+    if (/^tel:/i.test(rawHref)) return "tel";
     if (/lancers\.jp/i.test(href)) return "lancers";
     if (/coconala\.com/i.test(href)) return "coconala";
     if (/tools\/price-estimator/i.test(href)) return "estimator";
@@ -164,13 +267,106 @@ window.SITE_CONFIG = SITE_CONFIG;
     return "other";
   }
 
-  // ヘッダー常設CTAとページ内CTAは意味が違うので分けて記録する。
+  // 同じ「CONTACT」でも、ヘッダー常設・ページ内・フッターでは意味が違う。
+  // PC ナビとモバイルナビは別要素なので分けて記録する（従来はどちらも
+  // body に落ちていて区別できなかった）。
   function resolveCtaPosition(a) {
+    var explicit = attr(a, "data-cta-position");
+    if (explicit) return explicit;
     if (a.classList && a.classList.contains("nav-cta")) return "header";
+    if (a.closest("#mobile-nav")) return "mobile_nav";
+    if (a.closest(".site-header")) return "header_nav";
+    if (a.closest(".tool-nav")) return "tool_nav";
     if (a.closest("footer")) return "footer";
     var section = a.closest("section");
-    if (section && section.id) return section.id;
+    if (section && section.id) return POSITION_ALIAS[section.id] || section.id.replace(/-/g, "_");
     return "body";
+  }
+
+  // cta_id は「どのCTAか」の安定した識別子。巨大な textContent に依存せず、
+  // 明示指定があればそれを、無ければ 位置_種別 から機械的に決める。
+  function resolveCtaId(a, type, position) {
+    var explicit = attr(a, "data-cta-id");
+    if (explicit) return explicit;
+    var id = position + "_" + type;
+    return id.replace(/[^A-Za-z0-9_]/g, "_").toLowerCase();
+  }
+
+  // 遷移先。同一オリジンならサイト内の相対パス、外部ならホスト名だけを送る。
+  // クエリ文字列は送らない（個人情報が載る余地を作らないため）。
+  function resolveDestination(a, rawHref) {
+    if (/^mailto:/i.test(rawHref)) return "mailto";
+    if (/^tel:/i.test(rawHref)) return "tel";
+    try {
+      if (a.origin === window.location.origin) {
+        return a.pathname.replace(/^\//, "") || "/";
+      }
+      return a.hostname;
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function currentPage() {
+    return (
+      (document.body && document.body.getAttribute("data-page")) ||
+      window.location.pathname
+    );
+  }
+
+  function buildParams(a, rawHref) {
+    var type = resolveCtaType(a, a.href, rawHref);
+    var position = resolveCtaPosition(a);
+
+    var params = {
+      cta_id: resolveCtaId(a, type, position),
+      cta_type: type,
+      cta_position: position,
+      destination: resolveDestination(a, rawHref),
+      source_page: currentPage(),
+    };
+
+    // 短いラベルだけ残す。WORKS カードのように中身が全部入ってしまう要素は
+    // data-cta-label 側で明示する（textContent には依存しない）。
+    var label = attr(a, "data-cta-label");
+    if (!label) {
+      var text = (a.textContent || "").replace(/[→›»]/g, "");
+      text = text.replace(/\s+/g, " ").trim();
+      if (text.length <= 40) label = text;
+    }
+    if (label) params.cta_text = label.slice(0, 40);
+
+    // WORKS の作品識別。works-render.js が data 属性で渡す。
+    var workId = attr(a, "data-work-id");
+    if (workId) {
+      params.work_id = workId;
+      params.work_name = attr(a, "data-work-name");
+      var pos = parseInt(attr(a, "data-work-position"), 10);
+      if (!isNaN(pos)) params.work_position = pos;
+      var action = attr(a, "data-cta-action");
+      if (action) params.cta_action = action;
+    }
+
+    return params;
+  }
+
+  /* このクリックが「このタブで同一オリジンへ遷移する」ものかを判定する。
+     true なら送信を遷移先へ預ける。false なら今このページで送れる。
+     どちらか一方しか実行しないので二重送信は起きない。 */
+  function willNavigateSameOrigin(a, event) {
+    if (event.defaultPrevented) return false;
+    if (event.button !== 0) return false; // 中クリック等は別タブ＝このページは残る
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    var target = a.getAttribute("target");
+    if (target && target !== "_self") return false;
+    if (a.hasAttribute("download")) return false;
+    try {
+      if (a.protocol !== "http:" && a.protocol !== "https:") return false;
+      if (a.origin !== window.location.origin) return false;
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   document.addEventListener(
@@ -198,18 +394,13 @@ window.SITE_CONFIG = SITE_CONFIG;
         // GA4 未設定・gtag 未ロード時は何もしない（console にも出さない）。
         if (typeof window.gtag !== "function") return;
 
-        var text = (a.textContent || "").replace(/[→›»]/g, "");
-        text = text.replace(/\s+/g, " ").trim().slice(0, 100);
+        var params = buildParams(a, rawHref);
 
-        window.gtag("event", "cta_click", {
-          page:
-            (document.body && document.body.getAttribute("data-page")) ||
-            window.location.pathname,
-          href: a.href,
-          cta_type: resolveCtaType(a.href, rawHref),
-          cta_text: text,
-          cta_position: resolveCtaPosition(a),
-        });
+        if (willNavigateSameOrigin(a, event)) {
+          defer("cta_click", params);
+        } else {
+          sendNow("cta_click", params);
+        }
       } catch (e) {
         // 計測の失敗は握りつぶす。ここで throw するとリンク遷移まで
         // 巻き込む可能性があるため、意図的に何もしない。
