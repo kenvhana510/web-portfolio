@@ -1,7 +1,7 @@
 # LEGACRAFT 計測仕様（Measurement SSOT）
 
-Version 1.0 — CONVERSION SYSTEM v1 / PHASE 1
-最終更新: 2026-08-28
+Version 1.1 — CONVERSION SYSTEM v1 / PHASE 1
+最終更新: 2026-08-28（GA4 管理画面の実施状況を同期）
 
 このファイルが計測の正本。イベント名・パラメータ・UTM の書き方を変えるときは、
 コードより先にここを更新する。GA4 管理画面の設定もここに記録する。
@@ -181,19 +181,137 @@ https://legacraft.jp/tools/price-estimator/?utm_source=x&utm_medium=social&utm_c
 
 ---
 
-## 5. GA4 管理画面で必要な設定（コードでは完結しない）
+## 5. GA4 管理画面の設定状況
 
-**以下はコード側では実施できない。GA4 管理画面での操作が必要。**
+対象プロパティ: `legacraft.jp`（アカウント 398579084 / プロパティ 542351592）
+対象ストリーム: `LEGACRAFT`（ストリーム ID 15489902429 / 測定 ID `G-ZFSK3YRNJL`）
+同期日: 2026-08-28（CONVERSION SYSTEM v1 PHASE 1 リリース時点）
 
-| # | 設定 | 場所 | 内容 |
-|---|---|---|---|
-| 1 | `generate_lead` をキーイベントに登録 | 管理 → イベント → キーイベント | これをやらないと「問い合わせ件数」が GA4 上で CV として数えられない |
-| 2 | 内部トラフィックの除外 | 管理 → データストリーム → タグ設定 → 内部トラフィックの定義 | 自宅・作業環境の IP を `internal` として定義し、データフィルタを「有効」にする |
-| 3 | 参照元除外（unwanted referrals） | 管理 → データストリーム → タグ設定 → 参照元除外リスト | `legacraft.com` / `kenvhana510.github.io` / `onrender.com` を追加。TOPのDEMO 6本が別ドメインのため、戻ってきた訪問が新セッション扱いになるのを防ぐ |
-| 4 | カスタムディメンション登録 | 管理 → カスタム定義 | `cta_id` / `cta_position` / `work_id` / `work_name` / `plan` / `method` / `step_name` / `source_page`（イベントスコープ） |
-| 5 | カスタム指標 | 管理 → カスタム定義 | `range_min` / `range_max` / `work_position` / `step`（イベントスコープ・整数） |
+このプロパティには `愛知片付け窓口`（aichi-katazuke.com）のストリームも同居している。
+本仕様が対象にするのは `LEGACRAFT` ストリームのみ。数値を見るときは必ず絞り込む。
 
-**未実施のものを PASS にしない。** コード実装の完了と GA4 管理画面の設定完了は分けて記録する。
+### 5.1 完了済み（DONE）
+
+**カスタム ディメンション 8件** — 管理 → データの表示 → カスタム定義 → カスタム ディメンション
+すべてイベントスコープ。パラメータ名はディメンション名と同一。
+
+| ディメンション | パラメータ | 用途 |
+|---|---|---|
+| `cta_id` | `cta_id` | CTA の識別子（`hero_contact` 等） |
+| `cta_position` | `cta_position` | CTA の設置場所（`hero` / `works` / `final` / `footer` 等） |
+| `work_id` | `work_id` | 作品スラッグ（`work-03` 等） |
+| `work_name` | `work_name` | 作品名（`NESTA ARCHITECTS` 等） |
+| `plan` | `plan` | 見積り診断のプラン（`lp` / `small` / `wordpress`） |
+| `method` | `method` | 到達経路（`contact_form` / `lead_form` / `contact_page`） |
+| `step_name` | `step_name` | 見積り設問名（離脱ステップの特定用） |
+| `source_page` | `source_page` | CTA が押されたページ（`top` / `works` / `price-estimator` 等） |
+
+**カスタム指標 4件** — 管理 → データの表示 → カスタム定義 → カスタム指標
+すべてイベントスコープ・測定単位「標準」。
+
+| 指標 | パラメータ | 用途 |
+|---|---|---|
+| `range_min` | `range_min` | 概算レンジの下限（円） |
+| `range_max` | `range_max` | 概算レンジの上限（円） |
+| `work_position` | `work_position` | TOP ギャラリーでの作品の並び順（1始まり） |
+| `step` | `step` | 見積りシミュレーターの設問番号（1〜9） |
+
+測定単位を「通貨」ではなく「標準」にしてある。`range_*` は概算のレンジであって
+実売上ではないため、通貨として表示すると収益と取り違えられる。
+
+**除外する参照のリスト** — データストリーム → LEGACRAFT → タグ設定を行う → 除外する参照のリスト
+
+```
+参照ドメインが次を含む   legacraft.com
+参照ドメインが次を含む   kenvhana510.github.io
+```
+
+TOP の DEMO 6本がこの2ドメインにあるため、除外しないと「デモを見て戻ってきた訪問」が
+別セッション扱いになり、流入元の attribution が切れる。
+
+`onrender.com` は**追加しない**。Lead API は `fetch` でしか呼ばれず、ユーザーが
+そのドメインからサイトへ遷移する経路が存在しないため、参照元として現れない。
+追加しても無害だが効果がないので、設定を増やさない。
+
+**内部トラフィックの除外** — データストリーム → タグ設定 → 内部トラフィックの定義／管理 → データフィルタ
+
+```
+ルール      HOME-PC
+条件        IP アドレスが次と等しい  92.202.94.***（作業環境の IPv4・完全な値は GA4 管理画面のみに保持）
+traffic_type internal
+データフィルタ Internal Traffic（内部トラフィック／除外）= 有効
+```
+
+2026-08-28 に実測した作業環境のグローバル IPv4 と一致することを確認したうえで、
+データフィルタを「テスト」から「有効」へ切り替えた。GA4 の警告どおり、
+この操作は元に戻せず、遡って適用もされない。
+
+> **このファイルは本番で公開配信される**（https://legacraft.jp/docs/MEASUREMENT_SPEC.md）。
+> IP アドレス・認証情報・個人情報の完全な値をここへ書かないこと。上記の IPv4 を
+> 伏せ字にしているのはこのため。正確な値は GA4 管理画面側だけが持つ。
+
+> **MONITORING NOTE — IPv6**
+> 作業環境は IPv6（`240d:1c:8e:...` 系）も持っている。アクセス経路によっては GA4 が
+> IPv6 側を受け取り、上記の IPv4 ルールに一致しない可能性がある。
+> 除外が効いているかは、数日後にレポートで `traffic_type = internal` を確認して判断する。
+> **確認できていない段階で IPv6 条件を推測で追加しない。** ISP 側で変わる値のため、
+> 実際に GA4 が受け取っているアドレスを見てから決める。
+
+### 5.2 未完了（PENDING）
+
+**`generate_lead` をキーイベントに登録**
+
+| 項目 | 状態 |
+|---|---|
+| 実装（`js/contact-form.js`） | **DONE** |
+| Safe mock acceptance | **PASS**（API 成功時のみ発火・失敗時 0 件を実測） |
+| 本番への到達 | **WAITING FOR FIRST REAL LEAD** |
+| GA4 キーイベント登録 | **PENDING** |
+
+現在の GA4 UI では、キーイベントの登録は**イベント一覧の★をクリックする方式のみ**で、
+イベント名を入力して新規作成する導線がない（画面の案内文も「イベント名の横にある
+スターを選択します」）。`generate_lead` はまだ一度も GA4 に届いていないため一覧に出ない。
+
+**これはシステムの欠陥ではなく、初回の実イベントが未到達であることによる activation 待ち。**
+
+一覧に出すためだけにテストイベントを送ってはいけない。CV 件数が水増しされ、
+これから使い始める指標そのものを汚染する。偽の問い合わせを送るのも同様に禁止。
+
+なお `close_convert_lead` / `qualify_lead` / `purchase` がキーイベントとして登録済みだが、
+いずれもデータ受信がなく、本仕様のイベントとは無関係。
+
+---
+
+### 5.3 FIRST REAL LEAD RUNBOOK（初回の本物の問い合わせが入ったら）
+
+最初の1件が来たときにだけ実施する手順。以降は不要。
+
+1. **Lead API 側で受信を確認する**
+   lead-system に該当の Lead が保存されているか（`source: "ContactForm"`）。
+   保存されていなければ計測ではなく送信側の問題なので、まずそちらを調べる。
+
+2. **GA4 に `generate_lead` が届いたか確認する**
+   管理 → データの表示 → イベント →「最近のイベント」タブ、または DebugView。
+   `contact_form_submit_success` と対で届いていれば正常。
+
+3. **イベント一覧への反映を待つ**
+   新しいイベント名が一覧に出るまで最大24時間かかる。
+
+4. **`generate_lead` をキーイベント化する**
+   管理 → データの表示 → イベント →「最近のイベント」タブ →
+   `generate_lead` の行の左端にある★（キーイベントのステータスを切り替える）をクリック。
+   「キーイベント」タブに★点灯で出れば完了。
+
+5. **完了を記録する**
+   本ファイルの 5.2 を DONE に更新し、日付を残す。
+
+6. **SYSTEM を昇格させる**
+   `PRODUCTION / OPERATIONAL` → `PRODUCTION / DONE / FREEZE`
+
+> **この手順の完了を待つ間、開発を止める必要はない。**
+> キーイベント登録は「問い合わせ件数を GA4 の CV として数える」ためのものであり、
+> それ以外の計測（CTA / WORKS / ESTIMATOR / attribution）はすべて既に稼働している。
+> 初回リード待ちを理由に次フェーズを止めないこと。
 
 ---
 
@@ -219,7 +337,7 @@ CONTACT 到達      page_view + cta_click(cta_id=*_contact) が同一ページ�
 ↓
 送信成功           contact_form_submit_success
 ↓
-リード             generate_lead   ← キーイベント（要 GA4 管理画面設定）
+リード             generate_lead   ← キーイベント登録は初回リード到達後（5.2 / 5.3 参照）
 ↓
 受注               GA4 外。lead-system 側の SSOT で管理する
 ```
