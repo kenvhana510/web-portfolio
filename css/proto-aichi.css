@@ -1,0 +1,169 @@
+/* ==========================================================================
+   PROTOTYPE — /aichi/ 改善（PHASE 16）
+   prototype/ac-hybrid-top ブランチ専用。全セレクタを [data-page="aichi"] に閉じる。
+
+   TOP のコピーにはしない。役割を分ける:
+     TOP    = 全国・オンライン前提。PC画面を主役にして「制作の品質」を見せる
+     /aichi/ = 地域・対面前提。**SP画面を主役**にして「業種ごとに作った実物」を見せる
+   地域の事業者にとって、自社サイトを見るのは主にその土地の顧客のスマホなので、
+   ここでは SP を大きく、PC を添える（TOP と主従が逆）。
+
+   proto-top.css との共通ルール（ヘッダー常設CTA / 本文16px）は
+   意図的に複製している。共通ファイルへ切り出すのは消費者が3つになってから。
+   いま抽象化すると、検証済みの TOP を作り直すコストの方が大きい。
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 本文の読みやすさ（TOP と同じ判断。14px -> 16px）
+   -------------------------------------------------------------------------- */
+[data-page="aichi"] main p,
+[data-page="aichi"] main li {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+[data-page="aichi"] main section > .container > p,
+[data-page="aichi"] main .section-head p {
+  max-width: 40em;
+}
+
+/* --------------------------------------------------------------------------
+   2. ヘッダー常設CTA（P1）
+   /aichi/ も 900px 未満で .nav-cta が display:none だった。
+   地域検索からの流入はほぼスマホなので、TOP より効き目が大きい。
+   -------------------------------------------------------------------------- */
+[data-page="aichi"] .btn.nav-cta {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+@media (max-width: 899px) {
+  [data-page="aichi"] .btn.nav-cta {
+    font-size: 0.78rem;
+    padding: 0.62em 0.9em;
+    letter-spacing: 0.02em;
+    margin-left: auto;
+    margin-right: 0.5rem;
+  }
+  [data-page="aichi"] .site-header .brand-word {
+    font-size: 0.86rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. WORKS — 業種で引く証拠
+   これまでこのセクションは、見出しで「中身をすべて公開しています」と言いながら
+   200px を超える画像が1枚も無かった。主張と実物が繋がっていなかった。
+   -------------------------------------------------------------------------- */
+/* 狭い画面では横スクロールの帯にする。
+   2列グリッドにすると1枚165pxまで縮み、実物として読めない大きさになる。
+   /aichi/ は地域検索＝ほぼスマホ流入なので、ここで証拠が潰れるのは致命的。
+   帯にすれば1枚あたりの実寸を確保でき、縦にも伸びない。 */
+[data-page="aichi"] .awk__grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 66%;
+  gap: 1.1rem;
+  margin: 2.4rem 0 1.4rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.6rem;
+}
+
+[data-page="aichi"] .awk__item {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 560px) {
+  [data-page="aichi"] .awk__grid {
+    grid-auto-columns: 40%;
+  }
+}
+
+/* 6列にすると1枚165pxで、実物として読めない大きさになる（証拠にならない）。
+   広い画面では3列にして1枚350px前後を確保する。 */
+/* 広い画面はスクロールさせず、3列で全部見せる（1枚350px前後） */
+@media (min-width: 900px) {
+  [data-page="aichi"] .awk__grid {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.4rem 2rem;
+    overflow-x: visible;
+  }
+}
+
+[data-page="aichi"] .awk__item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* SP のスクリーンショットを主役に置く。端末比 390:844 を保つ */
+[data-page="aichi"] .awk__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* 端末そのままの 390:844 だと縦に伸びすぎるので、上端（Hero）を残して切る。
+     サイトの印象はファーストビューにほぼ出るため、そこだけ見せれば足りる。 */
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: top center;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-paper);
+}
+
+[data-page="aichi"] .awk__industry {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-text);
+}
+
+[data-page="aichi"] .awk__name {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem !important;
+  line-height: 1.6 !important;
+  color: var(--color-ink);
+}
+
+[data-page="aichi"] .awk__note {
+  font-size: 0.88rem !important;
+  color: var(--color-ink-soft);
+}
+
+[data-page="aichi"] .awk__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.6rem;
+}
+
+/* --------------------------------------------------------------------------
+   4. タップ標的（WCAG 2.5.8 の最小 24px）
+   -------------------------------------------------------------------------- */
+[data-page="aichi"] main p a:not(.btn),
+[data-page="aichi"] .site-footer a:not(.btn) {
+  display: inline-block;
+  min-height: 24px;
+  padding-block: 0.15rem;
+}
+
+[data-page="aichi"] .footer-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   5. axe-core が本番で検出した color-contrast 違反と同じ原因の箇所を潰す
+   accent-text に opacity を掛けると合成後 4.31 になり AA を割る
+   -------------------------------------------------------------------------- */
+[data-page="aichi"] .eyebrow,
+[data-page="aichi"] .tval__num,
+[data-page="aichi"] .tflow__num {
+  opacity: 1;
+}

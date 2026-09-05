@@ -26,6 +26,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="../css/style.css">
+<!-- PROTOTYPE(PHASE 16): /aichi/ 専用。全セレクタが [data-page="aichi"] に閉じている -->
+<link rel="stylesheet" href="../css/proto-aichi.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -105,7 +107,8 @@
       <li><a href="../contact.html" data-nav-link="contact">CONTACT</a></li>
     </ul>
     </nav>
-    <a href="../contact.html" class="btn btn-primary nav-cta">相談する</a>
+    <!-- PROTOTYPE(P1): 900px 未満でも常時表示。地域検索はほぼスマホ流入のため効きが大きい -->
+    <a href="../contact.html" class="btn btn-primary nav-cta" data-cta-position="header">無料相談</a>
     <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-nav"><span></span></button>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="モバイルナビゲーション">
@@ -188,12 +191,67 @@
         <h2>制作物は、中身をすべて公開しています</h2>
         <p>公開している6作品は、いずれも<strong>架空のクライアントを想定した自主制作</strong>です。実際の受注案件はお客様の許可や守秘義務の都合で中身をお見せできないことが多いのですが、自主制作であれば、デザインの意図・設計・実装・品質確認まで包み隠さず公開できます。「この人はどこまでやるのか」を、見てから判断してください。</p>
       </div>
-      <p class="reveal">
+      <!-- PROTOTYPE(PHASE 16): これまでこのセクションには 200px を超える画像が
+           1枚も無く、「中身をすべて公開しています」という見出しに対して
+           実物が存在しなかった。実際に各サイトを開いて撮影した SP 表示を置く。
+           TOP は PC を主役にしているが、ここは逆に SP を主役にする。
+           地域の事業者のサイトを実際に見るのは、その土地の顧客のスマホだから。 -->
+      <div class="awk__grid" role="group" aria-label="制作例（6作品・横にスクロールできます）" tabindex="0">
+        <div class="awk__item reveal">
+          <picture>
+            <source type="image/webp" srcset="../images/works/work-03-sp-390.webp 390w, ../images/works/work-03-sp-780.webp 780w" sizes="(min-width:900px) 15vw, (min-width:560px) 30vw, 44vw">
+            <img class="awk__shot" src="../images/works/work-03-sp-390.webp" width="390" height="844" loading="eager" decoding="async" alt="NESTA ARCHITECTS（建築設計）のスマートフォン表示">
+          </picture>
+          <span class="awk__industry">建築設計</span>
+          <p class="awk__name">NESTA ARCHITECTS</p>
+        </div>
+        <div class="awk__item reveal">
+          <picture>
+            <source type="image/webp" srcset="../images/works/work-04-sp-390.webp 390w, ../images/works/work-04-sp-780.webp 780w" sizes="(min-width:900px) 15vw, (min-width:560px) 30vw, 44vw">
+            <img class="awk__shot" src="../images/works/work-04-sp-390.webp" width="390" height="844" loading="eager" decoding="async" alt="LUMÉA SKIN CLINIC（美容医療）のスマートフォン表示">
+          </picture>
+          <span class="awk__industry">美容医療</span>
+          <p class="awk__name">LUMÉA SKIN CLINIC</p>
+        </div>
+        <div class="awk__item reveal">
+          <picture>
+            <source type="image/webp" srcset="../images/works/work-02-sp-390.webp 390w, ../images/works/work-02-sp-780.webp 780w" sizes="(min-width:900px) 15vw, (min-width:560px) 30vw, 44vw">
+            <img class="awk__shot" src="../images/works/work-02-sp-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="AICHI CLEAN（ハウスクリーニング）のスマートフォン表示">
+          </picture>
+          <span class="awk__industry">ハウスクリーニング</span>
+          <p class="awk__name">AICHI CLEAN</p>
+        </div>
+        <div class="awk__item reveal">
+          <picture>
+            <source type="image/webp" srcset="../images/works/work-01-sp-390.webp 390w, ../images/works/work-01-sp-780.webp 780w" sizes="(min-width:900px) 15vw, (min-width:560px) 30vw, 44vw">
+            <img class="awk__shot" src="../images/works/work-01-sp-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="株式会社ミライテック（製造業（採用））のスマートフォン表示">
+          </picture>
+          <span class="awk__industry">製造業（採用）</span>
+          <p class="awk__name">株式会社ミライテック</p>
+        </div>
+        <div class="awk__item reveal">
+          <picture>
+            <source type="image/webp" srcset="../images/works/work-06-sp-390.webp 390w, ../images/works/work-06-sp-780.webp 780w" sizes="(min-width:900px) 15vw, (min-width:560px) 30vw, 44vw">
+            <img class="awk__shot" src="../images/works/work-06-sp-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="潮風ロジスティクス（物流）のスマートフォン表示">
+          </picture>
+          <span class="awk__industry">物流</span>
+          <p class="awk__name">潮風ロジスティクス</p>
+        </div>
+        <div class="awk__item reveal">
+          <picture>
+            <source type="image/webp" srcset="../images/works/work-05-sp-390.webp 390w, ../images/works/work-05-sp-780.webp 780w" sizes="(min-width:900px) 15vw, (min-width:560px) 30vw, 44vw">
+            <img class="awk__shot" src="../images/works/work-05-sp-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="ひだまり介護ステーション（介護福祉）のスマートフォン表示">
+          </picture>
+          <span class="awk__industry">介護福祉</span>
+          <p class="awk__name">ひだまり介護ステーション</p>
+        </div>
+      </div>
+      <p class="awk__note reveal">横にスワイプすると残りの作品も見られます。6作品とも、実際に公開しているデモサイトをそのまま撮影したものです。業種は架空ですが、画面は実物です。</p>
+
+      <div class="awk__actions reveal">
         <a href="../works.html" class="btn btn-ghost" data-cta-id="aichi_works_works" data-cta-label="制作物を見る">6作品とデモサイトを見る <span class="btn-arrow">→</span></a>
-      </p>
-      <p class="reveal" style="margin-top:0.75rem;">
         <a href="../case-study.html" class="btn btn-ghost" data-cta-id="aichi_works_case_study" data-cta-label="制作プロセス">制作プロセスを見る <span class="btn-arrow">→</span></a>
-      </p>
+      </div>
     </div>
   </section>
 
