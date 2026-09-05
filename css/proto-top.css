@@ -107,7 +107,7 @@
 
 @media (min-width: 900px) {
   [data-page="top"] .phero {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   }
 }
 
@@ -123,7 +123,9 @@
 /* H1: 86px -> 44px。空いた面積は「情報」に使う（P-4） */
 [data-page="top"] .phero__title {
   font-family: var(--font-jp);
-  font-size: clamp(1.85rem, 3.4vw + 0.7rem, 2.75rem);
+  /* 44px だと 1440px 幅で 5行 319px になり、見出しだけで画面を食っていた。
+     P-4（大きさではなく情報を載せる）に沿ってサイズを落とし、行数を減らす。 */
+  font-size: clamp(1.7rem, 2.2vw + 0.7rem, 2.25rem);
   line-height: 1.45;
   letter-spacing: 0.01em;
   font-weight: 600;
@@ -132,11 +134,28 @@
 }
 
 /* 「30,000円」「ひとりで」は意味の塊なので行またぎで割らない。
-   390px で「ひとり / で一貫して」と割れていた。 */
+   390px で「ひとり / で一貫して」と割れていた。
+   inline-block ではなく nowrap を使う。inline-block は行ボックスを作り直すため、
+   Webフォント差し替え時に H1 の高さが変わって CLS 0.038 を出していた。 */
 [data-page="top"] .phero__title em {
   font-style: normal;
   color: var(--color-accent-text);
-  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Webフォント（Noto Serif JP）は swap で後から差し替わる。
+   Hero の高さがそれで変わると、下の全セクションがずれて CLS になる。
+   行数ぶんの高さを先に確保して、差し替えで箱が動かないようにする。 */
+[data-page="top"] .phero__title {
+  min-height: calc(4 * 1.45em);
+}
+
+/* axe-core が serious で検出したコントラスト違反（本番にも存在）。
+   .tval__num / .tflow__num は accent-text に opacity:0.85 を掛けており、
+   合成後の比が 4.31（要件 4.5）になっていた。不透明にすると 5.38 で PASS。 */
+[data-page="top"] .tval__num,
+[data-page="top"] .tflow__num {
+  opacity: 1;
 }
 
 [data-page="top"] .phero__lead {
