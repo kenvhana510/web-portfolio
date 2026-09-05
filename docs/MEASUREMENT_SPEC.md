@@ -53,13 +53,16 @@ GA4（`G-ZFSK3YRNJL`）を `js/site-config.js` から読み込む。全10ペー�
 |---|---|---|
 | `cta_id` | CTA の安定した識別子 | `hero_contact` |
 | `cta_type` | 遷移先の意味 | `contact` / `works` / `case_study` / `demo` / `estimator` / `service` / `email` / `tel` / `lancers` / `coconala` / `other` |
-| `cta_position` | 置かれている場所 | `hero` / `works` / `value` / `flow` / `final` / `header` / `header_nav` / `mobile_nav` / `tool_nav` / `footer` / `result` / `body` |
+| `cta_position` | 置かれている場所 | `hero` / `problem` / `works` / `value` / `price` / `flow` / `faq` / `final` / `header` / `header_nav` / `mobile_nav` / `tool_nav` / `footer` / `result` / `body` |
 | `destination` | 遷移先（同一オリジンは相対パス、外部はホスト名のみ。**クエリ文字列は送らない**） | `contact.html` / `nesta.legacraft.com` |
 | `source_page` | 押されたページ（`body[data-page]`） | `top` |
 | `cta_text` | 40文字までの短いラベル。`data-cta-label` があればそれを優先 | `相談する` |
 
 `cta_id` は `data-cta-id` があればそれ、無ければ `<cta_position>_<cta_type>` から機械的に決める。
 **巨大な `textContent` には依存しない。**
+
+`price` は TOP の料金セクション末尾に置いた CTA（2026-09-05 追加）。
+`problem` / `faq` は語彙として確保しているが、現時点で使っている要素は無い。
 
 主要な `cta_id`:
 
@@ -75,7 +78,9 @@ estimator_contact       （見積り結果画面の「相談する」）
 
 ### 2.3 WORKS 作品識別（TOPギャラリーのみ）
 
-`js/works-render.js` の `renderWorksGallery()` が `data-*` 属性で渡す。
+TOP プロトタイプでは `js/proto-works.js` が、works.html は `js/works-render.js` の
+`renderWorksGrid()` が担当する。属性の作り方は両者で揃えてある。
+（旧記述: `renderWorksGallery()` — TOP の描画は proto-works.js に置き換わった）
 `works.html` の `renderWorksGrid()` は FREEZE のため対象外。
 
 | パラメータ | 内容 | 例 |

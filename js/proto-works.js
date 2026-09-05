@@ -57,11 +57,35 @@
     );
   }
 
+  // MEASUREMENT_SPEC.md 2.3 が要求する data-* を必ず付ける。
+  // 初版はこれを落としており、TOP ギャラリーの work_id / work_name /
+  // work_position / cta_action が GA4 に届かなくなっていた（計測の後退）。
+  // 属性の作り方は既存 works-render.js の workAttrs() に合わせている。
+  function workName(w) {
+    return String(w.title || "").split("（")[0].trim().slice(0, 40);
+  }
+
+  function workAttrs(w, index, action) {
+    return (
+      ' data-work-id="' + esc(w.slug) + '"' +
+      ' data-work-name="' + esc(workName(w)) + '"' +
+      ' data-work-position="' + (index + 1) + '"' +
+      ' data-cta-action="' + action + '"' +
+      ' data-cta-id="' + esc(w.slug).replace(/-/g, "_") + "_" + action + '"' +
+      ' data-cta-label="' + esc(workName(w)) + '"' +
+      ' data-cta-position="works"'
+    );
+  }
+
   function item(w, index) {
     var eager = index === 0;
     var caseHref = "case-study.html?work=" + encodeURIComponent(w.slug);
+
+    // 稼働しているデモを開けることが、この事業で唯一その場に出せる証拠。
+    // テキストリンクではなくボタンにして第一リンクに昇格させる。
     var demo = w.url
-      ? '<a class="pwg__link" href="' + esc(w.url) + '" target="_blank" rel="noopener">デモを見る &rarr;</a>'
+      ? '<a class="btn btn-ghost pwg__demo" href="' + esc(w.url) + '" target="_blank" rel="noopener"' +
+        ' data-cta-type="demo"' + workAttrs(w, index, "demo") + '>実物を開く（別タブ） <span class="btn-arrow">&rarr;</span></a>'
       : "";
 
     return (
@@ -75,10 +99,12 @@
           '<span class="pwg__num">' + esc(w.number) + " / SELECTED WORK" + '</span>' +
           '<h3 class="pwg__name">' + esc(w.title) + '</h3>' +
           '<p class="pwg__meta">' + esc(w.industry) + '</p>' +
+          '<p class="pwg__scale">規模：' + esc(w.siteType) + '</p>' +
           '<p class="pwg__sum">' + esc(w.summary) + '</p>' +
           '<p class="pwg__links">' +
-            '<a class="pwg__link" href="' + caseHref + '">VIEW CASE &rarr;</a>' +
             demo +
+            '<a class="pwg__link" href="' + caseHref + '"' +
+              ' data-cta-type="case_study"' + workAttrs(w, index, "case_study") + '>制作プロセスを見る &rarr;</a>' +
           '</p>' +
         '</div>' +
       '</article>'

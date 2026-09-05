@@ -82,6 +82,18 @@
   }
 }
 
+/* 320px ではロゴと金色ボタンの間隔が実質0で接触していた */
+@media (max-width: 360px) {
+  [data-page="top"] .btn.nav-cta {
+    margin-left: 0.6rem;
+    font-size: 0.74rem;
+    padding: 0.6em 0.7em;
+  }
+  [data-page="top"] .site-header .brand-word {
+    font-size: 0.78rem;
+  }
+}
+
 /* --------------------------------------------------------------------------
    3. HERO — 分割構成（Direction A）
    左に「何を・いくらで・誰が」、右に実物。
@@ -223,20 +235,42 @@
   background: var(--color-paper);
 }
 
+/* 「架空・自主制作」という開示文が、右下に重ねたスマホ画像の下に潜って
+   読めなくなっていた。読めない開示は開示として機能しないので、
+   重なりの外へ完全に出す。SP のはみ出し分を先に確保してから置く。 */
+[data-page="top"] .phero__proof {
+  padding-bottom: 2.2rem;
+}
+
 [data-page="top"] .phero__proof-cap {
-  margin: 2.4rem 0 0;
+  position: relative;
+  z-index: 3;
+  margin: 1.2rem 0 0;
+  padding-right: 27%;
   font-size: 0.78rem;
   line-height: 1.7;
   color: var(--color-ink-soft);
+  /* Webフォント差し替えで 3行 <-> 4行 に振れると右カラムの高さが変わり、
+     align-items:center のせいで左カラムまで動いて CLS になる。行数を固定する。 */
+  min-height: calc(3 * 1.7em);
 }
 
 @media (max-width: 899px) {
   [data-page="top"] .phero__proof {
     max-width: 460px;
+    padding-bottom: 0;
   }
+  /* 390px では重ねをやめる。狭い画面で重ねると開示文が読めなくなる */
   [data-page="top"] .phero__proof-sp {
-    width: 26%;
-    bottom: -1.2rem;
+    position: static;
+    width: 34%;
+    max-width: 132px;
+    margin: 0.9rem 0 0 auto;
+    display: block;
+  }
+  [data-page="top"] .phero__proof-cap {
+    padding-right: 0;
+    margin-top: 0.9rem;
   }
 }
 
@@ -310,6 +344,16 @@
   max-width: 40em;
 }
 
+/* 「選ばれる理由」は左に見出し・右にリストの2カラムで、
+   左が 600px ほど空いたまま置き去りになっていた。追従させて空白を機能させる。 */
+@media (min-width: 900px) {
+  [data-page="top"] .tval__head {
+    position: sticky;
+    top: calc(var(--lc-header-height, 4rem) + 2.5rem);
+    align-self: start;
+  }
+}
+
 [data-page="top"] .pwg__eyebrow {
   display: block;
   font-family: var(--font-en);
@@ -342,7 +386,12 @@
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
     gap: 2.6rem;
   }
-  /* 偶数番は左右を入れ替えて、縦に読むリズムを単調にしない */
+  /* 偶数番は左右を入れ替えて、縦に読むリズムを単調にしない。
+     order だけ入れ替えると実物が狭い方の列（1fr）に落ちて 441px -> 292px と
+     3割小さくなっていた。列の比率ごと入れ替えて、左右どちらでも同じ大きさにする。 */
+  [data-page="top"] .pwg__item:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  }
   [data-page="top"] .pwg__item:nth-child(even) .pwg__shots {
     order: 2;
   }
@@ -432,10 +481,25 @@
   margin: 0 0 1rem;
 }
 
+/* 規模（siteType）。「8万円で何が手に入るのか」に実物で答えるための1行。
+   works-data.js の値をそのまま出しているので、こちらで作った数字ではない。 */
+[data-page="top"] .pwg__scale {
+  font-size: 0.85rem !important;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.8rem;
+}
+
 [data-page="top"] .pwg__links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 1.2rem;
+}
+
+/* 稼働しているデモを開けることが、この事業で唯一その場に出せる証拠。
+   テキストリンクのままだと最強の資産が最弱の見た目になるのでボタンにする。 */
+[data-page="top"] .pwg__demo {
+  font-size: 0.82rem;
 }
 
 [data-page="top"] .pwg__link {
