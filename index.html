@@ -60,9 +60,14 @@
 <!-- PROTOTYPE: A/C ハイブリッド。prototype/ac-hybrid-top ブランチ専用。
      全セレクタが [data-page="top"] に閉じているため他ページに影響しない。 -->
 <link rel="stylesheet" href="css/proto-top.css">
-<!-- Hero の実物画像は srcset で 720w が選ばれる（46vw / 88vw のどちらでも）。
-     初版は 1440w を preload していて、実際に使う 720w と二重取得になっていた。 -->
-<link rel="preload" as="image" href="images/works/work-03-pc-720.webp" type="image/webp" fetchpriority="high">
+<!-- Hero の実物画像の先読み。
+     720w 固定で preload していたが、1920px 幅や高DPRでは srcset が 1440w を選ぶため、
+     preload した 720w が使われず二重取得になっていた（実測で 1920px 時に発生）。
+     img 側と同じ srcset/sizes を渡して、実際に使う1本だけを先読みする。 -->
+<link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      imagesrcset="images/works/work-03-pc-720.webp 720w, images/works/work-03-pc-1440.webp 1440w"
+      imagesizes="(min-width: 900px) 46vw, 88vw"
+      href="images/works/work-03-pc-720.webp">
 <script>
 /* AMBIENT HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
    prefers-reduced-motion では動かさないモード(ahero-calm)を選ぶ。
