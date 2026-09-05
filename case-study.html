@@ -78,7 +78,9 @@
       <p>制作実績の詳細ページです。JavaScriptが有効な環境では、選択した実績の詳細（課題・設計・デザイン・実装・品質確認・完成）が表示されます。</p>
     </div>
     <noscript>
-      <div class="container" style="padding:3rem 0;">
+      <!-- padding ショートハンドは .container の左右 padding まで 0 にしてしまう。
+           JS無効時に本文が画面端へ密着していたため padding-block に変更した。 -->
+      <div class="container" style="padding-block:3rem;">
         <p>このページの内容を表示するにはJavaScriptを有効にしてください。作品詳細は<a href="works.html">WORKS一覧</a>からもご覧いただけます。</p>
       </div>
     </noscript>

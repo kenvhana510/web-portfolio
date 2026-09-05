@@ -52,7 +52,7 @@ GA4（`G-ZFSK3YRNJL`）を `js/site-config.js` から読み込む。全10ペー�
 | パラメータ | 内容 | 例 |
 |---|---|---|
 | `cta_id` | CTA の安定した識別子 | `hero_contact` |
-| `cta_type` | 遷移先の意味 | `contact` / `works` / `case_study` / `demo` / `estimator` / `service` / `email` / `tel` / `lancers` / `coconala` / `other` |
+| `cta_type` | 遷移先の意味 | `contact` / `works` / `case_study` / `demo` / `estimator` / `service` / `checklist` / `email` / `tel` / `lancers` / `coconala` / `other` |
 | `cta_position` | 置かれている場所 | `hero` / `problem` / `works` / `value` / `price` / `flow` / `faq` / `final` / `header` / `header_nav` / `mobile_nav` / `tool_nav` / `footer` / `result` / `body` |
 | `destination` | 遷移先（同一オリジンは相対パス、外部はホスト名のみ。**クエリ文字列は送らない**） | `contact.html` / `nesta.legacraft.com` |
 | `source_page` | 押されたページ（`body[data-page]`） | `top` |
@@ -62,15 +62,17 @@ GA4（`G-ZFSK3YRNJL`）を `js/site-config.js` から読み込む。全10ペー�
 **巨大な `textContent` には依存しない。**
 
 `price` は TOP の料金セクション末尾に置いた CTA（2026-09-05 追加）。
-`problem` / `faq` は語彙として確保しているが、現時点で使っている要素は無い。
+`faq` と `flow` は TOP の該当セクション内の本文リンクから実際に送信されている
+（2026-09-05 の実測で確認）。`problem` は語彙として確保しているが使用要素は無い。
 
 主要な `cta_id`:
 
 ```
-hero_works / hero_contact
+hero_contact / hero_estimator
 header_contact          （ヘッダー常設ボタン）
 header_nav_contact / mobile_nav_contact
-works_works             （すべての作品を見る）
+works_works             （制作実績をすべて見る）
+price_contact / price_estimator（料金セクション末尾）
 final_contact / final_estimator
 footer_contact / footer_works / footer_service / footer_estimator
 estimator_contact       （見積り結果画面の「相談する」）
@@ -121,6 +123,10 @@ TOP プロトタイプでは `js/proto-works.js` が、works.html は `js/works-
 `request_type`（相談種別の選択肢ラベル）。
 
 **ボタンを押した時点・validation を通った時点・送信を開始した時点では発火させない。**
+
+`LEAD_SUBMIT_ENABLED = false`（実送信を止めた状態）のときだけ、
+`contact_form_submit_stub_confirmed` / `lead_submit_stub_confirmed` が発火する。
+本番は `true` のため到達しない。動作確認用であり、KPI には使わない。
 
 ---
 
