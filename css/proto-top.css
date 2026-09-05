@@ -1,0 +1,680 @@
+/* ==========================================================================
+   PROTOTYPE — A/C ハイブリッド TOP（PHASE 8）
+   docs/ART_DIRECTION_2026-09-05.md の RECOMMENDED_DIRECTION を実装する。
+
+   このファイルは prototype/ac-hybrid-top ブランチ専用。
+   すべてのセレクタを [data-page="top"] に閉じ込めてあるので、
+   他ページ（service / works / about / contact / aichi）には一切効かない。
+
+   実装している判断:
+   - P1  モバイル追従ヘッダーに常設CTA（下部固定バーは作らない。参照群12件中0件）
+   - P2  作品は PC + SP の2枚組。明るい地に置いて沈ませない
+   - P3  料金とFAQをTOPに出す（/aichi/ からの移植）
+   - P-5 本文 14px -> 16px、行長 57字 -> 約40字
+   - P-4 H1 86px -> 44px。大きさではなく情報を載せる
+   ========================================================================== */
+
+[data-page="top"] {
+  /* 明るい面（作品を見せるための地）。ブランドのアイボリーを土台にする */
+  --proto-light: #F2EFE6;
+  --proto-light-2: #E8E4D6;
+  --proto-on-light: #1B2C24;
+  --proto-on-light-muted: #3A463E;
+  /* Gold は明るい地の上だと 2.72 しか出ないので、明地専用の濃い金を用意する */
+  --proto-accent-on-light: #6B5320;
+  --proto-section-pad: clamp(3.5rem, 7vw, 6rem);
+}
+
+/* --------------------------------------------------------------------------
+   1. 本文の読みやすさ（P-5）
+   14px / 行間2.06 / 行長57字 は、面積を使う割に読み取れる量が少なかった。
+   16px / 行間1.75 / 行長40字前後へ。
+   -------------------------------------------------------------------------- */
+[data-page="top"] main p,
+[data-page="top"] main li {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+/* 行長。全角40字前後で折り返す。
+   初版は幅を縛っていなかったため、デスクトップの中央値が 63字 になり
+   本番(57字)より悪化していた。読ませる段落は一律で 40em に閉じる。 */
+[data-page="top"] main .psec p,
+[data-page="top"] main .pwg__body p,
+[data-page="top"] main .pwg__note,
+[data-page="top"] main .pprice__why,
+[data-page="top"] main .pfaq__a,
+[data-page="top"] main .tcta__text {
+  max-width: 40em;
+}
+
+[data-page="top"] .proto-measure {
+  max-width: 40em;      /* 全角40字相当 */
+}
+
+[data-page="top"] .proto-measure-narrow {
+  max-width: 32em;
+}
+
+/* --------------------------------------------------------------------------
+   2. ヘッダー常設CTA（P1）
+   既存の .btn.nav-cta は 900px 未満で display:none だった。
+   = モバイルには成約の受け皿が一つも無い状態。ここを開ける。
+   下部固定バーは作らない（参照群 12/12 で不採用）。
+   -------------------------------------------------------------------------- */
+[data-page="top"] .btn.nav-cta {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+@media (max-width: 899px) {
+  [data-page="top"] .btn.nav-cta {
+    /* 390px 幅でロゴ・CTA・ハンバーガーが同居できる寸法に落とす */
+    font-size: 0.78rem;
+    padding: 0.62em 0.9em;
+    letter-spacing: 0.02em;
+    margin-left: auto;
+    margin-right: 0.5rem;
+  }
+  /* ロゴの英字が CTA を押し出さないように */
+  [data-page="top"] .site-header .brand-word {
+    font-size: 0.86rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. HERO — 分割構成（Direction A）
+   左に「何を・いくらで・誰が」、右に実物。
+   Ambient の背景レイヤーはそのまま残す（ahero__space / depth / glow / pass）。
+   JS は .ahero / .ahero__stage / 各 layer しか触っていないので、
+   message 側の構造を変えても Ambient Hero は壊れない。
+   -------------------------------------------------------------------------- */
+[data-page="top"] .ahero__stage {
+  display: block;
+}
+
+[data-page="top"] .phero {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding: clamp(3rem, 8vw, 5.5rem) 1.5rem;
+}
+
+@media (min-width: 900px) {
+  [data-page="top"] .phero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+}
+
+[data-page="top"] .phero__eyebrow {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--color-accent-text);
+  margin-bottom: 1.1rem;
+}
+
+/* H1: 86px -> 44px。空いた面積は「情報」に使う（P-4） */
+[data-page="top"] .phero__title {
+  font-family: var(--font-jp);
+  font-size: clamp(1.85rem, 3.4vw + 0.7rem, 2.75rem);
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  margin: 0 0 1.25rem;
+  color: var(--color-ink);
+}
+
+/* 「30,000円」「ひとりで」は意味の塊なので行またぎで割らない。
+   390px で「ひとり / で一貫して」と割れていた。 */
+[data-page="top"] .phero__title em {
+  font-style: normal;
+  color: var(--color-accent-text);
+  display: inline-block;
+}
+
+[data-page="top"] .phero__lead {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--color-ink-soft);
+  max-width: 32em;
+  margin: 0 0 1.6rem;
+}
+
+/* 料金レンジ。現行は 13.6px でサイト最小だった＝最大の差別化点が最小の文字。
+   本文サイズまで上げ、罫線で独立させる。 */
+[data-page="top"] .phero__price {
+  margin: 0 0 1.8rem;
+  padding: 0.9rem 0 0.9rem 1rem;
+  border-left: 2px solid var(--color-accent);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--color-ink);
+}
+
+[data-page="top"] .phero__price b {
+  font-weight: 700;
+  color: var(--color-accent-text);
+}
+
+[data-page="top"] .phero__price small {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+
+[data-page="top"] .phero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+/* Hero の右側 = 実物。PC と SP を重ねて「両方きちんと作る」を一目で示す。 */
+[data-page="top"] .phero__proof {
+  position: relative;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 640px;
+}
+
+[data-page="top"] .phero__proof-pc {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-line-strong);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+}
+
+[data-page="top"] .phero__proof-sp {
+  position: absolute;
+  right: -0.5rem;
+  bottom: -1.6rem;
+  width: 23%;
+  max-width: 132px;
+  height: auto;
+  border: 1px solid var(--color-line-strong);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+  background: var(--color-paper);
+}
+
+[data-page="top"] .phero__proof-cap {
+  margin: 2.4rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+}
+
+@media (max-width: 899px) {
+  [data-page="top"] .phero__proof {
+    max-width: 460px;
+  }
+  [data-page="top"] .phero__proof-sp {
+    width: 26%;
+    bottom: -1.2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. PROBLEM（/aichi/ から移植）
+   -------------------------------------------------------------------------- */
+[data-page="top"] .pprob__list {
+  display: grid;
+  gap: 1.6rem;
+  margin-top: 2.6rem;
+}
+
+@media (min-width: 760px) {
+  [data-page="top"] .pprob__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.2rem;
+  }
+}
+
+[data-page="top"] .pprob__item {
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--color-line);
+}
+
+[data-page="top"] .pprob__num {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--color-accent-text);
+  margin-bottom: 0.7rem;
+}
+
+[data-page="top"] .pprob__title {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 0.6rem;
+  color: var(--color-ink);
+}
+
+[data-page="top"] .pprob__text {
+  margin: 0;
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   5. WORKS — 明るい地に反転する（P-6 / P2）
+   暗い地のままだと作品画像が沈む。参照群で作品を主役にしているサイトは
+   例外なく明るい地だった。ここだけ地を返す。
+   -------------------------------------------------------------------------- */
+[data-page="top"] .plight {
+  background: var(--proto-light);
+  color: var(--proto-on-light);
+}
+
+[data-page="top"] .plight .tsec__eyebrow,
+[data-page="top"] .plight .pwg__eyebrow {
+  color: var(--proto-accent-on-light);
+}
+
+[data-page="top"] .plight h2,
+[data-page="top"] .plight h3 {
+  color: var(--proto-on-light);
+}
+
+[data-page="top"] .plight p {
+  color: var(--proto-on-light-muted);
+}
+
+[data-page="top"] .pwg__head {
+  max-width: 40em;
+}
+
+[data-page="top"] .pwg__eyebrow {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  margin-bottom: 1rem;
+}
+
+[data-page="top"] .pwg__title {
+  font-family: var(--font-jp);
+  font-size: clamp(1.5rem, 2.4vw + 0.6rem, 2.1rem);
+  line-height: 1.5;
+  margin: 0 0 1.1rem;
+}
+
+[data-page="top"] .pwg__list {
+  display: grid;
+  gap: clamp(3rem, 6vw, 4.5rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+[data-page="top"] .pwg__item {
+  display: grid;
+  gap: 1.6rem;
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  [data-page="top"] .pwg__item {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 2.6rem;
+  }
+  /* 偶数番は左右を入れ替えて、縦に読むリズムを単調にしない */
+  [data-page="top"] .pwg__item:nth-child(even) .pwg__shots {
+    order: 2;
+  }
+}
+
+/* 実物：PC を大きく、SP を隣に。「崩れないスマホ表示」を文字でなく実物で示す。
+
+   初版は 2カラム（PC + SP 88px）にしていたが、390px 幅で計測したところ
+   PC 側の表示幅が 200px を割り、本番（340px）より小さくなっていた。
+   作品を大きく見せるための変更で作品が小さくなっては本末転倒なので、
+   狭い画面では PC を全幅にし、SP は右下に重ねる。 */
+[data-page="top"] .pwg__shots {
+  position: relative;
+  display: block;
+  padding-bottom: 1.2rem;
+}
+
+[data-page="top"] .pwg__shots .pwg__shot--sp {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24%;
+  max-width: 104px;
+}
+
+@media (min-width: 560px) {
+  [data-page="top"] .pwg__shots {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 118px;
+    gap: 0.9rem;
+    align-items: end;
+    padding-bottom: 0;
+  }
+  [data-page="top"] .pwg__shots .pwg__shot--sp {
+    position: static;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+[data-page="top"] .pwg__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(27, 44, 36, 0.18);
+  background: #fff;
+}
+
+[data-page="top"] .pwg__shot--pc {
+  box-shadow: 0 14px 34px rgba(27, 44, 36, 0.14);
+}
+
+[data-page="top"] .pwg__shot--sp {
+  box-shadow: 0 10px 22px rgba(27, 44, 36, 0.16);
+}
+
+[data-page="top"] .pwg__shotcap {
+  grid-column: 1 / -1;
+  margin: 0.55rem 0 0;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--proto-on-light-muted);
+}
+
+[data-page="top"] .pwg__num {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  color: var(--proto-accent-on-light);
+  margin-bottom: 0.6rem;
+}
+
+[data-page="top"] .pwg__name {
+  font-size: 1.15rem;
+  line-height: 1.55;
+  margin: 0 0 0.6rem;
+}
+
+[data-page="top"] .pwg__meta {
+  font-size: 0.82rem !important;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.9rem;
+}
+
+[data-page="top"] .pwg__sum {
+  margin: 0 0 1rem;
+}
+
+[data-page="top"] .pwg__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+[data-page="top"] .pwg__link {
+  font-family: var(--font-en);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--proto-accent-on-light);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15rem;
+}
+
+[data-page="top"] .pwg__note {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(27, 44, 36, 0.18);
+  font-size: 0.85rem !important;
+}
+
+[data-page="top"] .pwg__foot {
+  margin-top: 2rem;
+}
+
+/* 明るい地の上のボタン。Gold 地に濃い文字のままだと浮くので枠線型にする */
+[data-page="top"] .plight .btn-ghost {
+  color: var(--proto-on-light);
+  border-color: rgba(27, 44, 36, 0.4);
+}
+
+[data-page="top"] .plight .btn-ghost:hover {
+  border-color: var(--proto-accent-on-light);
+  color: var(--proto-accent-on-light);
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   6. PRICE（/aichi/ から移植・P3）
+   TOP に金額が一つも無い状態を解消する。
+   「対応しないこと」を必ず併記する。これが LEGACRAFT の差別化の核なので、
+   金額だけ切り出して載せない。
+   -------------------------------------------------------------------------- */
+[data-page="top"] .pprice__list {
+  display: grid;
+  gap: 1.6rem;
+  margin-top: 2.6rem;
+}
+
+@media (min-width: 860px) {
+  [data-page="top"] .pprice__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+[data-page="top"] .pprice__item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.7rem 1.5rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+[data-page="top"] .pprice__plan {
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-text);
+  margin-bottom: 0.8rem;
+}
+
+[data-page="top"] .pprice__name {
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+  color: var(--color-ink);
+}
+
+[data-page="top"] .pprice__amount {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-accent-text);
+  margin: 0 0 1.1rem;
+}
+
+[data-page="top"] .pprice__spec {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.1rem;
+}
+
+[data-page="top"] .pprice__spec li {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem !important;
+  line-height: 1.7 !important;
+  color: var(--color-ink-soft);
+}
+
+[data-page="top"] .pprice__spec li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 6px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+[data-page="top"] .pprice__not {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--color-line);
+  font-size: 0.85rem !important;
+  color: var(--color-ink-soft);
+}
+
+[data-page="top"] .pprice__not b {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+[data-page="top"] .pprice__why {
+  margin-top: 2rem;
+  padding: 1.3rem 1.4rem;
+  border: 1px solid var(--color-line);
+  font-size: 0.92rem !important;
+}
+
+[data-page="top"] .pprice__actions {
+  margin-top: 1.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+/* --------------------------------------------------------------------------
+   7. FAQ（/aichi/ から移植・P3）
+   -------------------------------------------------------------------------- */
+[data-page="top"] .pfaq__list {
+  margin-top: 2.4rem;
+  max-width: 46em;
+}
+
+[data-page="top"] .pfaq__item {
+  border-top: 1px solid var(--color-line);
+}
+
+[data-page="top"] .pfaq__item:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+
+[data-page="top"] .pfaq__q {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 1.15rem 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-jp);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-ink);
+  min-height: 44px;
+}
+
+[data-page="top"] .pfaq__q::after {
+  content: "＋";
+  margin-left: auto;
+  flex: none;
+  color: var(--color-accent-text);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+[data-page="top"] .pfaq__q[aria-expanded="true"]::after {
+  content: "−";
+}
+
+[data-page="top"] .pfaq__a {
+  padding: 0 0 1.3rem;
+  margin: 0;
+  color: var(--color-ink-soft);
+  max-width: 40em;
+}
+
+[data-page="top"] .pfaq__a[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. セクション余白
+   現行 288px は、載っている情報量に対して広すぎた。
+   情報を足したぶん、余白は締める。
+   -------------------------------------------------------------------------- */
+[data-page="top"] .psec {
+  padding-block: var(--proto-section-pad);
+}
+
+/* 既存の .container が padding:0 1.5rem を持っているので、ここで幅を
+   さらに縮めると左右が二重に食われる（390px で作品画像が 302px まで痩せていた）。
+   幅は既存定義に任せる。 */
+
+[data-page="top"] .psec__head {
+  max-width: 40em;
+}
+
+[data-page="top"] .psec__eyebrow {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--color-accent-text);
+  margin-bottom: 1rem;
+}
+
+[data-page="top"] .psec__title {
+  font-family: var(--font-jp);
+  font-size: clamp(1.5rem, 2.4vw + 0.6rem, 2.1rem);
+  line-height: 1.5;
+  margin: 0 0 1rem;
+  color: var(--color-ink);
+}
+
+[data-page="top"] .psec__statement {
+  color: var(--color-ink-soft);
+  max-width: 40em;
+}
+
+/* --------------------------------------------------------------------------
+   9. タップ標的（WCAG 2.5.8）
+   監査で見つかった 15〜16px のインラインリンクを 24px 以上にする。
+   -------------------------------------------------------------------------- */
+/* min-height はインライン要素には効かない。
+   本文中のリンクは inline-block にして上下に余白を持たせる。 */
+[data-page="top"] main p a:not(.btn),
+[data-page="top"] .site-footer a:not(.btn) {
+  display: inline-block;
+  min-height: 24px;
+  padding-block: 0.15rem;
+}
+
+[data-page="top"] .footer-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   10. reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  [data-page="top"] .phero__proof-pc,
+  [data-page="top"] .phero__proof-sp,
+  [data-page="top"] .pwg__shot {
+    box-shadow: none;
+  }
+}

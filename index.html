@@ -57,6 +57,12 @@
 <link rel="stylesheet" href="css/ambient-hero.css">
 <link rel="stylesheet" href="css/works-gallery.css">
 <link rel="stylesheet" href="css/top-sections.css">
+<!-- PROTOTYPE: A/C ハイブリッド。prototype/ac-hybrid-top ブランチ専用。
+     全セレクタが [data-page="top"] に閉じているため他ページに影響しない。 -->
+<link rel="stylesheet" href="css/proto-top.css">
+<!-- Hero の実物画像は srcset で 720w が選ばれる（46vw / 88vw のどちらでも）。
+     初版は 1440w を preload していて、実際に使う 720w と二重取得になっていた。 -->
+<link rel="preload" as="image" href="images/works/work-03-pc-720.webp" type="image/webp" fetchpriority="high">
 <script>
 /* AMBIENT HERO: 演出モードを初期描画の時点で確定させ、レイアウトシフトを防ぐ。
    prefers-reduced-motion では動かさないモード(ahero-calm)を選ぶ。
@@ -110,7 +116,8 @@
       <li><a href="contact.html" data-nav-link="contact">CONTACT</a></li>
     </ul>
     </nav>
-    <a href="contact.html" class="btn btn-primary nav-cta">相談する</a>
+    <!-- PROTOTYPE(P1): モバイルでも常時表示する。position を明示して GA4 で効果を測る。 -->
+    <a href="contact.html" class="btn btn-primary nav-cta" data-cta-position="header">無料相談</a>
     <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-nav"><span></span></button>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="モバイルナビゲーション">
@@ -146,35 +153,75 @@
         </svg>
       </div>
 
-      <div class="ahero__message">
-        <p class="ahero__brand">LEGACRAFT</p>
-        <h1 class="ahero__headline">未来へ、遺す。</h1>
-        <p class="ahero__sub">高品質なWordPressサイトを、スマホでも美しく。個人事業主・中小企業のためのWeb制作 ― WordPress（SWELL）専門。構成設計からデザイン、実装、QAまで一貫して担当します。</p>
-        <div class="ahero__actions">
-          <a href="works.html" class="btn btn-primary">WORKSを見る <span class="btn-arrow">&rarr;</span></a>
-          <a href="contact.html" class="btn btn-ghost">相談する</a>
+      <!-- PROTOTYPE HERO（Direction A）
+           左に「何を・いくらで・誰が」、右に実物。
+           H1 は 86px から 44px へ落とし、空いた面積をオファーと料金に使う。
+           Ambient の背景レイヤー（space/depth/glow/pass/seed）はそのまま残しており、
+           ambient-hero.js は .ahero / .ahero__stage / 各 layer しか触らないので壊れない。 -->
+      <div class="phero">
+
+        <div class="phero__message">
+          <span class="phero__eyebrow">LEGACRAFT</span>
+          <!-- em を inline-block にして「ひとりで」が行またぎで割れないようにしている（CSS側） -->
+          <h1 class="phero__title">WordPressサイトを、<em>30,000円</em>から。<br>構成からQAまで、<em>ひとりで</em>一貫して。</h1>
+          <p class="phero__lead">個人事業主・中小企業のためのWeb制作です。ヒアリング・構成設計・デザイン・実装・QA・公開まで、最初から最後まで同じ人間が担当します。伝えたことが伝言で薄まりません。</p>
+
+          <p class="phero__price">
+            LP制作 <b>30,000円〜</b>／小規模Webサイト <b>80,000円〜</b>／WordPressサイト <b>150,000円〜</b>
+            <small>いずれも税別・素材支給前提。各プランの「対応しないこと」も先に公開しています。</small>
+          </p>
+
+          <div class="phero__actions">
+            <a href="contact.html" class="btn btn-primary" data-cta-position="hero">無料で相談する <span class="btn-arrow">&rarr;</span></a>
+            <a href="tools/price-estimator/index.html" class="btn btn-ghost" data-cta-position="hero">3分で概算費用をチェック <span class="btn-arrow">&rarr;</span></a>
+          </div>
         </div>
+
+        <div class="phero__proof">
+          <picture>
+            <source type="image/webp" srcset="images/works/work-03-pc-720.webp 720w, images/works/work-03-pc-1440.webp 1440w" sizes="(min-width: 900px) 46vw, 88vw">
+            <img class="phero__proof-pc" src="images/works/work-03-pc.jpg" width="1440" height="900" fetchpriority="high" decoding="async" alt="制作例：NESTA ARCHITECTS のPC表示">
+          </picture>
+          <picture>
+            <source type="image/webp" srcset="images/works/work-03-sp-390.webp 390w, images/works/work-03-sp-780.webp 780w" sizes="132px">
+            <img class="phero__proof-sp" src="images/works/work-03-sp-390.webp" width="390" height="844" decoding="async" alt="制作例：NESTA ARCHITECTS のスマートフォン表示">
+          </picture>
+          <p class="phero__proof-cap">制作例：NESTA ARCHITECTS（架空の注文住宅設計事務所を想定した自主制作）。PC・スマートフォン両方の実際の表示です。</p>
+        </div>
+
       </div>
 
     </div>
   </section>
 
   <!-- ======================================================================
-       WORKS — 作品を並べる場所。カードの箱をやめ、画像そのものを展示する。
-       このセクション用の CSS は css/works-gallery.css。works.html の
-       既存グリッドとは別実装で、あちらには影響しない。
+       PROBLEM — /aichi/ から移植。
+       TOP は「選ばれる理由」から始まっていて、読み手の状況から始まっていなかった。
        ====================================================================== -->
-  <section id="works" class="works-gallery">
+  <section id="problem" class="psec">
     <div class="container">
-      <div class="wgal-head reveal">
-        <span class="wgal-eyebrow">SELECTED WORKS</span>
-        <h2 class="wgal-title">つくったものが、<br>そのまま実績になる。</h2>
-        <p class="wgal-statement">WordPress（SWELL）を中心に制作した6作品です。構成設計からデザイン、実装、QAまで一貫して担当しています。各作品の詳細はCASE STUDYでご覧いただけます。</p>
+      <div class="psec__head reveal">
+        <span class="psec__eyebrow">PROBLEM</span>
+        <h2 class="psec__title">こんなところで止まっていませんか</h2>
       </div>
 
-      <div class="wgal" id="works-gallery-top"></div>
-
-      <p class="wgal-foot reveal"><a href="works.html" class="btn btn-ghost">すべての作品を見る <span class="btn-arrow">&rarr;</span></a></p>
+      <div class="pprob__list">
+        <div class="pprob__item reveal">
+          <span class="pprob__num">01</span>
+          <h3 class="pprob__title">相場が分からず、見積もりを取るのが不安</h3>
+          <p class="pprob__text">問い合わせないと金額が分からない会社が多く、比較の土俵に乗せる前に時間が消えていきます。</p>
+        </div>
+        <div class="pprob__item reveal">
+          <span class="pprob__num">02</span>
+          <h3 class="pprob__title">予算が合わない</h3>
+          <p class="pprob__text">制作会社に相談すると、コーポレートサイトで50万円以上を提示されることが少なくありません。最初の1サイトとしては重い金額です。</p>
+        </div>
+        <div class="pprob__item reveal">
+          <span class="pprob__num">03</span>
+          <h3 class="pprob__title">誰が作るのか最後まで見えない</h3>
+          <p class="pprob__text">営業担当と制作担当が別で、実際に手を動かす人と話せないまま進むことがあります。</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -225,6 +272,92 @@
   </section>
 
   <!-- ======================================================================
+       WORKS（PROTOTYPE） — 明るい地に反転する。
+       暗い地のままだと作品画像が沈む。参照サイト実測でも、作品を主役にしている
+       サイトは例外なく明るい地だった。ここだけ地を返す。
+       PC 1枚だった展示を PC + SP の2枚組にして、「崩れないスマホ表示」を
+       文章ではなく実物で示す。描画は js/proto-works.js。
+       ====================================================================== -->
+  <section id="works" class="psec plight">
+    <div class="container">
+      <div class="pwg__head reveal">
+        <span class="pwg__eyebrow">SELECTED WORKS</span>
+        <h2 class="pwg__title">つくったものが、そのまま実績になる。</h2>
+        <p>WordPress（SWELL）を中心に制作した6作品です。構成設計からデザイン、実装、QAまで一貫して担当しています。PC・スマートフォン両方の実際の表示を載せています。</p>
+      </div>
+
+      <div class="pwg__list" id="proto-works"></div>
+
+      <p class="pwg__note">掲載している6作品は、いずれも架空のクライアントを想定した自主制作です。実際の受注案件はお客様の許可や守秘義務の都合で中身をお見せできないことが多いのですが、自主制作であれば、デザインの意図・設計・実装・品質確認まで包み隠さず公開できます。</p>
+
+      <p class="pwg__foot reveal"><a href="works.html" class="btn btn-ghost">すべての作品を見る <span class="btn-arrow">&rarr;</span></a></p>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       PRICE — /aichi/ から移植。
+       TOP には金額が一つも書かれていなかった（/aichi/ にはある）。
+       金額だけを切り出さず、「対応しないこと」を必ず併記する。
+       ====================================================================== -->
+  <section id="price" class="psec">
+    <div class="container">
+      <div class="psec__head reveal">
+        <span class="psec__eyebrow">PRICE</span>
+        <h2 class="psec__title">料金</h2>
+        <p class="psec__statement">各プランの金額、含まれる作業、納期の目安、そして<b>対応しないこと</b>を先に公開しています。話を進めてから条件が変わることがないようにするためです。</p>
+      </div>
+
+      <div class="pprice__list">
+        <div class="pprice__item reveal">
+          <span class="pprice__plan">PLAN A</span>
+          <h3 class="pprice__name">LP制作</h3>
+          <p class="pprice__amount">30,000円〜60,000円</p>
+          <ul class="pprice__spec">
+            <li>1ページ完結のランディングページ（8〜12セクション目安）</li>
+            <li>構成案作成・デザイン・コーディング・レスポンシブ対応</li>
+            <li>フォーム設置・基本SEO設定・QA・公開作業</li>
+            <li>納期目安：素材支給後5〜10営業日</li>
+          </ul>
+          <p class="pprice__not"><b>対応しないこと：</b>広告運用／SEOライティング代行／商品撮影</p>
+        </div>
+
+        <div class="pprice__item reveal">
+          <span class="pprice__plan">PLAN B</span>
+          <h3 class="pprice__name">小規模Webサイト制作</h3>
+          <p class="pprice__amount">80,000円〜120,000円</p>
+          <ul class="pprice__spec">
+            <li>3〜5ページ（TOP・会社概要・事業内容・お問い合わせ 等）</li>
+            <li>WordPress／静的HTMLいずれも対応</li>
+            <li>レスポンシブ対応・フォーム・基本SEO・QA・公開作業</li>
+            <li>納期目安：素材支給後2〜3週間</li>
+          </ul>
+          <p class="pprice__not"><b>対応しないこと：</b>ロゴ制作／商品撮影／記事ライティング大量代行</p>
+        </div>
+
+        <div class="pprice__item reveal">
+          <span class="pprice__plan">PLAN C</span>
+          <h3 class="pprice__name">WordPressサイト制作</h3>
+          <p class="pprice__amount">150,000円〜250,000円</p>
+          <ul class="pprice__spec">
+            <li>WordPress（SWELL）による5〜8ページのコーポレートサイト</li>
+            <li>構成設計・デザイン・実装・レスポンシブ対応・フォーム</li>
+            <li>基本SEO・簡易マニュアル・QA・公開作業</li>
+            <li>納期目安：素材支給後3〜5週間</li>
+          </ul>
+          <p class="pprice__not"><b>対応しないこと：</b>ロゴ制作／商品撮影／既存システム連携開発</p>
+        </div>
+      </div>
+
+      <p class="pprice__why reveal">この価格は、LEGACRAFTが<b>実績を積み上げている段階</b>であることを反映したものです。制作範囲を削って安くしているのではなく、受注実績が増えた段階で見直す前提の価格です。理由を伏せて「格安」と名乗ることはしません。</p>
+
+      <div class="pprice__actions reveal">
+        <a href="tools/price-estimator/index.html" class="btn btn-primary" data-cta-position="price">3分で概算費用を出す（無料） <span class="btn-arrow">&rarr;</span></a>
+        <a href="service.html" class="btn btn-ghost">料金の内訳を見る <span class="btn-arrow">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
        FLOW — 横並びの図をやめ、上から下へ読むだけで順番が分かる形にする。
        ====================================================================== -->
   <section id="flow" class="tsec">
@@ -243,6 +376,50 @@
         <div class="tflow__item reveal"><span class="tflow__num">05</span><h3 class="tflow__label">確認・修正</h3><span class="tflow__rule" aria-hidden="true"></span></div>
         <div class="tflow__item reveal"><span class="tflow__num">06</span><h3 class="tflow__label">QA</h3><span class="tflow__rule" aria-hidden="true"></span></div>
         <div class="tflow__item reveal"><span class="tflow__num">07</span><h3 class="tflow__label">納品・公開</h3><span class="tflow__rule" aria-hidden="true"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       FAQ — /aichi/ から移植し、地域限定の設問を一般化した。
+       JS無効でも答えが読めるよう、HTMLは開いた状態で配り、JSが動いたときだけ閉じる。
+       ====================================================================== -->
+  <section id="faq" class="psec">
+    <div class="container">
+      <div class="psec__head reveal">
+        <span class="psec__eyebrow">FAQ</span>
+        <h2 class="psec__title">よくあるご質問</h2>
+      </div>
+
+      <div class="pfaq__list">
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">ホームページ制作を依頼するときの注意点は？</button>
+          <p class="pfaq__a">料金に何が含まれ、何が含まれないかを先に確認してください。LEGACRAFTでは各プランに「対応しないこと」を明記しています。あわせて、修正が何回までか、公開後の更新を自分でできる状態で納品されるか、素材（写真・文章）を誰が用意するかを事前にすり合わせることをおすすめします。</p>
+        </div>
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">個人事業主がホームページを作成するにはいくらかかりますか？</button>
+          <p class="pfaq__a">LEGACRAFTの場合、1ページ完結のLP制作が30,000円〜60,000円、3〜5ページの小規模Webサイト制作が80,000円〜120,000円です。別途、ドメイン費用とレンタルサーバー費用がかかります。ページ数やデザイン難度により変動するため、詳細はお見積り時にご案内します。</p>
+        </div>
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">中小企業のホームページ制作費用はいくらですか？</button>
+          <p class="pfaq__a">LEGACRAFTでは、WordPress（SWELL）による5〜8ページのコーポレートサイト制作が150,000円〜250,000円です。構成設計・デザイン・実装・レスポンシブ対応・フォーム・基本SEO・簡易マニュアル・公開作業を含みます。</p>
+        </div>
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">ホームページ制作の月額費用はいくらですか？</button>
+          <p class="pfaq__a">LEGACRAFTでは月額固定の保守プランを設けていません。公開後の保守・更新は対応可能ですが、必要な範囲がお客様ごとに異なるため、内容と費用はご相談のうえ個別に決定します。制作費とは別に、ドメイン・レンタルサーバーの実費は継続して発生します。</p>
+        </div>
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">ホームページの更新は自分でできますか？</button>
+          <p class="pfaq__a">WordPressサイト制作プランでは、ご自身で更新しやすい状態で納品します。カスタム投稿タイプ等を活用し、簡易マニュアルもお渡しします。更新作業をこちらで代行することも可能です。</p>
+        </div>
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">納期はどのくらいですか？</button>
+          <p class="pfaq__a">素材をご支給いただいた後、LP制作で5〜10営業日、小規模Webサイト制作で2〜3週間、WordPressサイト制作で3〜5週間が目安です。</p>
+        </div>
+        <div class="pfaq__item">
+          <button type="button" class="pfaq__q" aria-expanded="true">対面で打ち合わせできますか？</button>
+          <p class="pfaq__a">愛知県西三河を拠点にしているため、県内であればお伺いしての打ち合わせに対応できます。オンラインのみでの進行も可能です。なお、お客様にお越しいただける事務所は構えておりません。<a href="aichi/">愛知県内の方はこちら</a>。</p>
+        </div>
       </div>
     </div>
   </section>
@@ -297,7 +474,7 @@
 <script src="js/vendor/gsap.min.js" defer></script>
 <script src="js/ambient-hero.js" defer></script>
 <script src="js/main.js"></script>
-<script src="js/works-render.js"></script>
-<script>renderWorksGallery("#works-gallery-top");</script>
+<script src="js/proto-works.js"></script>
+<script>renderProtoWorks("#proto-works");</script>
 </body>
 </html>
