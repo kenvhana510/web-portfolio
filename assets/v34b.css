@@ -1,0 +1,129 @@
+/* ==========================================================================
+   V3.4b — WORKS 統合グリッド と 個別修正
+   ========================================================================== */
+
+/* ---- 大2＋標準4。同じカード行の反復に見せない ---- */
+.wgrid { margin-top: var(--v3-s6); display: grid; gap: var(--v3-s6) var(--v3-s5); }
+@media (min-width: 620px) { .wgrid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) {
+  .wgrid { grid-template-columns: repeat(6, 1fr); gap: var(--v31-s75) var(--v3-s6); }
+  .wcard { grid-column: span 2; }
+  .wcard--big:nth-child(1) { grid-column: span 4; }
+  .wcard--big:nth-child(2) { grid-column: span 2; }
+}
+.wcard { position: relative; }
+.wcard__link {
+  display: grid; gap: .3rem; text-decoration: none; color: inherit;
+  padding-bottom: var(--v3-s4); border-bottom: 1px solid var(--v31-hair);
+}
+.wcard__num {
+  font-family: var(--v3-font-num); font-weight: 700; font-size: 1.5rem; line-height: 1;
+  letter-spacing: -.02em; color: transparent; -webkit-text-stroke: 1px var(--v31-hair-accent);
+  margin-bottom: .3rem;
+}
+.wcard__shot { display: block; overflow: hidden; margin-bottom: .6rem; }
+.wcard__shot img {
+  width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 0;
+  filter: saturate(.95);
+  transition: object-position 700ms var(--v3-ease), filter var(--v3-dur) var(--v3-ease);
+}
+/* 実際に開けるページであることを、切り取り位置を下へ送って示す */
+.wcard__link:hover .wcard__shot img,
+.wcard__link:focus-visible .wcard__shot img { object-position: 50% 45%; filter: saturate(1); }
+/* 4:5 に変えると 16:10 の素材が横方向に大きく切れ、ロゴ側が消えた。16:10 のまま使う。
+   反復に見せない手当ては「列幅の違い」と「番号の位置」で足りている。 */
+.wcard__cat { font-size: var(--v3-text-xs); letter-spacing: .06em; color: var(--v3-ink-soft); }
+.wcard__name { font-family: var(--v3-font-jp-display); font-size: var(--v3-text-lg); line-height: 1.4; }
+.wcard--big .wcard__name { font-size: var(--v3-text-xl); }
+.wcard__desc { font-size: var(--v3-text-sm); color: var(--v3-ink-soft); line-height: 1.7; }
+.wcard__go {
+  margin-top: .4rem; display: inline-flex; align-items: center; gap: .4em; align-self: start;
+  min-height: var(--v3-tap); font-size: var(--v3-text-sm); color: var(--v3-accent-text);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--v3-dur) var(--v3-ease), color var(--v3-dur) var(--v3-ease);
+}
+.wcard__link:hover .wcard__go,
+.wcard__link:focus-visible .wcard__go { color: var(--v3-accent-bright); border-bottom-color: var(--v3-accent-bright); }
+/* 6件目のキャプションだけ画像の上に置いて、行の反復感を切る */
+@media (min-width: 900px) {
+  .wgrid > li:nth-child(6) .wcard__link { grid-template-rows: auto auto auto auto auto; }
+  .wgrid > li:nth-child(6) .wcard__shot { order: 3; margin: .6rem 0 0; }
+  .wgrid > li:nth-child(6) .wcard__go { order: 4; }
+}
+/* 「届く先の人」は大2件だけに添える */
+.wcard__human { margin-top: var(--v3-s4); max-width: 12rem; }
+.wcard__human img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.wcard__human figcaption { margin-top: .35rem; font-size: .6875rem; line-height: 1.5; }
+@media (min-width: 900px) {
+  .wcard--big { }
+  .wcard--big .wcard__human { position: absolute; right: 0; bottom: 3.2rem; width: 12rem; margin: 0; z-index: 2; box-shadow: var(--v3-shadow-lg); }
+  /* 2枚目は幅が狭く、重ねると見出しと本文に被って読めなくなった。流し込みに戻す */
+  .wcard--big:nth-child(2) .wcard__human { position: static; width: 9rem; margin-top: var(--v3-s4); box-shadow: none; }
+  .wcard--big:nth-child(2) .wcard__human figcaption { display: block; }
+  .wcard--big .wcard__human figcaption { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wcard__shot img { transition: none !important; }
+}
+
+/* ---- HERO の作品ストリップ内リンクがタップ 76x25 だった ---- */
+.hero__strip-h a {
+  display: inline-flex; align-items: center; min-height: var(--v3-tap); min-width: 44px;
+}
+.hero__strip-h { flex-wrap: wrap; }
+
+/* ---- モバイル: 明細を折りたたむ（§24 が認める pricing detail の accordion 化） ----
+   HTML では open を付けたままなので、JS が無ければ何も畳まれない＝隠れる内容は 0。
+   狭い画面のときだけ v34.js が open を外す。 */
+.plan__all > summary, .est__all > summary { list-style: none; }
+.plan__all > summary::-webkit-details-marker, .est__all > summary::-webkit-details-marker { display: none; }
+.plan__all-sum {
+  display: flex; align-items: center; gap: .5em; cursor: pointer;
+  min-height: var(--v3-tap); font-size: var(--v3-text-sm); color: var(--v3-paper-accent);
+  border-top: 1px solid var(--v31-hair-paper); margin-top: .3rem; padding-top: .6rem;
+}
+.plan__all-sum::after, .est__all-sum::after {
+  content: ""; width: 9px; height: 9px; margin-left: auto;
+  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform var(--v3-dur) var(--v3-ease);
+}
+.plan__all[open] > .plan__all-sum::after, .est__all[open] > .est__all-sum::after { transform: rotate(225deg) translate(-1px, -1px); }
+.est__all-sum { display: flex; align-items: center; cursor: pointer; min-height: var(--v3-tap); }
+@media (min-width: 760px) {
+  /* 広い画面は常に開いた状態。開閉 UI は出さない */
+  .plan__all-sum, .est__all-sum::after { display: none; }
+  /* summary はデスクトップでも操作部品として数えられるので、高さは 44 を割らない */
+  .est__all-sum { cursor: default; }
+}
+
+/* ---- モバイル: 標準4件を 2 列にする（大2件は全幅のまま） ---- */
+@media (max-width: 619px) {
+  .wgrid { grid-template-columns: repeat(2, 1fr); gap: var(--v3-s5) var(--v3-s4); }
+  .wcard--big { grid-column: 1 / -1; }
+  .wgrid > li:not(.wcard--big) .wcard__name { font-size: var(--v3-text-base); }
+  .wgrid > li:not(.wcard--big) .wcard__desc { font-size: var(--v3-text-xs); line-height: 1.6; }
+  .wgrid > li:not(.wcard--big) .wcard__num { font-size: 1.125rem; }
+}
+
+/* ---- 最後の詰め（モバイルのみ。情報は削らない） ---- */
+@media (max-width: 619px) {
+  .hero__person figcaption { font-size: .625rem; line-height: 1.5; }
+  .prob-fig figcaption { margin-top: .6rem; }
+  .prob-fig__lead { font-size: var(--v3-text-base); }
+  .prob > li { padding: var(--v3-s5) 0; }
+  .brand-band { padding: var(--v3-s6) 0; }
+  .est__form { gap: var(--v3-s5); }
+  .est__opts { margin-top: var(--v3-s3); gap: .35rem; }
+  .est__opt span { padding: .45em .8em; font-size: var(--v3-text-xs); }
+  .est__card { padding: var(--v3-s4); }
+  .est__meta div { grid-template-columns: 5rem minmax(0, 1fr); }
+  .final__human { max-width: 20rem; }
+  .plan__mock { max-width: 12rem; }
+}
+
+/* ---- HERO 画像は LCP 要素。opacity 0 から始めると LCP が 1.2 秒遅れる（実測 524ms→1760ms）。
+       透明にはせず、寄りだけで「到着」を出す。 ---- */
+@keyframes v34-arrive { from { transform: scale(1.03); } to { transform: none; } }
+.js .hero__person img { animation: v34-arrive 900ms var(--v3-ease) both; }
+@media (prefers-reduced-motion: reduce) { .js .hero__person img { animation: none !important; } }

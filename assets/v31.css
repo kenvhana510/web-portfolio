@@ -1,0 +1,722 @@
+/* ==========================================================================
+   LEGACRAFT OFFICIAL SITE V3.1 — FULL CANDIDATE
+   ==========================================================================
+   本番には出していない。candidate/v3.1/ の中だけで完結する。
+   candidate/v3/ は 1 バイトも変えていない。
+
+   採用: 案A（Editorial）を骨格に、案B（Cinematic / 重ねた作品）を WORKS へ、
+        案C（一目で 3 価格帯・モバイル価格帯）を PRICE へ移植したハイブリッド。
+
+   V3 の何を直しているか（実描画で確認した症状に対して）:
+     1. 白い角丸カード ×3 の均等グリッドが 3 section 連続 → カードを全廃した。
+        区切りは罫・余白・地色・組み方で作る。
+     2. 全 section が同じ密度 → 明→明→暗→暗→明→明→暗 の地色リズムと、
+        typography / structured data / cinematic / timeline / minimal /
+        immersive という 6 種類の組み方を割り当てた。
+     3. 数字が表のセル → 価格と工程番号を版面の要素として大きく置いた。
+
+   守っているもの（V3 の勝ち筋。壊さない）:
+     ・価格 3 本を早い位置で出す ・「対応しないこと」を隠さない
+     ・自主制作である表記 ・一貫工程という差別化 ・暗緑×金×生成りのブランド値
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--v3-paper);
+  color: var(--v3-paper-ink);
+  font-family: var(--v3-font-body);
+  font-size: var(--v3-text-base);
+  line-height: var(--v3-lh-body);
+  font-feature-settings: "palt" 1;
+  overflow-x: clip;              /* 断ち落としの図版が横スクロールを作らないように */
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.24; font-weight: 600; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+strong, b { font-weight: 700; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--v3-accent); color: var(--v3-accent-ink);
+  padding: var(--v3-s3) var(--v3-s4); text-decoration: none;
+}
+.skip:focus { left: 0; }
+:where(a, button, summary):focus-visible {
+  outline: 2px solid var(--v3-accent); outline-offset: 3px; border-radius: 3px;
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { width: 100%; max-width: var(--v3-container); margin-inline: auto; padding-inline: var(--v3-gutter); }
+.wrap--wide { max-width: var(--v3-container-w); }
+
+/* ---------- 面の切り替え（リズムの土台） ---------- */
+.dark      { background: var(--v3-bg);      color: var(--v3-ink); }
+.dark-deep { background: var(--v3-bg-deep); color: var(--v3-ink); }
+.paper     { background: var(--v3-paper);   color: var(--v3-paper-ink); }
+.paper-2   { background: var(--v3-paper-2); color: var(--v3-paper-ink); }
+
+/* V3 のモバイル全長 8,040px に対し、初版の V3.1 は 10,715px（+33%）になっていた。
+   WORKS の作品説明と PRICE の一目バンドは指示で足したものなので削らない。
+   代わりに狭い画面の余白を 1 段落として、伸びを抑える。 */
+.sec { padding: var(--v3-s7) 0; }
+@media (min-width: 560px) { .sec { padding: var(--v3-s8) 0; } }
+@media (min-width: 768px) { .sec { padding: var(--v31-s95) 0; } }
+
+/* ---------- 共通タイポ ---------- */
+.eyebrow {
+  font-family: var(--v3-font-display); font-size: var(--v3-text-xs);
+  letter-spacing: .12em; color: var(--v3-paper-accent);
+  display: inline-flex; align-items: center; gap: .8em;
+}
+.eyebrow::before { content: ""; width: 2.25rem; height: 1px; background: rgba(122, 95, 30, .5); }
+.dark .eyebrow, .dark-deep .eyebrow { color: var(--v3-accent-text); }
+.dark .eyebrow::before, .dark-deep .eyebrow::before { background: var(--v31-hair-accent); }
+
+.h2 {
+  font-family: var(--v3-font-jp-display); font-weight: 500;
+  font-size: var(--v31-display-sm); letter-spacing: .01em;
+  margin-top: var(--v3-s4); text-wrap: balance;
+}
+.h3 { font-family: var(--v3-font-jp-display); font-weight: 500; font-size: var(--v3-text-xl); }
+.lead {
+  margin-top: var(--v3-s5); max-width: var(--v3-measure);
+  color: var(--v3-paper-ink-soft); font-size: var(--v3-text-md);
+}
+.dark .lead, .dark-deep .lead { color: var(--v3-ink-soft); }
+.note { font-size: var(--v3-text-xs); color: var(--v3-paper-ink-soft); max-width: 46em; line-height: 1.75; }
+.dark .note, .dark-deep .note { color: var(--v3-ink-soft); }
+.num { font-family: var(--v3-font-num); font-weight: 700; letter-spacing: -.02em; }
+.hair { height: 1px; background: var(--v31-hair-paper); border: 0; margin: 0; }
+.dark .hair, .dark-deep .hair { background: var(--v31-hair); }
+
+/* ---------- ボタン ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  min-height: var(--v3-tap); min-width: 44px; padding: .85em 1.7em;
+  border: 1px solid transparent; border-radius: var(--v3-radius);
+  font-family: var(--v3-font-body); font-size: var(--v3-text-base); font-weight: 600;
+  letter-spacing: .02em; text-decoration: none; cursor: pointer;
+  transition: background-color var(--v3-dur-fast) var(--v3-ease),
+              color var(--v3-dur-fast) var(--v3-ease),
+              border-color var(--v3-dur-fast) var(--v3-ease),
+              transform var(--v3-dur-fast) var(--v3-ease);
+}
+.btn--primary { background: var(--v3-accent); color: var(--v3-accent-ink); }
+.btn--primary:hover { background: var(--v3-accent-bright); }
+.btn--ghost { background: transparent; color: inherit; border-color: rgba(35, 41, 31, .3); }
+.btn--ghost:hover { border-color: var(--v3-paper-accent); color: var(--v3-paper-accent); }
+.dark .btn--ghost, .dark-deep .btn--ghost { color: var(--v3-ink); border-color: var(--v31-hair-strong); }
+.dark .btn--ghost:hover, .dark-deep .btn--ghost:hover { border-color: var(--v3-accent); color: var(--v3-accent-bright); }
+.btn--sm { padding: .55em 1.15em; font-size: var(--v3-text-sm); min-height: var(--v3-tap); }
+.btn--lg { padding: 1em 2.4em; font-size: var(--v3-text-lg); }
+.btn:active { transform: translateY(1px); }
+.btn--rule {
+  background: transparent; color: inherit; border: 0; border-radius: 0;
+  border-bottom: 1px solid var(--v31-hair-accent); padding: .6em .1em; min-height: var(--v3-tap);
+}
+.btn--rule:hover { color: var(--v3-accent-bright); border-bottom-color: var(--v3-accent-bright); }
+.cta-row { display: flex; flex-wrap: wrap; gap: var(--v3-s4); align-items: center; margin-top: var(--v3-s5); }
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.hd {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(29, 47, 39, .92);
+  backdrop-filter: saturate(1.15) blur(10px);
+  border-bottom: 1px solid var(--v31-hair);
+  color: var(--v3-ink);
+}
+.hd__in { display: flex; align-items: center; gap: var(--v3-s5); min-height: 66px; }
+.hd__brand {
+  margin-right: auto; text-decoration: none;
+  display: inline-flex; flex-direction: column; justify-content: center; min-height: var(--v3-tap);
+}
+.hd__brand b { font-family: var(--v3-font-display); font-weight: 400; font-size: 1.0625rem; letter-spacing: .2em; line-height: 1; }
+.hd__brand small { font-size: .625rem; letter-spacing: .16em; color: var(--v3-ink-soft); margin-top: .45em; line-height: 1; }
+.hd__nav { display: none; gap: var(--v3-s6); }
+.hd__nav a {
+  text-decoration: none; font-size: var(--v3-text-xs); letter-spacing: .14em;
+  color: var(--v3-ink-soft); display: inline-flex; align-items: center; justify-content: center;
+  /* AA(24x24) と AAA(44x44) のどちらの基準で測っても落ちないようにする */
+  min-height: var(--v3-tap); min-width: 44px; position: relative;
+}
+.hd__nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 13px; height: 1px;
+  background: var(--v3-accent); transform: scaleX(0); transform-origin: left;
+  transition: transform var(--v3-dur) var(--v3-ease);
+}
+.hd__nav a:hover { color: var(--v3-ink); }
+.hd__nav a:hover::after { transform: scaleX(1); }
+@media (min-width: 900px) { .hd__nav { display: flex; } }
+
+/* ==========================================================================
+   HERO — 案A（誌面・非対称）
+   --------------------------------------------------------------------------
+   右が NESTA 1 点だけだと「建築専門の会社」に読める。
+   図版の下に他業種の索引を置いて、扱う範囲を図と文の両方で示す。
+   ========================================================================== */
+.hero { position: relative; overflow: clip; background: var(--v3-bg); color: var(--v3-ink); padding: var(--v3-s7) 0 var(--v3-s8); }
+@media (min-width: 960px) { .hero { padding: var(--v3-s7) 0 var(--v31-s75); } }
+.hero__grid { display: grid; gap: var(--v3-s7); align-items: start; }
+@media (min-width: 960px) { .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, .92fr); gap: var(--v3-s9); } }
+
+.hero__h1 {
+  font-family: var(--v3-font-jp-display); font-weight: 500;
+  font-size: var(--v31-display-lg); line-height: 1.18; letter-spacing: .01em;
+  margin-top: var(--v3-s4);
+}
+.hero__h1 em { font-style: normal; color: var(--v3-accent-text); }
+.hero__en {
+  display: block; font-family: var(--v3-font-display); font-weight: 400;
+  font-size: .26em; letter-spacing: .3em; color: var(--v3-ink-soft); margin-top: 1em;
+}
+.hero__sub { margin-top: var(--v3-s4); max-width: 34em; color: var(--v3-ink-soft); font-size: var(--v3-text-md); }
+.hero__rule { height: 1px; background: var(--v31-hair-accent); margin: var(--v3-s5) 0; }
+
+/* 価格＝誌面のデータ欄。カードにしない */
+.data { border-top: 1px solid var(--v31-hair); }
+.data li {
+  display: grid; grid-template-columns: 1fr auto; align-items: baseline;
+  gap: var(--v3-s4); padding: .8rem 0; border-bottom: 1px solid var(--v31-hair);
+}
+.data .k { font-size: var(--v3-text-sm); letter-spacing: .04em; color: var(--v3-ink-soft); }
+.data .v { font-size: var(--v31-num-md); color: var(--v3-ink); white-space: nowrap; }
+.data .v small { font-family: var(--v3-font-body); font-weight: 400; font-size: .42em; letter-spacing: 0; color: var(--v3-ink-soft); margin-left: .35em; }
+.data li:first-child .v { color: var(--v3-accent-bright); }
+
+/* 図版。枠を付けず右へ断ち落とす */
+.plate { position: relative; }
+.plate img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 32%; filter: saturate(.94) contrast(1.02); }
+@media (min-width: 960px) {
+  /* 列の右端から画面の右端までの距離だけ伸ばす。
+     container より狭い画面では余白ぶんだけ（負にしない）。 */
+  .plate { margin-right: calc(-1 * (max(0px, (100vw - var(--v3-container-w))) / 2 + var(--v3-gutter))); }
+  .plate img { aspect-ratio: 3 / 4; max-height: 32rem; object-position: 22% 34%; }
+}
+.plate__idx { font-family: var(--v3-font-display); font-size: var(--v3-text-xs); letter-spacing: .22em; color: var(--v3-accent-text); display: block; margin-bottom: .5em; }
+.plate figcaption { margin-top: var(--v3-s4); max-width: 30em; }
+
+/* 扱う業種の索引。図版 1 点で誤解されないための最小の装置 */
+.hero__idx { margin-top: var(--v3-s5); display: grid; gap: var(--v3-s3); }
+.hero__idx-thumbs { display: none; }
+@media (min-width: 960px) {
+  .hero__idx-thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--v3-s3); }
+  .hero__idx-thumbs img { aspect-ratio: 16 / 10; object-fit: cover; filter: saturate(.85) brightness(.9); }
+  .hero__idx-thumbs figcaption { font-size: var(--v3-text-xs); color: var(--v3-ink-soft); margin-top: .4rem; }
+}
+.hero__idx-line { font-size: var(--v3-text-xs); color: var(--v3-ink-soft); line-height: 1.8; max-width: 30em; }
+.hero__idx-line a { color: var(--v3-accent-text); text-decoration: none; border-bottom: 1px solid var(--v31-hair-accent); padding-bottom: 1px; }
+.hero__idx-line a:hover { color: var(--v3-accent-bright); }
+
+/* ==========================================================================
+   PROBLEM — 組版だけで見せる。カード 0 枚
+   ========================================================================== */
+.prob { margin-top: var(--v3-s8); border-top: 1px solid var(--v31-hair-paper); }
+.prob > li { padding: var(--v3-s6) 0; border-bottom: 1px solid var(--v31-hair-paper); display: grid; gap: var(--v3-s3); }
+@media (min-width: 860px) {
+  .prob > li { grid-template-columns: 8rem minmax(0, 1fr) minmax(0, 1.05fr); gap: var(--v3-s6); align-items: start; padding: var(--v3-s7) 0; }
+  /* 3 行が同じ位置から始まると表に見える。行ごとに字下げを変えて誌面にする */
+  .prob > li:nth-child(2) { padding-left: var(--v3-s5); }
+  .prob > li:nth-child(3) { padding-left: var(--v3-s7); }
+}
+.prob__n {
+  font-family: var(--v3-font-num); font-weight: 700; line-height: .84;
+  font-size: clamp(2.75rem, 9vw, 5rem); letter-spacing: -.04em;
+  color: transparent; -webkit-text-stroke: 1px rgba(122, 95, 30, .72);
+}
+.prob__t { font-family: var(--v3-font-jp-display); font-weight: 500; font-size: clamp(1.125rem, 3.4vw, 1.5rem); line-height: 1.5; }
+.prob__b { color: var(--v3-paper-ink-soft); font-size: var(--v3-text-base); }
+
+/* ==========================================================================
+   PRICE — 案C の「一目で 3 価格帯」＋ 案A の台帳。カードには戻さない
+   ========================================================================== */
+.band {
+  margin-top: var(--v3-s7); display: grid; grid-template-columns: 1fr;
+  border-top: 1px solid rgba(35, 41, 31, .2); border-bottom: 1px solid rgba(35, 41, 31, .2);
+}
+.band li { padding: var(--v3-s5) var(--v3-s2); }
+.band li + li { border-top: 1px solid var(--v31-hair-paper); }
+@media (min-width: 760px) {
+  .band { grid-template-columns: repeat(3, 1fr); }
+  .band li { padding: var(--v3-s6) var(--v3-s5); text-align: center; }
+  .band li + li { border-top: 0; border-left: 1px solid var(--v31-hair-paper); }
+}
+@media (max-width: 759px) {
+  /* 中央 3 段積みだと 1 プラン 3 行使う。狭い側は左右組にして行数を落とす */
+  .band li { display: grid; grid-template-columns: 1fr auto; align-items: baseline; column-gap: var(--v3-s4); padding: .9rem var(--v3-s2); }
+  .band .r { grid-column: 1 / -1; margin-top: .2rem; }
+}
+.band .k { display: block; font-size: var(--v3-text-xs); letter-spacing: .1em; color: var(--v3-paper-ink-soft); }
+.band .v { display: block; font-size: var(--v31-num-lg); line-height: 1; color: var(--v3-paper-ink); }
+@media (min-width: 760px) { .band .v { margin-top: .6rem; } }
+.band .u { font-family: var(--v3-font-body); font-weight: 400; font-size: .3em; letter-spacing: 0; margin-left: .2em; }
+.band .r { display: block; margin-top: .5rem; font-size: var(--v3-text-xs); color: var(--v3-paper-ink-soft); }
+.band li:first-child .v { color: var(--v3-paper-accent); }
+
+/* プラン明細＝台帳。罫で区切る */
+.plans { margin-top: var(--v3-s7); }
+@media (min-width: 768px) { .plans { margin-top: var(--v3-s8); } }
+.plan { padding: var(--v3-s5) 0; border-bottom: 1px solid var(--v31-hair-paper); display: grid; gap: var(--v3-s4); }
+@media (min-width: 768px) { .plan { padding: var(--v3-s7) 0; } }
+.plan:first-child { border-top: 1px solid var(--v31-hair-paper); }
+@media (min-width: 900px) { .plan { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); gap: var(--v3-s8); } }
+.plan__tag { font-family: var(--v3-font-display); font-size: var(--v3-text-xs); letter-spacing: .2em; color: var(--v3-paper-accent); }
+.plan__name { font-family: var(--v3-font-jp-display); font-weight: 500; font-size: var(--v3-text-xl); margin-top: .5rem; }
+.plan__price { font-family: var(--v3-font-num); font-weight: 700; font-size: var(--v31-num-md); letter-spacing: -.02em; margin-top: .6rem; line-height: 1.1; }
+.plan__price small { font-family: var(--v3-font-body); font-weight: 400; font-size: .42em; letter-spacing: 0; color: var(--v3-paper-ink-soft); margin-left: .4em; }
+.plan__head { align-self: start; }
+@media (min-width: 900px) { .plan__head { position: sticky; top: 5.5rem; } }
+.plan__who { margin-top: .55rem; font-size: var(--v3-text-sm); color: var(--v3-paper-ink-soft); max-width: 22em; }
+.plan__fixed {
+  display: inline-block; margin-top: .5rem; padding: .2em .7em;
+  border: 1px solid rgba(122, 95, 30, .5); border-radius: 999px;
+  font-size: var(--v3-text-xs); letter-spacing: .08em; color: var(--v3-paper-accent);
+}
+/* 5 段を素直に縦積みすると PRICE が V3.2 比 +46〜60% になった。
+   何も削らずに、狭い側は「見出し＋本文」を 1 行に寄せ、広い側は 2 段組にする。 */
+.plan__body { display: grid; gap: var(--v3-s4); }
+@media (min-width: 760px) {
+  .plan__body { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--v3-s5) var(--v3-s6); }
+  .plan__blk:first-child { grid-row: span 3; align-content: start; }
+}
+.plan__blk { display: grid; gap: .35rem; }
+@media (max-width: 759px) {
+  /* 「含まれるもの」以外は、見出しを行頭のラベルにして行数を減らす */
+  .plan__blk:not(:first-child) { grid-template-columns: 6.5rem minmax(0, 1fr); gap: .2rem var(--v3-s3); align-items: baseline; }
+  .plan__blk:not(:first-child) .plan__h { border-bottom: 0; padding-bottom: 0; }
+}
+.plan__h {
+  font-size: var(--v3-text-xs); letter-spacing: .1em; font-weight: 700;
+  color: var(--v3-paper-ink); padding-bottom: .35rem; border-bottom: 1px solid var(--v31-hair-paper);
+}
+.plan__txt { font-size: var(--v3-text-sm); line-height: 1.7; color: var(--v3-paper-ink-soft); }
+.plan__blk--no .plan__h { color: var(--v3-paper-ink-soft); }
+.plan__blk--no .plan__txt { color: var(--v3-paper-ink-soft); }
+.plan__inc { display: grid; gap: .3rem; }
+.plan__inc li { position: relative; padding-left: 1.15em; font-size: var(--v3-text-sm); line-height: 1.65; color: var(--v3-paper-ink-soft); }
+.plan__inc li::before { content: ""; position: absolute; left: 0; top: .72em; width: .5em; height: 1px; background: var(--v3-paper-accent); }
+.plan__no {
+  margin-top: var(--v3-s5); padding-top: var(--v3-s4); border-top: 1px dashed rgba(35, 41, 31, .28);
+  font-size: var(--v3-text-sm); color: var(--v3-paper-ink-soft);
+}
+
+/* 固定価格は人間の決裁事項。候補であることをページ上で明示する */
+.price-flag {
+  margin-top: var(--v3-s5); padding: .7rem .9rem;
+  border: 1px dashed rgba(122, 95, 30, .5); border-radius: var(--v3-radius);
+  font-size: var(--v3-text-xs); color: var(--v3-paper-ink-soft); max-width: 46em;
+}
+.price-flag b {
+  font-family: var(--v3-font-display); letter-spacing: .16em; font-size: .9em;
+  color: var(--v3-paper-accent); margin-right: .6em;
+}
+
+/* ==========================================================================
+   WORKS — 案B の DNA。暗い地の上で作品を主役にする
+   --------------------------------------------------------------------------
+   ただし B の「重ねすぎて作品が読めない」は持ち込まない。
+   1 点を大きく（cinematic）、残り 2 点を交互配置の誌面で読ませる。
+   ========================================================================== */
+.works__feat { margin-top: var(--v3-s7); position: relative; }
+.works__feat-img { position: relative; overflow: hidden; }
+.works__feat-img img { width: 100%; aspect-ratio: 16 / 11; object-fit: cover; object-position: 50% 30%; }
+@media (min-width: 900px) { .works__feat-img img { aspect-ratio: 16 / 9; object-position: 50% 22%; } }
+/* V3.2 P3: 主図版の幕を薄くして作品を見せる。
+   実測（合成後の平均輝度）で V3.1 は 1440 で 57.6/255、390 で 61.4/255 だった。
+   文字が載る左端（desktop）／下端（mobile）の濃さは残し、
+   作品が写っている側だけ薄くする。文字のコントラストは合成後の画素で再測定する。
+     文字が載る左端（desktop 0〜45%）／下端（mobile）の濃さは残し、
+   作品が写っている側だけ薄くする。文字のコントラストは合成後の画素で再測定する。
+     desktop  .96 .86@38% .35@72% .18  →  .93 .78@38% .10@62% .00
+     mobile   .95 .70@42% .20         →  .92 .50@42% .00                        */
+.works__feat-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top,
+                /* モバイルでは説明文が画像の下に出るので、幕の上に文字は載らない。
+                   下端を締めるのは図版と本文の境目を作るためだけなので、もっと薄くできる。 */
+                rgba(29, 47, 39, .82) 0%,
+                rgba(29, 47, 39, .38) 42%,
+                rgba(29, 47, 39, 0) 100%);
+}
+@media (min-width: 900px) {
+  /* 幕を薄くしたら、作品側の見出し（「暮らしから、家を設計する。」）が
+     こちらの説明文の下に透けて、文字同士が重なって読みにくくなった。
+     コントラスト比は 5.10:1 で基準は満たしていたが、比では出ない種類の可読性低下。
+     一様に濃くし直すと明るさが戻ってしまうので、
+     文字がある左下だけを楕円で沈めて、右側の作品は明るいまま残す。 */
+  .works__feat-scrim {
+    background:
+      radial-gradient(128% 96% at 0% 100%,
+        rgba(29, 47, 39, .78) 0%,
+        rgba(29, 47, 39, .48) 50%,
+        rgba(29, 47, 39, 0) 78%),
+      linear-gradient(to right,
+        rgba(29, 47, 39, .86) 0%,
+        rgba(29, 47, 39, .62) 34%,
+        rgba(29, 47, 39, .10) 64%,
+        rgba(29, 47, 39, 0) 100%);
+  }
+}
+.works__feat-txt { position: relative; margin-top: var(--v3-s5); }
+@media (min-width: 900px) {
+  .works__feat-txt {
+    position: absolute; left: 0; bottom: 0; margin: 0;
+    padding: var(--v3-s7) var(--v3-s8) var(--v3-s7) var(--v3-s7);
+    max-width: 32rem;
+  }
+}
+.works__cat { font-size: var(--v3-text-xs); letter-spacing: .1em; color: var(--v3-accent-text); }
+.works__name { font-family: var(--v3-font-jp-display); font-weight: 500; font-size: clamp(1.375rem, 4vw, 2rem); margin-top: .5rem; }
+.works__meta { margin-top: var(--v3-s4); display: grid; gap: .5rem; }
+.works__meta div { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--v3-s3); font-size: var(--v3-text-sm); }
+.works__meta dt { color: var(--v3-accent-text); letter-spacing: .06em; font-size: var(--v3-text-xs); padding-top: .25em; }
+.works__meta dd { margin: 0; color: var(--v3-ink-soft); }
+
+/* V3.3: 「制作例を見せて終わり」をやめ、実際に公開しているデモサイトへ渡す。
+   URL は web-portfolio/works.html（正本）から取り、6本とも HTTP 200 を実測してある。 */
+.works__go { margin-top: var(--v3-s4); }
+.works__go .btn { gap: .5em; }
+
+.works__more { margin-top: var(--v3-s8); border-top: 1px solid var(--v31-hair); padding-top: var(--v3-s5); }
+.works__more-h { font-size: var(--v3-text-xs); letter-spacing: .1em; color: var(--v3-accent-text); }
+.works__more-list { margin-top: var(--v3-s3); }
+.works__more-list li {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem var(--v3-s4);
+  padding: .7rem 0; border-bottom: 1px solid var(--v31-hair); align-items: center;
+}
+.works__more-cat { grid-column: 1; grid-row: 1; align-self: end; }
+.works__more-name { grid-column: 1; grid-row: 2; font-size: var(--v3-text-base); }
+.works__more-list a { grid-column: 2; grid-row: 1 / 3; font-size: var(--v3-text-xs); }
+@media (max-width: 759px) {
+  .works__more-list li { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0; padding: .55rem 0; }
+  .works__more-cat { font-size: .6875rem; }
+}
+@media (min-width: 760px) {
+  .works__more-list li { grid-template-columns: 10rem minmax(0, 1fr) auto; padding: var(--v3-s4) 0; }
+  .works__more-cat, .works__more-name, .works__more-list a { grid-column: auto; grid-row: auto; }
+}
+.works__more-cat { font-size: var(--v3-text-xs); color: var(--v3-ink-soft); letter-spacing: .06em; }
+.works__more-name { font-family: var(--v3-font-jp-display); font-size: var(--v3-text-lg); }
+.works__more-list a {
+  display: inline-flex; align-items: center; gap: .45em; justify-content: center;
+  min-height: var(--v3-tap); min-width: 44px; text-decoration: none;
+  font-size: var(--v3-text-sm); color: var(--v3-accent-text);
+  border-bottom: 1px solid var(--v31-hair-accent);
+}
+.works__more-list a:hover { color: var(--v3-accent-bright); border-bottom-color: var(--v3-accent-bright); }
+
+.works__rows { margin-top: var(--v3-s7); display: grid; gap: var(--v3-s7); }
+@media (min-width: 768px) { .works__rows { margin-top: var(--v3-s8); gap: var(--v3-s8); } }
+.works__row { display: grid; gap: var(--v3-s5); align-items: center; }
+@media (min-width: 860px) {
+  .works__row { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--v3-s7); }
+  .works__row:nth-child(even) .works__row-img { order: 2; }
+}
+/* 交互配置の 2 点には幕を掛けていない = V3.1 の時点で素材そのままの明るさ。
+   brightness で持ち上げることを検討したが、実測して取り下げた:
+     brightness  平均輝度        白飛び画素（LUMÉA）
+       1.00      166.4           0.27%
+       1.02      169.2 (+1.6%)   6.07%
+       1.05      172.1 (+3.4%)   7.14%
+       1.10      174.9 (+5.5%)  41.15%
+   作品はフルページのスクリーンショットで、地が 255 直下の白。乗算すると
+   その白がまとめて 255 に張り付き、明るさが +2% 増える代わりに
+   画面の 6〜41% が真っ白な板になる。「作品がもう少し見える」の逆になるので入れない。
+   幕を掛けているのは主図版だけなので、視認性の改善はそこで取る。 */
+.works__row-img img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.works__row-b .works__name { font-size: clamp(1.25rem, 3.2vw, 1.625rem); }
+
+/* ==========================================================================
+   BRAND BAND — ブランド文の置き場所
+   --------------------------------------------------------------------------
+   「未来へ、遺す。」は Hero の h1 には戻さない（h1 はコンバージョン文の担当）。
+   WORKS の直後に置く。作品を見た直後がいちばん効き、
+   密度の高い区画（WORKS / PROCESS）の間に息継ぎができて、リズムも作れる。
+   ========================================================================== */
+.brand-band { position: relative; padding: var(--v3-s8) 0; text-align: center; overflow: hidden; }
+@media (min-width: 768px) { .brand-band { padding: var(--v31-s95) 0; } }
+.brand-band::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(to right, var(--v31-grid) 0 1px, transparent 1px 25%),
+    repeating-linear-gradient(to bottom, var(--v31-grid) 0 1px, transparent 1px 8rem);
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 100%);
+}
+.brand-band__in { position: relative; }
+.brand-band h2 {
+  font-family: var(--v3-font-jp-display); font-weight: 500;
+  font-size: var(--v31-display-md); letter-spacing: .06em; line-height: 1.3;
+}
+.brand-band h2 em { font-style: normal; color: var(--v3-accent-text); }
+.brand-band p { margin: var(--v3-s5) auto 0; max-width: 34em; color: var(--v3-ink-soft); font-size: var(--v3-text-sm); text-wrap: balance; }
+.brand-band__mark { display: block; width: 1px; height: 3.5rem; background: var(--v31-hair-accent); margin: 0 auto var(--v3-s6); }
+
+/* ==========================================================================
+   PROCESS — 横並びカードをやめて、1 本の線に沿った工程表にする
+   --------------------------------------------------------------------------
+   「同じ 1 人が最後まで担当する」ことを、線が途切れないことで示す。
+   ========================================================================== */
+/* V3.2 P1: 工程表の縦圧縮。
+   1 行あたり「見出し 25px + 本文 26px + 下余白 48px」で、余白が本文より大きかった。
+   一本線・6 工程・番号はそのまま、行の下余白と本文の行送りだけ詰める。
+   モバイルは可読性とタップを優先して据え置く（下の 860px 以上のブロックだけ変える）。 */
+.flow { margin-top: var(--v3-s6); position: relative; display: grid; gap: 0; }
+.flow::before {
+  content: ""; position: absolute; left: 0; top: .6rem; bottom: 2.2rem; width: 1px;
+  background: linear-gradient(to bottom, var(--v3-paper-accent), rgba(122, 95, 30, .25));
+}
+@media (min-width: 860px) { .flow::before { left: 6.5rem; } }
+.flow li { position: relative; padding: 0 0 var(--v3-s6) var(--v3-s6); }
+@media (min-width: 860px) {
+  .flow li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--v3-s6); padding-left: 0; padding-bottom: var(--v3-s4); }
+  .flow li > div:last-child { padding-left: var(--v3-s6); }
+}
+.flow li::before {
+  content: ""; position: absolute; left: -3.5px; top: .55rem; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--v3-paper); border: 1px solid var(--v3-paper-accent);
+}
+@media (min-width: 860px) { .flow li::before { left: calc(6.5rem - 3.5px); } }
+.flow__n { font-family: var(--v3-font-num); font-weight: 700; font-size: var(--v3-text-sm); letter-spacing: .1em; color: var(--v3-paper-accent); }
+@media (min-width: 860px) { .flow__n { font-size: var(--v3-text-lg); text-align: right; padding-right: var(--v3-s2); } }
+.flow__t { font-family: var(--v3-font-jp-display); font-weight: 500; font-size: var(--v3-text-lg); margin-top: .15rem; }
+.flow__b { margin-top: .25rem; line-height: 1.7; color: var(--v3-paper-ink-soft); font-size: var(--v3-text-sm); max-width: 40em; }
+.flow__owner {
+  margin-top: var(--v3-s3); padding: var(--v3-s3) 0 0; border-top: 1px solid var(--v31-hair-paper);
+  font-size: var(--v3-text-xs); color: var(--v3-paper-ink-soft); letter-spacing: .04em;
+}
+.flow__owner b { color: var(--v3-paper-accent); letter-spacing: .1em; }
+
+/* ==========================================================================
+   FAQ — 罫だけの開閉。白い大カードを 6 枚並べない
+   ========================================================================== */
+/* V3.2 P2: FAQ の縦圧縮。
+   summary が本文の行送り 1.85 を継いでいて、20px の質問 1 行が 37px を占めていた。
+   見出しなので 1.4 に落とす。上下余白も 24px → 16px。
+   summary の高さは 16+16+28 = 60px で、タップ 44px は割らない（実測で確認）。 */
+.faq { margin-top: var(--v3-s6); border-top: 1px solid var(--v31-hair-paper); }
+.faq details { border-bottom: 1px solid var(--v31-hair-paper); }
+.faq summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: var(--v3-s4);
+  padding: var(--v3-s4) 0; min-height: var(--v3-tap); line-height: 1.4;
+  font-family: var(--v3-font-jp-display); font-weight: 500; font-size: var(--v3-text-lg);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; margin-left: auto; flex: 0 0 auto; width: 12px; height: 12px;
+  border-right: 1px solid var(--v3-paper-accent); border-bottom: 1px solid var(--v3-paper-accent);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--v3-dur) var(--v3-ease);
+}
+.faq details[open] summary::after { transform: rotate(225deg) translate(-2px, -2px); }
+.faq details > p { padding: 0 0 var(--v3-s4); color: var(--v3-paper-ink-soft); max-width: 46em; font-size: var(--v3-text-sm); }
+
+/* ==========================================================================
+   FINAL CTA — ページの締め。ここだけ縦に大きく取る
+   ========================================================================== */
+.final { position: relative; overflow: hidden; padding: var(--v3-s8) 0 var(--v3-s7); text-align: center; }
+@media (min-width: 768px) { .final { padding: var(--v31-s95) 0 var(--v31-s75); } }
+.final::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 62% at 50% 0%, rgba(176, 141, 63, .2) 0%, transparent 66%);
+}
+.final__in { position: relative; max-width: 60rem; margin-inline: auto; }
+.final__mark { display: block; width: 1px; height: 3rem; background: var(--v31-hair-accent); margin: 0 auto var(--v3-s6); }
+.final h2 {
+  font-family: var(--v3-font-jp-display); font-weight: 500;
+  font-size: var(--v31-display-md); line-height: 1.24; letter-spacing: .015em;
+  margin-top: var(--v3-s5); text-wrap: balance;
+}
+.final .lead { margin-inline: auto; text-align: left; }
+@media (min-width: 700px) { .final .lead { text-align: center; max-width: 38em; } }
+.final .cta-row { justify-content: center; margin-top: var(--v3-s7); }
+.final__band { margin-top: var(--v3-s7); display: flex; flex-wrap: wrap; justify-content: center; gap: .6em var(--v3-s5); font-size: var(--v3-text-xs); color: var(--v3-ink-soft); }
+.final__band li { display: inline-flex; align-items: center; gap: .5em; }
+.final__band li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--v3-accent); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.ft { padding: var(--v3-s7) 0 var(--v3-s8); border-top: 1px solid var(--v31-hair); }
+.ft__top { display: grid; gap: var(--v3-s5); }
+@media (min-width: 760px) { .ft__top { grid-template-columns: 1fr auto; align-items: end; } }
+.ft__mark b { font-family: var(--v3-font-display); font-weight: 400; letter-spacing: .2em; font-size: 1.0625rem; }
+.ft__mark span { display: block; margin-top: .6rem; font-family: var(--v3-font-jp-display); color: var(--v3-accent-text); letter-spacing: .1em; }
+.ft__nav { display: flex; flex-wrap: wrap; gap: var(--v3-s2) var(--v3-s5); }
+.ft__nav a {
+  text-decoration: none; font-size: var(--v3-text-xs); letter-spacing: .12em; color: var(--v3-ink-soft);
+  display: inline-flex; align-items: center; justify-content: center; min-height: var(--v3-tap); min-width: 44px;
+}
+.ft__nav a:hover { color: var(--v3-ink); }
+.ft .note { margin-top: var(--v3-s6); }
+
+/* ==========================================================================
+   モバイル固定 CTA — 主 CTA が折り返しの外へ出ても導線を切らさない
+   ========================================================================== */
+.sticky {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  display: flex; gap: var(--v3-s3); padding: var(--v3-s3) var(--v3-gutter);
+  background: rgba(29, 47, 39, .95); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--v31-hair); color: var(--v3-ink);
+}
+.sticky .btn { flex: 1 1 auto; padding-inline: .8em; }
+.sticky .btn--ghost { border-color: var(--v31-hair-strong); }
+@media (min-width: 700px) { .sticky { display: none; } }
+/* 固定 CTA が HERO の CTA に重なって、同じボタンが 2 つ並んで見えていた。
+   HERO の CTA が画面から出るまで引っ込める。
+   JS が動かない環境では .js-sticky が付かないので、従来どおり常時表示になる
+   （導線が消えるより、重なって見えるほうがまし）。 */
+.js-sticky .sticky { transform: translateY(110%); transition: transform var(--v3-dur) var(--v3-ease); }
+.js-sticky .sticky.is-on { transform: none; }
+@media (prefers-reduced-motion: reduce) { .js-sticky .sticky { transition: none; } }
+@media (max-width: 699px) { .ft { padding-bottom: calc(var(--v3-s8) + 4.5rem); } }
+
+/* ==========================================================================
+   MOTION — 意味のあるものだけ
+   --------------------------------------------------------------------------
+   .js が付くのは JS が動き、かつ reduced-motion でないときだけ。
+   付かなければ .reveal は素の表示。JS を切っても本文は全部読める。
+   ========================================================================== */
+.js .reveal { opacity: 0; transform: translateY(16px); }
+.js .reveal.is-in {
+  opacity: 1; transform: none;
+  transition: opacity var(--v3-dur-slow) var(--v3-ease), transform var(--v3-dur-slow) var(--v3-ease);
+}
+.js .reveal.d1 { transition-delay: 70ms; }
+.js .reveal.d2 { transition-delay: 140ms; }
+.js .reveal.d3 { transition-delay: 210ms; }
+.js .reveal.d4 { transition-delay: 280ms; }
+/* 工程は順番に出す。順番があること自体が情報 */
+.js .flow li { opacity: 0; transform: translateY(12px); }
+.js .flow.is-in li { opacity: 1; transform: none; transition: opacity var(--v3-dur-slow) var(--v3-ease), transform var(--v3-dur-slow) var(--v3-ease); }
+.js .flow.is-in li:nth-child(1) { transition-delay: 0ms; }
+.js .flow.is-in li:nth-child(2) { transition-delay: 80ms; }
+.js .flow.is-in li:nth-child(3) { transition-delay: 160ms; }
+.js .flow.is-in li:nth-child(4) { transition-delay: 240ms; }
+.js .flow.is-in li:nth-child(5) { transition-delay: 320ms; }
+.js .flow.is-in li:nth-child(6) { transition-delay: 400ms; }
+/* 図版だけ薄い視差。translate3d 1 プロパティに限定して負荷を出さない */
+.js .par { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal, .js .flow li { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .js .par { transform: none !important; }
+}
+
+
+/* ==========================================================================
+   V3.3 — HUMAN / DEMO / MOTION
+   ==========================================================================
+   人物は「その区画で何を伝える人物か」という役割を持たせている。
+   PROBLEM = 見積りを前に迷っている事業者（3つの不安を1枚で背負う）
+   WORKS   = その作品が届く先の人（施主／来院者）
+   CONTACT = 相談を送る側の時間
+   作り手本人の写真は入れていない。実写でなければ「担当は同じ1人」の証拠にならず、
+   生成人物を作り手として置くのは架空の証拠を作るのと同じになるため。
+   ========================================================================== */
+
+/* ---------- PROBLEM: 組版の右に 1 枚 ---------- */
+.prob-wrap { display: grid; gap: var(--v3-s7); }
+@media (min-width: 1000px) {
+  .prob-wrap { grid-template-columns: minmax(0, 1fr) 22rem; gap: var(--v3-s8); align-items: start; }
+  .prob-fig { position: sticky; top: 6rem; }
+}
+.prob-fig img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; object-position: 50% 40%; }
+@media (max-width: 999px) { .prob-fig img { aspect-ratio: 4 / 3; object-position: 50% 45%; } }
+.prob-fig figcaption { margin-top: var(--v3-s4); }
+.prob-fig__lead {
+  font-family: var(--v3-font-jp-display); font-size: var(--v3-text-lg); line-height: 1.6;
+  color: var(--v3-paper-ink);
+}
+.prob-fig .note { margin-top: .6rem; }
+/* 段落と写真が同時に始まらないよう、リストの上端だけ少し下げる */
+@media (min-width: 1000px) {
+  .prob { margin-top: var(--v3-s7); }
+  /* 8rem + 1fr + 1.05fr のままだと本文が 1 行 13 字になる。2 列に落とす */
+  .prob > li { grid-template-columns: 7rem minmax(0, 1fr); }
+  .prob > li .prob__b { grid-column: 2; margin-top: .5rem; }
+}
+
+/* ---------- WORKS: 作品の隣に「届く先の人」 ---------- */
+.works__note {
+  margin-top: var(--v3-s3); font-family: var(--v3-font-jp-display);
+  font-size: var(--v3-text-base); color: var(--v3-ink);
+  padding-left: .9em; border-left: 1px solid var(--v31-hair-accent);
+}
+.works__human { margin-top: var(--v3-s4); max-width: 14rem; }
+@media (min-width: 900px) { .works__human { max-width: 20rem; } }
+.works__human img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.works__human figcaption { margin-top: .4rem; font-size: .6875rem; line-height: 1.5; }
+@media (min-width: 900px) {
+  /* 主図版の右下に差し込む。重ねるのは 1 枚だけで、作品は隠さない */
+  .works__feat { position: relative; }
+  .works__feat .works__human {
+    position: absolute; right: 0; bottom: -2.5rem; width: 20rem; margin: 0;
+    box-shadow: var(--v3-shadow-lg);
+  }
+  .works__feat .works__human figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(29,47,39,.92), rgba(29,47,39,0));
+    padding: 2em .8em .55em; margin: 0;
+  }
+  .works__rows { margin-top: var(--v31-s75); }
+}
+.works__human--row { max-width: 9rem; margin-top: var(--v3-s4); }
+.works__human--row img { aspect-ratio: 2 / 3; }
+@media (min-width: 860px) {
+  .works__row-img { position: relative; }
+  .works__human--row {
+    position: absolute; right: -2rem; bottom: -2rem; width: 12rem; margin: 0;
+    z-index: 2;   /* これが無いと後続の作品スクショの下に潜る */
+    box-shadow: var(--v3-shadow-lg);
+  }
+  .works__human--row figcaption { display: none; }
+  .works__row:nth-child(even) .works__human--row { right: auto; left: -2rem; }
+}
+
+/* ---------- FINAL CTA: 受け取る側の時間 ---------- */
+.final__human { max-width: 24rem; margin: 0 auto var(--v3-s6); }
+@media (min-width: 760px) { .final__human { max-width: 34rem; margin-bottom: var(--v3-s7); } }
+.final__human img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.final__human figcaption { margin-top: .6rem; }
+.final__who {
+  margin-top: var(--v3-s5); font-family: var(--v3-font-jp-display);
+  font-size: var(--v3-text-lg); color: var(--v3-accent-text);
+}
+
+/* ==========================================================================
+   MOTION — 4 種類だけ。ONE EFFECT = ONE PURPOSE
+     HERO   attention : 見出し 2 行目のインク・ワイプ（読み込み時 1 回）
+     HUMAN  warmth    : 人物写真の寄り（scale 1.04→1）。移動はさせない
+     BRAND  memory    : ブランド文の縦罫が伸びる
+     CTA    action    : ボタンの色と 1px の沈み込み（既存）
+   全面 fade-up（旧 .reveal）は廃止した。意味を持たない動きだったため。
+   PROCESS の順次表示だけは「順番があること自体が情報」なので残している。
+   ========================================================================== */
+@keyframes v33-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.js .hero__h1 em {
+  display: inline-block;
+  animation: v33-wipe 900ms cubic-bezier(.2, .7, .2, 1) 220ms both;
+}
+.js .human img { opacity: 0; transform: scale(1.04); }
+.js .human.is-in img {
+  opacity: 1; transform: scale(1);
+  transition: opacity 1200ms ease-out, transform 1200ms ease-out;
+}
+.js .human figcaption { opacity: 0; }
+.js .human.is-in figcaption { opacity: 1; transition: opacity 900ms ease-out 200ms; }
+.js .brand-band__mark { transform: scaleY(0); transform-origin: top; }
+.js .brand-band.is-in .brand-band__mark {
+  transform: scaleY(1); transition: transform 1400ms cubic-bezier(.4, 0, .2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .hero__h1 em { animation: none !important; }
+  .js .human img, .js .human figcaption, .js .brand-band__mark {
+    opacity: 1 !important; transform: none !important; transition: none !important;
+  }
+}

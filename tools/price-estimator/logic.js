@@ -92,7 +92,7 @@
     },
     wordpress: {
       key: "wordpress",
-      pageDesc: "WordPress（SWELL）による5〜8ページのコーポレートサイト",
+      pageDesc: "WordPress＋SWELLによる5〜8ページのコーポレートサイト",
       includes: [
         "ヒアリング深掘り",
         "デザインコンセプト設計",
@@ -297,6 +297,8 @@
     if (result.totalMin === null || result.totalMax === null) {
       return "個別お見積り";
     }
+    // 固定価格でオプションも無いときは範囲にしない（「3万円〜3万円」を避ける）
+    if (result.totalMin === result.totalMax) return formatYen(result.totalMin);
     return formatYen(result.totalMin) + "〜" + formatYen(result.totalMax);
   }
 

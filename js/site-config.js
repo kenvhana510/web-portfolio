@@ -5,7 +5,7 @@
 const SITE_CONFIG = {
   // 屋号：LEGACRAFT（legacraft/brand/brand-guidelines.md Version 1.0で確定）。
   siteName: "LEGACRAFT",
-  tagline: "WordPress（SWELL）・LP制作専門のWeb制作",
+  tagline: "WordPress＋SWELL・LP制作専門のWeb制作",
 
   // 2026-07-31確定：実績構築期（初回受注獲得優先）の正式価格。
   // 事業が軌道に乗った後の本来価格帯は sales/application-ready-kit.md 4章・
@@ -18,9 +18,11 @@ const SITE_CONFIG = {
   // price-estimator が legacraft/site/06-price.md の旧「仮」価格を参照し続け、
   // 公開価格の最大4倍を提示していた（2026-08-24 に発見）。
   pricing: {
-    lp: { label: "LP制作", min: 30000, max: 60000 },
-    small: { label: "小規模Webサイト制作", min: 80000, max: 120000 },
-    wordpress: { label: "WordPressサイト制作", min: 150000, max: 250000 },
+    // 2026-09-09 固定価格化。min と max を同額にしてある。
+    // キーを消さないのは price-estimator が min/max の両方を必須で読むため。
+    lp: { label: "LP制作", min: 30000, max: 30000 },
+    small: { label: "WordPressサイト", min: 80000, max: 80000 },
+    wordpress: { label: "WordPress + SWELL + ブログ", min: 150000, max: 150000 },
   },
 
   // 旧価格（参考・履歴。現在の営業価格としては使用しない）：
@@ -62,7 +64,10 @@ const SITE_CONFIG = {
   }
   Object.keys(config.pricing).forEach(function (key) {
     var p = config.pricing[key];
-    p.price = comma(p.min) + "円〜" + comma(p.max) + "円";
+    // 固定価格（min === max）のときは範囲表記にしない
+    p.price = p.min === p.max
+      ? comma(p.min) + "円"
+      : comma(p.min) + "円〜" + comma(p.max) + "円";
   });
 })(SITE_CONFIG);
 

@@ -1,0 +1,181 @@
+/* ==========================================================================
+   LEGACRAFT OFFICIAL SITE V3 — Design Tokens
+   ==========================================================================
+   ブランド資産は現行本番から実測して引き継ぐ（推測で変えない）。
+     bg #22372E / surface #263F33 / ink #EDE4CE / accent #B08D3F
+     display = 明朝（Trajan Pro → Noto Serif JP）
+
+   V3 で変えるのは3点だけ。いずれも現行の実測値に根拠がある。
+
+   1. 本文を明朝からゴシックへ
+      現行は本文も Georgia+明朝。日本語の 16px 明朝はモバイルで潰れる。
+      見出しの明朝は残す（明朝×ゴシックの対比が「工芸×技術」になる）。
+
+   2. 読ませる列に上限を置く（現行に欠陥があるからではない）
+      当初「現行は行長 29字で短すぎる」と書いたが、これは測り方の誤りだった。
+      価格チップのような短い箱まで「本文の行」に数えていたため平均が下がっていた。
+      散文だけを測り直すと現行は desktop 中央値 42字で、むしろ適正。
+      V3 でも 40em の上限を置くが、これは現行を直すためではなく、
+      幅の広い画面で 1 行 80 字になるのを防ぐため。
+
+   3. 見出しの段階を作る
+      現行は h1 36px / h2 34px（1.06倍）。ほぼ差が無く、構造が読めない。
+      V3 は 1.5 倍前後の段差を置く。
+   ========================================================================== */
+
+:root {
+  /* --- ブランド（現行本番から実測。変更しない） --- */
+  --v3-bg:            #22372E;
+  --v3-bg-deep:       #1D2F27;
+  --v3-surface:       #263F33;
+  --v3-ink:           #EDE4CE;
+  --v3-ink-soft:      #CFCBB5;
+  --v3-accent:        #B08D3F;
+  --v3-accent-text:   #C9A55C;
+  --v3-accent-bright: #D8B876;
+  --v3-accent-ink:    #14211A;
+  --v3-line:          rgba(237, 228, 206, .16);
+  --v3-line-strong:   rgba(176, 141, 63, .5);
+
+  /* --- 明るい面（V3 で追加）---
+     全長 13,429px（モバイル15.9画面）を暗い地のまま読ませると疲れる。
+     読ませる区画だけ明るい面に置き、暗い地は「入口」と「締め」に使う。 */
+  --v3-paper:         #F5F2EA;
+  --v3-paper-2:       #EDE8DC;
+  --v3-paper-ink:     #23291F;
+  --v3-paper-ink-soft:#4E5647;
+  --v3-paper-line:    rgba(35, 41, 31, .14);
+  --v3-paper-accent:  #7A5F1E;   /* 明るい地の上で 4.5:1 を満たす金 */
+
+  /* --- 文字 --- */
+  --v3-font-display: "Trajan Pro", "Noto Serif JP", "Noto Serif CJK JP",
+                     "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --v3-font-jp-display: "Noto Serif JP", "Noto Serif CJK JP",
+                        "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --v3-font-body: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
+                  "Noto Sans JP", "Yu Gothic Medium", "Yu Gothic", "Segoe UI",
+                  Roboto, sans-serif;
+  --v3-font-num: "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  /* 段階を明確に。モバイルとデスクトップで別の刻みを持つ */
+  --v3-text-xs:   .8125rem;   /* 13 */
+  --v3-text-sm:   .875rem;    /* 14 */
+  --v3-text-base: 1rem;       /* 16 */
+  --v3-text-md:   1.0625rem;  /* 17 本文 desktop */
+  --v3-text-lg:   1.25rem;    /* 20 */
+  --v3-text-xl:   1.5rem;     /* 24 */
+  --v3-text-2xl:  1.875rem;   /* 30 h3 */
+  --v3-text-3xl:  2.375rem;   /* 38 h2 */
+  --v3-text-4xl:  3.5rem;     /* 56 h1 */
+
+  --v3-lh-tight: 1.32;
+  --v3-lh-head:  1.5;
+  --v3-lh-body:  1.85;   /* 日本語は行間を広く取らないと固まって見える */
+
+  /* --- 余白（4の倍数で刻む） --- */
+  --v3-s1: .25rem;  --v3-s2: .5rem;   --v3-s3: .75rem;  --v3-s4: 1rem;
+  --v3-s5: 1.5rem;  --v3-s6: 2rem;    --v3-s7: 3rem;    --v3-s8: 4rem;
+  --v3-s9: 6rem;    --v3-s10: 8rem;
+
+  /* --- 面 --- */
+  --v3-radius:    .5rem;
+  --v3-radius-lg: .875rem;
+  --v3-border:    1px;
+  --v3-shadow:    0 1px 2px rgba(20, 33, 26, .08), 0 8px 24px rgba(20, 33, 26, .06);
+  --v3-shadow-lg: 0 2px 4px rgba(20, 33, 26, .10), 0 20px 48px rgba(20, 33, 26, .12);
+
+  /* --- 版面 ---
+     本文 17px で 36〜42字 に収まる幅。読ませる列はここから広げない。 */
+  --v3-measure:    40em;    /* ≒ 40字 */
+  --v3-container:  72rem;   /* 1152 */
+  --v3-container-w:80rem;   /* 1280 全幅寄りの区画 */
+  --v3-gutter:     1.25rem;
+
+  /* --- 動き ---
+     意味のあるものだけ。読み手の目を追い越さない速さにする。 */
+  --v3-dur-fast: 140ms;
+  --v3-dur:      240ms;
+  --v3-dur-slow: 520ms;
+  --v3-ease:     cubic-bezier(.2, .7, .3, 1);
+
+  /* --- タップ ---
+     現行の実測で CONTACT が 44px 未満だった。ここを既定値にして再発を防ぐ。 */
+  --v3-tap: 44px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --v3-gutter: 2rem;
+    /* h1 は hero の clamp で 48px に落ち着く。h2 を 44 にすると 1.09 倍しか差が無く、
+       現行本番（h1 36 / h2 34）と同じ「段差が無い」状態になる。1.33 倍まで開ける。 */
+    --v3-text-3xl: 2.25rem;   /* 36 = h2 */
+    --v3-text-4xl: 4rem;      /* 64 */
+  }
+}
+
+/* 動きを減らす設定を尊重する。装飾のためだけの動きは全部止める。 */
+@media (prefers-reduced-motion: reduce) {
+  :root { --v3-dur-fast: 1ms; --v3-dur: 1ms; --v3-dur-slow: 1ms; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   V3.1 追加トークン
+   ==========================================================================
+   V3 のブランド値（暗緑 #22372E ×金 #B08D3F、明朝の見出し）は 1 つも変えない。
+   足したのは「余白の階調」「罫の階調」「大きい表示用の級数」の 3 系統だけ。
+   V3 が template 的に見えた原因は色ではなく、
+     ・全 section が同じ矩形カード
+     ・全 heading が同じ級数
+     ・余白が s8/s9 の 2 段しかない
+   ことだった。段階を増やして視覚的リズムを作れるようにする。
+   ========================================================================== */
+
+:root {
+  /* 表示用の級数（見出しを「文字」でなく「面」として置くため） */
+  --v31-display-sm: clamp(1.75rem, 6.4vw, 2.5rem);
+  --v31-display-md: clamp(2.125rem, 8vw, 3.75rem);
+  --v31-display-lg: clamp(2.375rem, 9.2vw, 5rem);
+  --v31-display-xl: clamp(2.625rem, 10.5vw, 6.5rem);
+
+  /* 数字は本文と別系統。価格をデザイン要素として置くために使う */
+  --v31-num-lg: clamp(2rem, 7vw, 3.25rem);
+  --v31-num-md: clamp(1.5rem, 5vw, 2.125rem);
+
+  /* 罫の階調。カードの代わりに「線」で区切るための語彙 */
+  --v31-hair:        rgba(237, 228, 206, .14);
+  --v31-hair-strong: rgba(237, 228, 206, .30);
+  --v31-hair-accent: rgba(176, 141, 63, .55);
+  --v31-hair-paper:  rgba(35, 41, 31, .12);
+
+  /* 暗部に敷く建築的グリッド（technology 側の語彙。装飾ではなく整列の可視化） */
+  --v31-grid: rgba(237, 228, 206, .055);
+
+  /* 画像の上に文字を置くための幕 */
+  --v31-scrim: linear-gradient(to right,
+                 rgba(29, 47, 39, .96) 0%,
+                 rgba(29, 47, 39, .86) 38%,
+                 rgba(29, 47, 39, .35) 72%,
+                 rgba(29, 47, 39, .18) 100%);
+  --v31-scrim-v: linear-gradient(to top,
+                 rgba(29, 47, 39, .95) 0%,
+                 rgba(29, 47, 39, .70) 42%,
+                 rgba(29, 47, 39, .20) 100%);
+
+  /* 余白の追加段（s7 と s8 の間、s9 と s10 の間が空いていた） */
+  --v31-s75: 3.5rem;
+  --v31-s95: 7rem;
+  --v31-s11: 10rem;
+
+  /* タップ最小。WCAG 2.5.8 (AA) は 24x24。V3.1 は
+     「主要な操作は 44 高 x 44 幅」「文中リンクは 24 以上」で運用する。
+     V3 で 2〜4 件の未達に見えたのは、高さ 44 を満たす短い nav リンク
+     （PRICE 39x44 / FAQ 26x44）に AAA の幅 44 を当てていたためで、
+     実装の欠陥ではなく測定条件の不一致だった。 */
+  --v31-tap-min: 24px;
+}

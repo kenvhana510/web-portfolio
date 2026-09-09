@@ -1,0 +1,195 @@
+/* ==========================================================================
+   LEGACRAFT V3.4 — 追加分（V3.3 の v31.css の上に載せる）
+   ==========================================================================
+   Fable の Visual Direction を実装したもの。採否は README に記録している。
+   ========================================================================== */
+
+/* ==========================================================================
+   サイトモック（インライン SVG）
+   --------------------------------------------------------------------------
+   Fable の指摘で「ブラウザ枠＋信号機ドット」をやめた（Mac のクリシェで、
+   実在サイトのスクショに寄って誤認を招く）。ブランド色の「紙のシート」として描く。
+   写真も文字も入れないので、模式図であることが一目で分かる。
+   ========================================================================== */
+.mock { width: 100%; height: auto; display: block; }
+.mk-frame { fill: var(--v3-paper); stroke: var(--v3-paper-line); }
+.mk-bar   { fill: var(--v3-bg); }
+.mk-hero  { fill: rgba(34, 55, 46, .90); }
+.mk-nav   { fill: rgba(35, 41, 31, .09); }
+.mk-side  { fill: rgba(35, 41, 31, .07); }
+.mk-band  { fill: rgba(122, 95, 30, .14); }
+.mk-img   { fill: var(--v3-paper-2); }
+.mk-t     { fill: rgba(237, 228, 206, .92); }
+.mk-t2    { fill: rgba(237, 228, 206, .55); }
+.mk-t3    { fill: rgba(35, 41, 31, .18); }
+.mk-cta   { fill: var(--v3-accent); }
+.plan__mock { margin-bottom: var(--v3-s3); max-width: 17rem; }
+.plan__mock figcaption,
+.mock-cap { margin-top: .4rem; font-size: .6875rem; letter-spacing: .04em; color: var(--v3-paper-ink-soft); }
+
+/* ==========================================================================
+   ESTIMATE（3分で概算）
+   --------------------------------------------------------------------------
+   Fable の指示: 見積書ではなく「仕様書を1枚発行する」。
+   スライダー・トグル・月額切替・合計の自動加算・アイコンは使わない
+   （SaaS の pricing calculator に見えるため）。
+   金は 3 箇所だけ = ステップ数字 / 選択中の角点 / CTA。
+   JS が無い場合は 3 プランがそのまま全部見える。ラジオなのでキーボードだけで操作できる。
+   ========================================================================== */
+.est__form { margin-top: var(--v3-s7); display: grid; gap: var(--v3-s6); }
+@media (min-width: 1000px) {
+  .est__wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--v3-s8); align-items: start; }
+  .est__form { margin-top: var(--v3-s6); }
+  .est__out { margin-top: var(--v3-s6); position: sticky; top: 6rem; }
+}
+.est__step { border: 0; padding: 0; margin: 0; }
+.est__step legend {
+  padding: 0; display: flex; align-items: baseline; gap: .7em;
+  font-family: var(--v3-font-jp-display); font-size: var(--v3-text-lg);
+}
+.est__n {
+  font-family: var(--v3-font-num); font-weight: 700; font-size: 1.5rem; line-height: 1;
+  letter-spacing: -.02em; color: transparent; -webkit-text-stroke: 1px var(--v31-hair-accent);
+}
+.est__opts { margin-top: var(--v3-s4); display: flex; flex-wrap: wrap; gap: .45rem; }
+.est__opt { position: relative; display: inline-flex; }
+.est__opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.est__opt span {
+  display: inline-flex; align-items: center; gap: .55em;
+  min-height: var(--v3-tap); padding: .5em 1em;
+  border: 1px solid var(--v31-hair); border-radius: 2px;
+  font-size: var(--v3-text-sm); color: var(--v3-ink-soft);
+  transition: border-color var(--v3-dur-fast) var(--v3-ease),
+              color var(--v3-dur-fast) var(--v3-ease),
+              background-color var(--v3-dur-fast) var(--v3-ease);
+}
+.est__opt span::before {
+  content: ""; width: 6px; height: 6px; flex: 0 0 auto; background: transparent;
+  transition: background-color var(--v3-dur-fast) var(--v3-ease);
+}
+.est__opt input:hover + span { color: var(--v3-ink); border-color: var(--v31-hair-strong); }
+.est__opt input:checked + span { background: var(--v3-ink); color: var(--v3-bg); border-color: var(--v3-ink); }
+.est__opt input:checked + span::before { background: var(--v3-accent); }
+.est__opt input:focus-visible + span { outline: 2px solid var(--v3-accent); outline-offset: 3px; }
+.est__opt--wide span { flex-direction: row; align-items: center; padding: .55em 1em; }
+.est__opt--wide b { font-weight: 600; }
+.est__opt--wide small { font-size: var(--v3-text-xs); opacity: .75; margin-left: .5em; }
+
+.est__hint {
+  margin-top: var(--v3-s5); padding: .8rem 1rem; border: 1px dashed var(--v31-hair-strong);
+  font-size: var(--v3-text-sm); color: var(--v3-ink-soft);
+}
+.est__out { margin-top: var(--v3-s6); display: grid; gap: var(--v3-s5); }
+
+/* 結果シート */
+.est__card {
+  background: var(--v3-paper); color: var(--v3-paper-ink);
+  border-top: 3px solid var(--v3-accent);
+  padding: var(--v3-s5);
+  display: grid; gap: var(--v3-s5);
+}
+@media (min-width: 620px) {
+  .est__card { grid-template-columns: minmax(0, 1fr) minmax(0, 15rem); gap: var(--v3-s6); align-items: start; padding: var(--v3-s6); }
+  .est__cardmock { order: 2; }
+}
+.est__tag { font-family: var(--v3-font-display); font-size: var(--v3-text-xs); letter-spacing: .2em; color: var(--v3-paper-accent); }
+.est__name { font-family: var(--v3-font-jp-display); font-weight: 500; font-size: clamp(1.375rem, 4vw, 1.75rem); margin-top: .4rem; }
+.est__price {
+  margin-top: .7rem; display: flex; align-items: baseline; flex-wrap: wrap; gap: .5em;
+  font-family: var(--v3-font-num); font-weight: 700; font-size: var(--v31-num-lg);
+  line-height: 1; letter-spacing: -.02em; color: var(--v3-paper-ink);
+}
+.est__price small { font-family: var(--v3-font-body); font-weight: 400; font-size: .26em; letter-spacing: 0; color: var(--v3-paper-ink-soft); }
+.est__fixed {
+  font-family: var(--v3-font-body); font-weight: 400; font-size: .22em; letter-spacing: .08em;
+  padding: .35em 1em; border: 1px solid rgba(122, 95, 30, .5); border-radius: 999px; color: var(--v3-paper-accent);
+}
+.est__meta { margin-top: var(--v3-s5); display: grid; gap: .45rem; }
+.est__meta div { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: var(--v3-s3); font-size: var(--v3-text-sm); }
+.est__meta dt { color: var(--v3-paper-accent); font-size: var(--v3-text-xs); padding-top: .3em; letter-spacing: .06em; }
+.est__meta dd { margin: 0; color: var(--v3-paper-ink-soft); }
+.est__h {
+  margin-top: var(--v3-s5); font-size: var(--v3-text-xs); letter-spacing: .1em; font-weight: 700;
+  padding-bottom: .35rem; border-bottom: 1px solid var(--v31-hair-paper);
+}
+.est__feats { margin-top: .5rem; display: grid; gap: .3rem; }
+.est__feats li { position: relative; padding-left: 1.15em; font-size: var(--v3-text-sm); line-height: 1.65; color: var(--v3-paper-ink-soft); }
+.est__feats li::before { content: ""; position: absolute; left: 0; top: .72em; width: .5em; height: 1px; background: var(--v3-paper-accent); }
+.est__cta { margin-top: var(--v3-s5); display: flex; flex-wrap: wrap; gap: var(--v3-s4); align-items: center; }
+.est__cta a.est__more { font-size: var(--v3-text-sm); color: var(--v3-paper-accent); border-bottom: 1px solid rgba(122,95,30,.5); text-decoration: none; min-height: var(--v3-tap); display: inline-flex; align-items: center; }
+.est__note { margin-top: var(--v3-s5); }
+
+/* JS が動いているときだけ推奨1件に絞る。JS 無しでは 3 プランとも見える */
+.est--js .est__card { display: none; }
+.est--js .est__card.is-on { display: grid; }
+.est--js .est__hint { display: none; }
+.est--js .est__hint.is-on { display: block; }
+
+/* ==========================================================================
+   HERO 右 — 人物＋作品プレビュー
+   ========================================================================== */
+.hero__person img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 30%; }
+@media (min-width: 960px) { .hero__person img { aspect-ratio: 14 / 15; object-position: 42% 32%; max-height: 32rem; } }
+.hero__person figcaption { margin-top: var(--v3-s3); }
+.hero__strip { display: none; }
+@media (min-width: 960px) {
+  .hero__strip { display: block; margin-top: var(--v3-s5); }
+  .hero__strip-h { display: flex; justify-content: space-between; align-items: baseline; gap: var(--v3-s4); font-size: var(--v3-text-xs); color: var(--v3-ink-soft); }
+  .hero__strip-h a { color: var(--v3-accent-text); text-decoration: none; border-bottom: 1px solid var(--v31-hair-accent); }
+  .hero__strip-list { margin-top: .6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; }
+  .hero__strip-list img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 0; filter: saturate(.9) brightness(.92); }
+}
+
+/* ==========================================================================
+   BRAND — 1画面の空ブロックをやめて、写真つきの帯にする
+   ========================================================================== */
+.brand-band { padding: var(--v3-s7) 0; text-align: left; }
+@media (min-width: 768px) { .brand-band { padding: var(--v31-s75) 0; } }
+.brand-band__grid { display: grid; gap: var(--v3-s5); align-items: center; }
+@media (min-width: 860px) { .brand-band__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); gap: var(--v3-s8); } }
+.brand-band h2 { font-size: var(--v31-display-sm); letter-spacing: .04em; }
+.brand-band p { margin: var(--v3-s4) 0 0; max-width: 34em; text-wrap: pretty; }
+.brand-band__mark { margin: 0 0 var(--v3-s4); height: 2.5rem; }
+.brand-band__fig img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.brand-band__fig figcaption { margin-top: .5rem; }
+
+/* ==========================================================================
+   長さ対策（モバイル）
+   --------------------------------------------------------------------------
+   畳むのは「追加オプション」だけ。価格・含まれるもの・含まれないもの・納期・
+   作品・概算ツールは畳まない（V3 の勝ち筋である「隠さない」を壊さないため）。
+   ========================================================================== */
+.plan__opt summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: .5em;
+  min-height: var(--v3-tap);
+  font-size: var(--v3-text-xs); letter-spacing: .1em; font-weight: 700; color: var(--v3-paper-ink);
+}
+.plan__opt summary::-webkit-details-marker { display: none; }
+.plan__opt summary::after {
+  content: ""; width: 9px; height: 9px; margin-left: .1em;
+  border-right: 1px solid var(--v3-paper-accent); border-bottom: 1px solid var(--v3-paper-accent);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform var(--v3-dur) var(--v3-ease);
+}
+.plan__opt[open] summary::after { transform: rotate(225deg) translate(-1px, -1px); }
+.plan__opt .plan__txt { padding-bottom: .3rem; }
+@media (min-width: 760px) {
+  /* 広い画面は畳まない。details を常時開いた見た目にする */
+  .plan__opt summary::after { display: none; }
+  .plan__opt summary { cursor: default; }
+}
+.prob-fig img, .final__human img { aspect-ratio: 3 / 2; }
+@media (min-width: 1000px) { .prob-fig img { aspect-ratio: 4 / 3; } }
+
+/* ==========================================================================
+   MOTION — 4種。ONE EFFECT = ONE PURPOSE
+     1 HERO 人物   到着     opacity + scale（既存 .human を流用）
+     2 WORKS サムネ 実在の証明 object-position を送る（hover / focus）
+     3 概算シート   発行     clip-path のワイプ 1回
+     4 選択タグ     押した   色 140ms（上で定義済み）
+   ========================================================================== */
+.est--js .est__card.is-on { animation: v33-wipe 520ms var(--v3-ease) both; }
+@media (prefers-reduced-motion: reduce) {
+  .est--js .est__card.is-on { animation: none !important; }
+  .wcard__shot img { transition: none !important; }
+}

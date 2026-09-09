@@ -1,0 +1,169 @@
+/* ==========================================================================
+   V3.4-final — Visual Target に寄せる差分
+   --------------------------------------------------------------------------
+   参考画像から取ったのは「語彙」であって「レイアウトのコピー」ではない。
+   採用理由は README に1件ずつ記録している。
+   ========================================================================== */
+
+/* ---- 特徴リストを金のチェックに（参考画像の語彙）---- */
+.plan__inc li::before,
+.est__feats li::before {
+  content: "";
+  position: absolute; left: 0; top: .52em;
+  width: .62em; height: .34em;
+  border-left: 1.5px solid var(--v3-paper-accent);
+  border-bottom: 1.5px solid var(--v3-paper-accent);
+  transform: rotate(-45deg);
+  background: none;
+}
+.plan__inc li, .est__feats li { padding-left: 1.35em; }
+
+/* ---- 各プランの CTA（参考画像は3プランとも面のボタンを持つ）---- */
+.plan__cta { margin-top: var(--v3-s4); }
+.plan__cta .btn { width: 100%; max-width: 17rem; justify-content: center; gap: .6em; }
+
+/* ---- HERO の但し書きを区切り付きのメタ行に ---- */
+.hero__meta {
+  margin-top: var(--v3-s4); display: flex; flex-wrap: wrap; align-items: center;
+  gap: .35em var(--v3-s4); font-size: var(--v3-text-xs); color: var(--v3-ink-soft);
+}
+.hero__meta li { display: inline-flex; align-items: center; }
+.hero__meta li + li::before {
+  content: ""; width: 1px; height: 1em; background: var(--v31-hair-strong);
+  margin-right: var(--v3-s4);
+}
+.hero__meta a {
+  color: var(--v3-accent-text); text-decoration: none;
+  border-bottom: 1px solid var(--v31-hair-accent);
+  display: inline-flex; align-items: center; min-height: var(--v3-tap);
+}
+.hero__meta a:hover { color: var(--v3-accent-bright); }
+
+/* ---- WORKS 見出し行と業種ピル ---- */
+.works__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--v3-s4); }
+.works__all {
+  font-size: var(--v3-text-sm); color: var(--v3-accent-text); text-decoration: none;
+  display: inline-flex; align-items: center; gap: .4em; min-height: var(--v3-tap);
+  border-bottom: 1px solid var(--v31-hair-accent);
+}
+.works__all:hover { color: var(--v3-accent-bright); border-bottom-color: var(--v3-accent-bright); }
+.wcard__pill {
+  display: inline-flex; align-items: center; align-self: start;
+  padding: .25em .8em; border: 1px solid var(--v31-hair-strong); border-radius: 999px;
+  font-size: .6875rem; letter-spacing: .04em; color: var(--v3-ink-soft);
+}
+.wcard__link:hover .wcard__pill,
+.wcard__link:focus-visible .wcard__pill { border-color: var(--v31-hair-accent); color: var(--v3-accent-text); }
+
+/* ==========================================================================
+   Fable の比較結果にもとづく5点（Visual Target に寄せる）
+   ========================================================================== */
+
+/* ① HERO: 900px の折り返しに価格と CTA を収める（実測で CTA 上端 885px だった） */
+@media (min-width: 960px) {
+  .hero { padding: var(--v3-s6) 0 var(--v3-s7); }
+  .hero__h1 { margin-top: var(--v3-s3); font-size: clamp(2.375rem, 8.4vw, 4.5rem); }
+  .hero__en { margin-top: .8em; }
+  .hero__sub { margin-top: var(--v3-s3); }
+  .hero__rule { margin: var(--v3-s4) 0; }
+  .hero .data li { padding: .55rem 0; }
+  .hero .cta-row { margin-top: var(--v3-s4); }
+  .hero__meta { margin-top: var(--v3-s3); }
+}
+/* 価格行に添える用途の 1 行（カードにはしない） */
+.k__use {
+  display: block; margin-top: .3rem; font-size: .75rem; line-height: 1.5;
+  color: var(--v3-ink-soft); letter-spacing: 0; font-weight: 400;
+}
+
+/* ② HERO の人物写真を右端まで断ち落とし、キャプションを重ねる（文字は写真に重ねない原則は
+      キャプションのみ例外。開示文なので必ず残す） */
+@media (min-width: 960px) {
+  .hero__person {
+    position: relative;
+    margin-right: calc(-1 * (max(0px, (100vw - var(--v3-container-w))) / 2 + var(--v3-gutter)));
+  }
+  .hero__person img {
+    aspect-ratio: auto; height: 34rem; max-height: none; width: 100%;
+    object-fit: cover; object-position: 40% 30%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18%);
+    mask-image: linear-gradient(to right, transparent 0, #000 18%);
+  }
+  /* text-shadow だけだと明るい前掛けや顔の上で 1 行目が読めなかった。
+     文字の下に幕を敷いて、開示文が必ず読める状態にする。 */
+  .hero__person figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
+    padding: 3em var(--v3-s5) .9rem;
+    background: linear-gradient(to top, rgba(29, 47, 39, .94) 0%, rgba(29, 47, 39, .78) 45%, rgba(29, 47, 39, 0) 100%);
+    font-size: .6875rem; line-height: 1.6; color: var(--v3-ink-soft);
+  }
+  .hero__strip { margin-top: var(--v3-s4); }
+}
+
+/* ③ PROBLEM: 写真を大きくし、3項目の段差を揃える */
+@media (min-width: 1000px) {
+  .prob-wrap { grid-template-columns: minmax(0, 1fr) 22rem; }
+  .prob-fig { position: sticky; top: 5rem; }
+  .prob-fig img { aspect-ratio: 4 / 5; object-position: 50% 38%; }
+  /* 現状 x=177/200/225 の階段は「ズレ」に見える。字下げをやめて列を揃える */
+  .prob > li:nth-child(2), .prob > li:nth-child(3) { padding-left: 0; }
+  .prob > li { grid-template-columns: 7rem minmax(0, 1fr); }
+}
+
+/* ④ PRICE: 3プランを横並びで比較できるようにする */
+@media (min-width: 1024px) {
+  .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--v3-s7) var(--v3-s6); margin-top: var(--v3-s7); }
+  .plan { display: block; padding: 0 0 var(--v3-s6); border-top: 1px solid var(--v31-hair-paper); border-bottom: 0; padding-top: var(--v3-s6); }
+  .plan__head { position: static; }
+  .plan__mock { max-width: none; }
+  .plan__body { display: block; margin-top: var(--v3-s5); }
+  .plan__blk:first-child { grid-row: auto; }
+  .plan__blk + .plan__blk { margin-top: var(--v3-s4); }
+  .plan__cta .btn { max-width: none; }
+  /* 納期・追加オプション・含まれないものは畳んで比較を邪魔しない（開閉は残す） */
+  .plan__all-sum { display: flex; }
+  .plan__all[open] > .plan__all-sum::after { transform: rotate(225deg) translate(-1px, -1px); }
+}
+
+/* ⑤ WORKS: 3×2 の均一グリッド。孤立行とフィラーを作らない */
+@media (min-width: 900px) {
+  .wgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--v31-s75) var(--v3-s6); }
+  .wcard { grid-column: auto; }
+  .wgrid > li:nth-child(6) .wcard__link { grid-template-rows: none; }
+  .wgrid > li:nth-child(6) .wcard__shot { order: 0; margin: 0 0 .6rem; }
+  .wgrid > li:nth-child(6) .wcard__go { order: 0; }
+  .wcard__shot img { border: 1px solid rgba(245, 242, 234, .12); }
+}
+
+/* 「6作品すべて実際に開けます」は行き先が無いのでリンクにしない（誤誘導になる） */
+.works__all--static { border-bottom: 0; min-height: 0; color: var(--v3-ink-soft); font-size: var(--v3-text-xs); }
+
+/* ==========================================================================
+   本番互換（Option B）— 既存サイト構造への導線
+   --------------------------------------------------------------------------
+   トップは 1 ページ構成だが、既存の 8 ページは削除も noindex 化もしない。
+   問い合わせは既存 contact.html の実フォーム（Lead API 接続済み）へ渡す。
+   ========================================================================== */
+
+/* WORKS の二次リンク（Primary = デモサイト / Secondary = 制作事例） */
+.wcard__case { margin-top: .1rem; }
+.wcard__case a {
+  display: inline-flex; align-items: center; gap: .35em;
+  min-height: var(--v3-tap); font-size: var(--v3-text-xs); color: var(--v3-ink-soft);
+  text-decoration: none; border-bottom: 1px solid transparent;
+  transition: color var(--v3-dur) var(--v3-ease), border-color var(--v3-dur) var(--v3-ease);
+}
+.wcard__case a:hover, .wcard__case a:focus-visible {
+  color: var(--v3-accent-text); border-bottom-color: var(--v31-hair-accent);
+}
+
+/* フッターの補助導線（巨大なサイトマップにしない。1行に収める） */
+.ft__sub {
+  margin-top: var(--v3-s5); display: flex; flex-wrap: wrap; gap: .2rem var(--v3-s5);
+  padding-top: var(--v3-s4); border-top: 1px solid var(--v31-hair);
+}
+.ft__sub a {
+  display: inline-flex; align-items: center; min-height: var(--v3-tap);
+  font-size: var(--v3-text-xs); color: var(--v3-ink-soft); text-decoration: none;
+}
+.ft__sub a:hover { color: var(--v3-accent-text); }
