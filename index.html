@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ホームページ制作｜LP 3万円／サイト 8万円 | LEGACRAFT</title>
-<meta name="description" content="個人事業主・中小企業のためのホームページ制作。LP制作 30,000円、WordPressサイト 80,000円、WordPress + SWELL + ブログ 150,000円（いずれも標準仕様・税別の固定価格）。料金と「対応しないこと」を先に公開し、構成設計から実装・QAまで同じ担当者が一貫して担当します。">
-<meta property="og:title" content="ホームページ制作｜LP 3万円／サイト 8万円 | LEGACRAFT">
-<meta property="og:description" content="LP 30,000円／WordPressサイト 80,000円／WordPress + SWELL + ブログ 150,000円（固定価格）。料金と「対応しないこと」を先に公開。構成設計から実装・QAまで、ひとりで一貫対応するWeb制作です。">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ホームページ制作｜LP 30,000円／サイト 80,000円 | LEGACRAFT</title>
+<meta name="description" content="愛知・名古屋のホームページ制作。LP制作 30,000円、WordPressサイト 80,000円、WordPress + SWELL + ブログ 150,000円（いずれも税別・買い切り）。WordPressサイトは実際に制作したデモをそのままご覧いただけます。">
 <link rel="canonical" href="https://legacraft.jp/">
 <meta name="theme-color" content="#22372E">
 <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -15,956 +13,555 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:site_name" content="LEGACRAFT">
 <meta property="og:url" content="https://legacraft.jp/">
+<meta property="og:title" content="ホームページ制作｜LP 30,000円／サイト 80,000円 | LEGACRAFT">
+<meta property="og:description" content="LP制作 30,000円／WordPressサイト 80,000円／WordPress + SWELL + ブログ 150,000円（固定価格）。WordPressサイトは制作デモを公開しています。">
 <meta property="og:image" content="https://legacraft.jp/images/ogp.png">
 <!-- サイト共通設定。GA4（G-ZFSK3YRNJL）の読み込みもここが行う。
      既存ページと同じ位置・同じ読み方にする。これを外すとトップだけ計測が消える。 -->
 <script src="js/site-config.js"></script>
-<link rel="stylesheet" href="assets/tokens.css">
-<link rel="stylesheet" href="assets/v31.css">
-<link rel="stylesheet" href="assets/v34.css">
-<link rel="stylesheet" href="assets/v34b.css">
-<link rel="stylesheet" href="assets/v34f.css">
+<link rel="stylesheet" href="assets/v4.css">
 </head>
 <body>
-<a class="skip" href="#main">本文へスキップ</a>
+
 
 <header class="hd">
-  <div class="wrap hd__in">
-    <a class="hd__brand" href="#main"><b>LEGACRAFT</b><small>WEB DESIGN &amp; BUILD</small></a>
-    <nav class="hd__nav" aria-label="サイト内">
-      <a href="service.html">サービス</a><a href="works.html">制作例</a>
-      <a href="#price">料金</a><a href="about.html">LEGACRAFTについて</a>
+  <div class="wrap hd-in">
+    <a class="brand" href="#top">LEGACRAFT</a>
+    <nav class="nav">
+      <a href="#demo">制作デモ</a>
+      <a href="#plans">料金</a>
+      <a href="#works">制作例</a>
+      <a href="service.html">サービス</a>
+      <a href="about.html">LEGACRAFTについて</a>
     </nav>
-    <a class="btn btn--primary btn--sm" href="contact.html">無料相談</a>
+    <a class="btn free tiny" href="contact.html">無料相談</a>
   </div>
 </header>
 
-<main id="main">
-
-  <!-- ============ HERO ／ 誌面・非対称 ============
-       h1 はコンバージョン文（何をする会社か）。ブランド文「未来へ、遺す。」は
-       WORKS の直後と footer に置き、役割を分けている。 -->
-  <section class="hero dark" aria-labelledby="hero-h">
-    <div class="wrap wrap--wide hero__grid">
-      <div>
-        <p class="eyebrow">個人事業主・中小企業のホームページ制作</p>
-
-        <h1 class="hero__h1" id="hero-h">
-          事業の価値を、<br><em>伝わる形</em>に。
-          <span class="hero__en">CRAFTED FOR SMALL BUSINESS</span>
-        </h1>
-
-        <p class="hero__sub">
-          見た目を整える前に、誰に何をどの順で読ませるかを設計します。
-          構成設計から実装・QA・公開まで、同じ人間が最後まで担当します。
-        </p>
-
-        <div class="hero__rule"></div>
-
-        <ul class="data" aria-label="料金">
-          <li><span class="k">LP制作<small class="k__use">売りたい商品・サービスを1ページで伝える</small></span>
-            <span class="v num">30,000<small>円</small></span></li>
-          <li><span class="k">WordPressサイト<small class="k__use">店舗・会社の「顔」になる5ページ構成</small></span>
-            <span class="v num">80,000<small>円</small></span></li>
-          <li><span class="k">WordPress + SWELL + ブログ<small class="k__use">更新して育てる集客・ブログ運用</small></span>
-            <span class="v num">150,000<small>円</small></span></li>
-        </ul>
-        <ul class="hero__meta">
-          <li>税別・素材支給前提</li>
-          <li>修正は初稿提示後2回まで</li>
-          <li><a href="#price">含まれないことも明記</a></li>
-        </ul>
-
-        <div class="cta-row">
-          <a class="btn btn--primary" href="contact.html">無料で相談する</a>
-          <a class="btn btn--ghost" href="#estimate">3分で概算費用を出す</a>
-        </div>
-      </div>
-
-      <div>
-        <figure class="hero__person">
-          <picture>
-            <source media="(min-width: 960px)" type="image/avif" srcset="assets/human-hero-p-560.avif 560w, assets/human-hero-p-720.avif 720w, assets/human-hero-p-1120.avif 1120w" sizes="46vw">
-            <source media="(min-width: 960px)" type="image/webp" srcset="assets/human-hero-p-560.webp 560w, assets/human-hero-p-720.webp 720w, assets/human-hero-p-1120.webp 1120w" sizes="46vw">
-            <source media="(min-width: 960px)" srcset="assets/human-hero-p-560.jpg 560w, assets/human-hero-p-720.jpg 720w, assets/human-hero-p-1120.jpg 1120w" sizes="46vw">
-            <source type="image/avif" srcset="assets/human-hero-l-480.avif 480w, assets/human-hero-l-960.avif 960w" sizes="100vw">
-            <source type="image/webp" srcset="assets/human-hero-l-480.webp 480w, assets/human-hero-l-960.webp 960w" sizes="100vw">
-            <img src="assets/human-hero-l-480.jpg" srcset="assets/human-hero-l-480.jpg 480w, assets/human-hero-l-960.jpg 960w" sizes="100vw"
-                 width="480" height="320" fetchpriority="high" decoding="async"
-                 alt="小さな店のカウンターに立ち、来店した相手へ自然に微笑む40代の店主。背後の棚に手仕事の品が並び、右手の窓から朝の光が入っている。">
-          </picture>
-          <figcaption class="note">
-            写真はイメージです。依頼主像として用意した人物写真で、実在の方や実際のお客様ではありません。
-          </figcaption>
-        </figure>
-
-        <div class="hero__strip">
-          <p class="hero__strip-h">
-            <span>WORKS 01&ndash;03 ／ いずれも自主制作（架空クライアント）</span>
-            <a href="#works">制作例を見る</a>
-          </p>
-          <div class="hero__strip-list">
-            <img src="assets/thumb-nesta-480.jpg" width="480" height="300" loading="lazy" decoding="async" alt="制作例 NESTA ARCHITECTS のトップページ。">
-            <img src="assets/thumb-lumea-480.jpg" width="480" height="300" loading="lazy" decoding="async" alt="制作例 LUM&Eacute;A SKIN CLINIC のトップページ。">
-            <img src="assets/thumb-mirai-480.jpg" width="480" height="300" loading="lazy" decoding="async" alt="制作例 株式会社ミライテック 採用LP のトップページ。">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PROBLEM ／ 組版＋1枚の場面 ============
-       「困った顔の人物×3」にしない。1枚の場面に3つの不安をまとめて背負わせ、
-       写真の下の一文で次の PRICE（＝答え）へ渡す。 -->
-  <section class="sec paper" aria-labelledby="problem-h">
-    <div class="wrap prob-wrap">
-      <div class="prob-main">
-        <p class="eyebrow">PROBLEM</p>
-        <h2 class="h2" id="problem-h">こんなところで止まっていませんか</h2>
-
-        <ul class="prob">
-          <li>
-            <p class="prob__n num" aria-hidden="true">01</p>
-            <h3 class="prob__t">相場が分からず、<br>見積りを取るのが不安</h3>
-            <p class="prob__b">料金を出していない制作会社が多く、まず問い合わせないと比べられません。
-              数社に連絡して見積りが揃うまでに、それだけで数週間かかります。</p>
-          </li>
-          <li>
-            <p class="prob__n num" aria-hidden="true">02</p>
-            <h3 class="prob__t">予算が合わない</h3>
-            <p class="prob__b">見積りが出てきても、はじめての1サイトに出せる金額とかけ離れていることがあります。
-              かといって何が削れるのかも分からず、判断のしようがありません。</p>
-          </li>
-          <li>
-            <p class="prob__n num" aria-hidden="true">03</p>
-            <h3 class="prob__t">誰が作るのか<br>最後まで見えない</h3>
-            <p class="prob__b">窓口の担当者と、実際に手を動かす人が別のことがあります。
-              伝えたつもりの意図が、途中で誰かの解釈に置き換わっていきます。</p>
-          </li>
-        </ul>
-      </div>
-
-      <figure class="prob-fig human">
-        <picture>
-            <source type="image/avif" srcset="assets/human-problem-480.avif 480w, assets/human-problem-960.avif 960w" sizes="(min-width: 1000px) 22rem, 100vw">
-            <source type="image/webp" srcset="assets/human-problem-480.webp 480w, assets/human-problem-960.webp 960w" sizes="(min-width: 1000px) 22rem, 100vw">
-            <img src="assets/human-problem-480.jpg" srcset="assets/human-problem-480.jpg 480w, assets/human-problem-960.jpg 960w" sizes="(min-width: 1000px) 22rem, 100vw"
-                 width="480" height="720" loading="lazy" decoding="async" alt="閉店後の小さな店のカウンターで、ノートパソコンを開いたまま複数の見積書を読み比べている店主。">
-          </picture>
-        <figcaption>
-          <p class="prob-fig__lead">見積りを取る前に、価格が見えるようにしました。</p>
-          <p class="note">写真はイメージです。実在のお客様・実績を示すものではありません。</p>
-        </figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ============ PRICE ／ 料金と制作内容 ============
-       V3.3 で情報の順序を変えた:
-         価格 → 含まれるもの → 納期・修正 → 追加オプション → 含まれないもの。
-       「対応しないこと」は各プランの最後に残すが、区画の主役からは外した。
-       価格幅を全廃し、標準仕様の固定価格にしている。サービス名も
-       LP制作／WordPressサイト／WordPress + SWELL + ブログ の3つに統一。 -->
-  <section class="sec paper-2" id="price" aria-labelledby="price-h">
-    <div class="wrap">
-      <p class="eyebrow">PRICE</p>
-      <h2 class="h2" id="price-h">料金と制作内容</h2>
-      <p class="lead">
-        3つのプランはすべて固定価格です。含まれる範囲を標準仕様として決めてあるので、
-        「結局いくらになるのか」を見積り前に確かめられます。
-        標準仕様を超える分だけを、追加オプションとしてお見積りします。
+<!-- ═══ 01 HERO ═══════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-bg"><picture><source type="image/webp" srcset="assets/human-hero-p-1120.webp"><img src="assets/human-hero-p-1120.jpg" alt="打ち合わせをする事業者" class="" width="1120" height="1200" fetchpriority="high" decoding="async"></picture></div>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">LEGACRAFT <span class="sep">／</span> 愛知・名古屋</p>
+      <h1 class="hero-h">
+        <span class="l1">愛知・名古屋の<b>ホームページ制作</b></span>
+        <span class="l2">つくる前に、</span>
+        <span class="l2">完成イメージが<em>見られる</em>。</span>
+      </h1>
+      <p class="hero-lead">
+        「頼んでみないと、どんなものが出てくるか分からない」。<br>
+        ホームページで一番こわいのは、そこだと思います。<br>
+        だから LEGACRAFT は、<b>先に見せます。</b>
       </p>
 
-
-      <div class="plans">
-        <article class="plan">
-          <div class="plan__head">
-            <div class="plan__mock" aria-hidden="false">
-<svg class="mock" viewBox="0 0 320 220" role="img" aria-label="LP制作の完成イメージ。1ページに見出し・交互の説明ブロック・申し込みボタンが並ぶ縦長の構成。" width="320" height="220">
-  <rect x=".5" y=".5" width="319" height="219" rx="3" class="mk-frame"/>
-  <rect x=".5" y=".5" width="319" height="6" class="mk-bar"/>
-  <rect x="10" y="14" width="300" height="62" rx="3" class="mk-hero"/>
-  <rect x="24" y="32" width="130" height="8" rx="2" class="mk-t"/>
-  <rect x="24" y="46" width="96" height="6" rx="2" class="mk-t2"/>
-  <rect x="24" y="60" width="54" height="10" rx="5" class="mk-cta"/>
-  <rect x="10" y="84" width="140" height="30" rx="3" class="mk-img"/>
-  <rect x="160" y="88" width="100" height="6" rx="2" class="mk-t2"/>
-  <rect x="160" y="99" width="80" height="5" rx="2" class="mk-t3"/>
-  <rect x="160" y="108" width="88" height="5" rx="2" class="mk-t3"/>
-  <rect x="170" y="120" width="140" height="30" rx="3" class="mk-img"/>
-  <rect x="10" y="124" width="100" height="6" rx="2" class="mk-t2"/>
-  <rect x="10" y="135" width="80" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="144" width="88" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="156" width="140" height="30" rx="3" class="mk-img"/>
-  <rect x="160" y="160" width="100" height="6" rx="2" class="mk-t2"/>
-  <rect x="160" y="171" width="80" height="5" rx="2" class="mk-t3"/>
-  <rect x="160" y="180" width="88" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="192" width="300" height="24" rx="3" class="mk-band"/>
-  <rect x="126" y="199" width="68" height="10" rx="5" class="mk-cta"/>
-</svg>
-            <p class="mock-cap">構成イメージ（模式図）</p>
-            </div>
-            <p class="plan__tag">PLAN A</p>
-            <h3 class="plan__name">LP制作</h3>
-            <p class="plan__who">1つの商品・サービスを、まず売りたい方に</p>
-            <p class="plan__price"><span class="num">30,000</span><small>円（税別・標準仕様）</small></p>
-            <p class="plan__fixed">固定価格</p>
-            <p class="plan__cta"><a class="btn btn--primary btn--sm" href="contact.html">このプランで相談する<span aria-hidden="true">→</span></a></p>
-          </div>
-          <details class="plan__all" open>
-            <summary class="plan__all-sum">
-              <span>含まれるもの・納期・追加オプション・含まれないもの</span>
-            </summary>
-            <div class="plan__body">
-            <div class="plan__blk">
-              <h4 class="plan__h">含まれるもの</h4>
-              <ul class="plan__inc">
-              <li>1ページ完結（セクション上限10）</li>
-              <li>構成設計・デザイン・コーディング</li>
-              <li>レスポンシブ（スマートフォン／タブレット）</li>
-              <li>お問い合わせフォーム 1つ</li>
-              <li>基本SEO設定（title・description・OGP）とGA4設置</li>
-              <li>公開前QA・公開作業</li>
-              </ul>
-            </div>
-            <div class="plan__blk">
-              <h4 class="plan__h">納期・修正</h4>
-              <p class="plan__txt">素材受領後 10営業日。修正は初稿提示後2回まで。</p>
-            </div>
-            <details class="plan__blk plan__opt" open>
-              <summary class="plan__h">追加オプション（別料金）</summary>
-              <p class="plan__txt">セクション追加／原稿の整理（箇条書きから本文へ）／ストック写真の選定／3回目以降の修正／サーバー・ドメイン設定の代行</p>
-            </details>
-            <div class="plan__blk plan__blk--no">
-              <h4 class="plan__h">含まれないもの</h4>
-              <p class="plan__txt">2ページ目以降／広告運用／SEOライティング代行／商品撮影／コピーの企画から</p>
-            </div>
-          </div>
-          </details>
-        </article>
-        <article class="plan">
-          <div class="plan__head">
-            <div class="plan__mock" aria-hidden="false">
-<svg class="mock" viewBox="0 0 320 220" role="img" aria-label="WordPressサイトの完成イメージ。5項目のナビゲーションと、TOP・事業内容・会社概要・実績・お問い合わせの5ページ構成。" width="320" height="220">
-  <rect x=".5" y=".5" width="319" height="219" rx="3" class="mk-frame"/>
-  <rect x=".5" y=".5" width="319" height="6" class="mk-bar"/>
-  <rect x="10" y="14" width="300" height="16" rx="3" class="mk-nav"/>
-  <rect x="20" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="60" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="100" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="140" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="180" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="36" width="300" height="46" rx="3" class="mk-hero"/>
-  <rect x="24" y="50" width="118" height="8" rx="2" class="mk-t"/>
-  <rect x="24" y="64" width="84" height="6" rx="2" class="mk-t2"/>
-  <rect x="10" y="88" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="10" y="126" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="135" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="110" y="88" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="110" y="126" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="110" y="135" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="210" y="88" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="210" y="126" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="210" y="135" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="10" y="140" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="10" y="178" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="187" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="110" y="140" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="110" y="178" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="110" y="187" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="210" y="140" width="90" height="34" rx="3" class="mk-band"/>
-  <rect x="228" y="151" width="54" height="10" rx="5" class="mk-cta"/>
-</svg>
-            <p class="mock-cap">構成イメージ（模式図）</p>
-            </div>
-            <p class="plan__tag">PLAN B</p>
-            <h3 class="plan__name">WordPressサイト</h3>
-            <p class="plan__who">店舗・会社の「顔」になる5ページが必要な方に</p>
-            <p class="plan__price"><span class="num">80,000</span><small>円（税別・標準仕様）</small></p>
-            <p class="plan__fixed">固定価格</p>
-            <p class="plan__cta"><a class="btn btn--primary btn--sm" href="contact.html">このプランで相談する<span aria-hidden="true">→</span></a></p>
-          </div>
-          <details class="plan__all" open>
-            <summary class="plan__all-sum">
-              <span>含まれるもの・納期・追加オプション・含まれないもの</span>
-            </summary>
-            <div class="plan__body">
-            <div class="plan__blk">
-              <h4 class="plan__h">含まれるもの</h4>
-              <ul class="plan__inc">
-              <li>5ページ固定（TOP・事業内容・会社概要・実績またはお知らせ・お問い合わせ）</li>
-              <li>各ページ セクション上限6</li>
-              <li>WordPress で構築（テーマは標準構成）</li>
-              <li>レスポンシブ・お問い合わせフォーム</li>
-              <li>基本SEO設定とGA4設置・簡易マニュアル</li>
-              <li>公開前QA・公開作業</li>
-              </ul>
-            </div>
-            <div class="plan__blk">
-              <h4 class="plan__h">納期・修正</h4>
-              <p class="plan__txt">素材受領後 3週間。修正は初稿提示後2回まで。</p>
-            </div>
-            <details class="plan__blk plan__opt" open>
-              <summary class="plan__h">追加オプション（別料金）</summary>
-              <p class="plan__txt">ページ追加／お知らせ投稿テンプレート／地図・予約ツールの埋め込み／原稿の整理／写真選定</p>
-            </details>
-            <div class="plan__blk plan__blk--no">
-              <h4 class="plan__h">含まれないもの</h4>
-              <p class="plan__txt">6ページ目以降／多言語／ロゴ制作／商品撮影／記事ライティングの大量代行</p>
-            </div>
-          </div>
-          </details>
-        </article>
-        <article class="plan">
-          <div class="plan__head">
-            <div class="plan__mock" aria-hidden="false">
-<svg class="mock" viewBox="0 0 320 220" role="img" aria-label="WordPress + SWELL + ブログの完成イメージ。ナビゲーション、記事一覧、サイドバーを備えた更新型サイトの構成。" width="320" height="220">
-  <rect x=".5" y=".5" width="319" height="219" rx="3" class="mk-frame"/>
-  <rect x=".5" y=".5" width="319" height="6" class="mk-bar"/>
-  <rect x="10" y="14" width="300" height="16" rx="3" class="mk-nav"/>
-  <rect x="20" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="53" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="86" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="119" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="152" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="185" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="36" width="196" height="34" rx="3" class="mk-hero"/>
-  <rect x="22" y="46" width="96" height="7" rx="2" class="mk-t"/>
-  <rect x="22" y="58" width="68" height="5" rx="2" class="mk-t2"/>
-  <rect x="214" y="36" width="96" height="34" rx="3" class="mk-side"/>
-  <rect x="222" y="44" width="58" height="5" rx="2" class="mk-t3"/>
-  <rect x="222" y="53" width="74" height="4" rx="2" class="mk-t3"/>
-  <rect x="222" y="61" width="66" height="4" rx="2" class="mk-t3"/>
-  <rect x="10" y="78" width="46" height="30" rx="2" class="mk-img"/>
-  <rect x="62" y="80" width="108" height="6" rx="2" class="mk-t2"/>
-  <rect x="62" y="91" width="138" height="4" rx="2" class="mk-t3"/>
-  <rect x="62" y="99" width="118" height="4" rx="2" class="mk-t3"/>
-  <rect x="214" y="78" width="96" height="30" rx="3" class="mk-side"/>
-  <rect x="10" y="114" width="46" height="30" rx="2" class="mk-img"/>
-  <rect x="62" y="116" width="108" height="6" rx="2" class="mk-t2"/>
-  <rect x="62" y="127" width="138" height="4" rx="2" class="mk-t3"/>
-  <rect x="62" y="135" width="118" height="4" rx="2" class="mk-t3"/>
-  <rect x="214" y="114" width="96" height="30" rx="3" class="mk-side"/>
-  <rect x="10" y="150" width="46" height="30" rx="2" class="mk-img"/>
-  <rect x="62" y="152" width="108" height="6" rx="2" class="mk-t2"/>
-  <rect x="62" y="163" width="138" height="4" rx="2" class="mk-t3"/>
-  <rect x="62" y="171" width="118" height="4" rx="2" class="mk-t3"/>
-  <rect x="214" y="150" width="96" height="30" rx="3" class="mk-side"/>
-  <rect x="10" y="186" width="196" height="14" rx="3" class="mk-band"/>
-  <rect x="78" y="189" width="60" height="8" rx="4" class="mk-cta"/>
-</svg>
-            <p class="mock-cap">構成イメージ（模式図）</p>
-            </div>
-            <p class="plan__tag">PLAN C</p>
-            <h3 class="plan__name">WordPress + SWELL + ブログ</h3>
-            <p class="plan__who">自分で更新し、発信を続けたい事業に</p>
-            <p class="plan__price"><span class="num">150,000</span><small>円（税別・標準仕様）</small></p>
-            <p class="plan__fixed">固定価格</p>
-            <p class="plan__cta"><a class="btn btn--primary btn--sm" href="contact.html">このプランで相談する<span aria-hidden="true">→</span></a></p>
-          </div>
-          <details class="plan__all" open>
-            <summary class="plan__all-sum">
-              <span>含まれるもの・納期・追加オプション・含まれないもの</span>
-            </summary>
-            <div class="plan__body">
-            <div class="plan__blk">
-              <h4 class="plan__h">含まれるもの</h4>
-              <ul class="plan__inc">
-              <li>WordPress＋SWELL の固定6ページ＋ブログ</li>
-              <li>ブログのカテゴリ設計・投稿テンプレート・見本記事1本</li>
-              <li>ご契約済みサーバーへの設置</li>
-              <li>レスポンシブ・お問い合わせフォーム</li>
-              <li>基本SEO設定とGA4設置・操作レクチャー60分＋マニュアル</li>
-              <li>自社で更新できる状態で納品</li>
-              </ul>
-            </div>
-            <div class="plan__blk">
-              <h4 class="plan__h">納期・修正</h4>
-              <p class="plan__txt">素材受領後 5週間。修正は初稿提示後2回まで（ページ単位）。</p>
-            </div>
-            <details class="plan__blk plan__opt" open>
-              <summary class="plan__h">追加オプション（別料金）</summary>
-              <p class="plan__txt">固定ページ追加／既存記事の移行（10本単位）／月次保守（更新・バックアップ・軽微修正）／サーバー契約の代行</p>
-            </details>
-            <div class="plan__blk plan__blk--no">
-              <h4 class="plan__h">含まれないもの</h4>
-              <p class="plan__txt">7ページ目以降／会員・決済・予約システム／既存システム連携開発／公開後の保守（オプション）</p>
-            </div>
-          </div>
-          </details>
-        </article>
+      <div class="hero-price">
+        <div class="hp-item"><span class="hp-k">LP制作</span><span class="hp-v">30,000円</span></div>
+        <div class="hp-item"><span class="hp-k">WordPressサイト</span><span class="hp-v">80,000円</span></div>
+        <div class="hp-item"><span class="hp-k">＋ブログ</span><span class="hp-v">150,000円</span></div>
+        <p class="hp-note">税別・買い切り／<b>月額はかかりません</b></p>
       </div>
 
-      <p class="note" style="margin-top:var(--v3-s5)">
-        すべて税別です。原稿と写真はチェックリストに沿ってご支給いただく前提で、ヒアリングはオンライン60分1回を含みます。
-        SWELLのライセンス費用、サーバー・ドメインの費用はお客様のご契約分となります。
-        標準仕様に収まらない場合は、固定価格を崩さずに個別見積りとしてお出しします。
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ ESTIMATE ／ 3分で概算 ============
-       金額の幅は出さない。固定価格 3 本のどれかに必ず着地させる。
-       合計の自動加算・スライダー・トグルは使わない（SaaS の計算機に見えるため）。
-       JS が無い場合は 3 プランがそのまま全部見える。radio なのでキーボードだけで操作できる。 -->
-  <section class="sec dark est" id="estimate" aria-labelledby="est-h">
-    <div class="wrap">
-      <p class="eyebrow">ESTIMATE</p>
-      <h2 class="h2" id="est-h">3分で、あなたに合うプランと金額を出す</h2>
-      <p class="lead">
-        3つ選ぶだけです。結果は固定価格の3つのどれかに決まります。金額の幅は出しません。
-        標準仕様に入らないものは、追加オプションとして分けてお見積りします。
-      </p>
-
-      <div class="est__wrap">
-        <form class="est__form" id="est-form">
-          <fieldset class="est__step">
-            <legend><span class="est__n" aria-hidden="true">01</span>業種を選ぶ</legend>
-            <div class="est__opts">
-            <label class="est__opt"><input type="radio" name="industry" value="kenchiku" checked><span>建築・工務店</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="biyou"><span>美容</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="inshoku"><span>飲食</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="shigyo"><span>士業</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="saiyo"><span>採用</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="butsuryu"><span>物流</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="kaigo"><span>介護</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="seiso"><span>クリーニング</span></label>
-            <label class="est__opt"><input type="radio" name="industry" value="other"><span>その他</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="est__step">
-            <legend><span class="est__n" aria-hidden="true">02</span>目的を選ぶ</legend>
-            <div class="est__opts">
-            <label class="est__opt"><input type="radio" name="purpose" value="toiawase" checked><span>問い合わせを増やす</span></label>
-            <label class="est__opt"><input type="radio" name="purpose" value="yoyaku"><span>予約を増やす</span></label>
-            <label class="est__opt"><input type="radio" name="purpose" value="oubo"><span>採用応募を増やす</span></label>
-            <label class="est__opt"><input type="radio" name="purpose" value="kaisha"><span>会社案内</span></label>
-            <label class="est__opt"><input type="radio" name="purpose" value="service"><span>サービス紹介</span></label>
-            <label class="est__opt"><input type="radio" name="purpose" value="seo"><span>ブログでSEO</span></label>
-            <label class="est__opt"><input type="radio" name="purpose" value="shinrai"><span>信頼性を上げる</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="est__step">
-            <legend><span class="est__n" aria-hidden="true">03</span>制作グレードを選ぶ</legend>
-            <div class="est__opts">
-            <label class="est__opt est__opt--wide"><input type="radio" name="grade" value="simple"><span><b>シンプル</b><small>要点だけを1枚で</small></span></label>
-            <label class="est__opt est__opt--wide"><input type="radio" name="grade" value="standard" checked><span><b>スタンダード</b><small>会社の顔になる数ページ</small></span></label>
-            <label class="est__opt est__opt--wide"><input type="radio" name="grade" value="deep"><span><b>しっかり運用</b><small>自分で更新して育てる</small></span></label>
-            </div>
-          </fieldset>
-        </form>
-
-        <div class="est__out" id="est-out" aria-live="polite">
-          <p class="est__hint">3つ選ぶと、ここに推奨プランと固定価格が出ます。</p>
-        <article class="est__card" data-plan="lp">
-          <div class="est__cardmock">
-<svg class="mock" viewBox="0 0 320 220" role="img" aria-label="LP制作の完成イメージ。1ページに見出し・交互の説明ブロック・申し込みボタンが並ぶ縦長の構成。" width="320" height="220">
-  <rect x=".5" y=".5" width="319" height="219" rx="3" class="mk-frame"/>
-  <rect x=".5" y=".5" width="319" height="6" class="mk-bar"/>
-  <rect x="10" y="14" width="300" height="62" rx="3" class="mk-hero"/>
-  <rect x="24" y="32" width="130" height="8" rx="2" class="mk-t"/>
-  <rect x="24" y="46" width="96" height="6" rx="2" class="mk-t2"/>
-  <rect x="24" y="60" width="54" height="10" rx="5" class="mk-cta"/>
-  <rect x="10" y="84" width="140" height="30" rx="3" class="mk-img"/>
-  <rect x="160" y="88" width="100" height="6" rx="2" class="mk-t2"/>
-  <rect x="160" y="99" width="80" height="5" rx="2" class="mk-t3"/>
-  <rect x="160" y="108" width="88" height="5" rx="2" class="mk-t3"/>
-  <rect x="170" y="120" width="140" height="30" rx="3" class="mk-img"/>
-  <rect x="10" y="124" width="100" height="6" rx="2" class="mk-t2"/>
-  <rect x="10" y="135" width="80" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="144" width="88" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="156" width="140" height="30" rx="3" class="mk-img"/>
-  <rect x="160" y="160" width="100" height="6" rx="2" class="mk-t2"/>
-  <rect x="160" y="171" width="80" height="5" rx="2" class="mk-t3"/>
-  <rect x="160" y="180" width="88" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="192" width="300" height="24" rx="3" class="mk-band"/>
-  <rect x="126" y="199" width="68" height="10" rx="5" class="mk-cta"/>
-</svg>
-            <p class="mock-cap">構成イメージ（模式図）</p>
-          </div>
-          <div class="est__cardbody">
-            <p class="est__tag">PLAN A</p>
-            <h3 class="est__name">LP制作</h3>
-            <p class="est__price"><span class="num">30,000</span><small>円（税別）</small><span class="est__fixed">固定価格</span></p>
-            <dl class="est__meta">
-              <div><dt>向いている</dt><dd class="est__fit">3つ選ぶと表示します</dd></div>
-              <div><dt>ページ構成</dt><dd class="est__pages">3つ選ぶと表示します</dd></div>
-              <div><dt>納期</dt><dd>素材受領後 10営業日</dd></div>
-            </dl>
-            <details class="est__all" open>
-            <summary class="est__h est__all-sum">含まれるもの（標準仕様）</summary>
-            <ul class="est__feats">
-              <li>1ページ完結（セクション上限10）</li>
-              <li>構成設計・デザイン・コーディング</li>
-              <li>レスポンシブ（スマートフォン／タブレット）</li>
-              <li>お問い合わせフォーム 1つ</li>
-              <li>基本SEO設定とGA4設置</li>
-              <li>公開前QA・公開作業</li>
-              <li>修正 初稿提示後2回まで</li>
-            </ul>
-            </details>
-            <p class="est__cta">
-              <a class="btn btn--primary" href="contact.html">この内容で相談する</a>
-              <a class="est__more" href="#price">料金の詳細を見る</a>
-            </p>
-          </div>
-        </article>
-        <article class="est__card" data-plan="wp">
-          <div class="est__cardmock">
-<svg class="mock" viewBox="0 0 320 220" role="img" aria-label="WordPressサイトの完成イメージ。5項目のナビゲーションと、TOP・事業内容・会社概要・実績・お問い合わせの5ページ構成。" width="320" height="220">
-  <rect x=".5" y=".5" width="319" height="219" rx="3" class="mk-frame"/>
-  <rect x=".5" y=".5" width="319" height="6" class="mk-bar"/>
-  <rect x="10" y="14" width="300" height="16" rx="3" class="mk-nav"/>
-  <rect x="20" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="60" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="100" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="140" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="180" y="20" width="30" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="36" width="300" height="46" rx="3" class="mk-hero"/>
-  <rect x="24" y="50" width="118" height="8" rx="2" class="mk-t"/>
-  <rect x="24" y="64" width="84" height="6" rx="2" class="mk-t2"/>
-  <rect x="10" y="88" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="10" y="126" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="135" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="110" y="88" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="110" y="126" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="110" y="135" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="210" y="88" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="210" y="126" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="210" y="135" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="10" y="140" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="10" y="178" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="187" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="110" y="140" width="90" height="34" rx="3" class="mk-img"/>
-  <rect x="110" y="178" width="62" height="5" rx="2" class="mk-t3"/>
-  <rect x="110" y="187" width="46" height="4" rx="2" class="mk-t3"/>
-  <rect x="210" y="140" width="90" height="34" rx="3" class="mk-band"/>
-  <rect x="228" y="151" width="54" height="10" rx="5" class="mk-cta"/>
-</svg>
-            <p class="mock-cap">構成イメージ（模式図）</p>
-          </div>
-          <div class="est__cardbody">
-            <p class="est__tag">PLAN B</p>
-            <h3 class="est__name">WordPressサイト</h3>
-            <p class="est__price"><span class="num">80,000</span><small>円（税別）</small><span class="est__fixed">固定価格</span></p>
-            <dl class="est__meta">
-              <div><dt>向いている</dt><dd class="est__fit">3つ選ぶと表示します</dd></div>
-              <div><dt>ページ構成</dt><dd class="est__pages">3つ選ぶと表示します</dd></div>
-              <div><dt>納期</dt><dd>素材受領後 3週間</dd></div>
-            </dl>
-            <details class="est__all" open>
-            <summary class="est__h est__all-sum">含まれるもの（標準仕様）</summary>
-            <ul class="est__feats">
-              <li>5ページ固定（TOP・事業内容・会社概要・実績またはお知らせ・お問い合わせ）</li>
-              <li>WordPress で構築（テーマは標準構成）</li>
-              <li>レスポンシブ・お問い合わせフォーム</li>
-              <li>基本SEO設定とGA4設置</li>
-              <li>簡易マニュアル</li>
-              <li>公開前QA・公開作業</li>
-              <li>修正 初稿提示後2回まで</li>
-            </ul>
-            </details>
-            <p class="est__cta">
-              <a class="btn btn--primary" href="contact.html">この内容で相談する</a>
-              <a class="est__more" href="#price">料金の詳細を見る</a>
-            </p>
-          </div>
-        </article>
-        <article class="est__card" data-plan="blog">
-          <div class="est__cardmock">
-<svg class="mock" viewBox="0 0 320 220" role="img" aria-label="WordPress + SWELL + ブログの完成イメージ。ナビゲーション、記事一覧、サイドバーを備えた更新型サイトの構成。" width="320" height="220">
-  <rect x=".5" y=".5" width="319" height="219" rx="3" class="mk-frame"/>
-  <rect x=".5" y=".5" width="319" height="6" class="mk-bar"/>
-  <rect x="10" y="14" width="300" height="16" rx="3" class="mk-nav"/>
-  <rect x="20" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="53" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="86" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="119" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="152" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="185" y="20" width="24" height="5" rx="2" class="mk-t3"/>
-  <rect x="10" y="36" width="196" height="34" rx="3" class="mk-hero"/>
-  <rect x="22" y="46" width="96" height="7" rx="2" class="mk-t"/>
-  <rect x="22" y="58" width="68" height="5" rx="2" class="mk-t2"/>
-  <rect x="214" y="36" width="96" height="34" rx="3" class="mk-side"/>
-  <rect x="222" y="44" width="58" height="5" rx="2" class="mk-t3"/>
-  <rect x="222" y="53" width="74" height="4" rx="2" class="mk-t3"/>
-  <rect x="222" y="61" width="66" height="4" rx="2" class="mk-t3"/>
-  <rect x="10" y="78" width="46" height="30" rx="2" class="mk-img"/>
-  <rect x="62" y="80" width="108" height="6" rx="2" class="mk-t2"/>
-  <rect x="62" y="91" width="138" height="4" rx="2" class="mk-t3"/>
-  <rect x="62" y="99" width="118" height="4" rx="2" class="mk-t3"/>
-  <rect x="214" y="78" width="96" height="30" rx="3" class="mk-side"/>
-  <rect x="10" y="114" width="46" height="30" rx="2" class="mk-img"/>
-  <rect x="62" y="116" width="108" height="6" rx="2" class="mk-t2"/>
-  <rect x="62" y="127" width="138" height="4" rx="2" class="mk-t3"/>
-  <rect x="62" y="135" width="118" height="4" rx="2" class="mk-t3"/>
-  <rect x="214" y="114" width="96" height="30" rx="3" class="mk-side"/>
-  <rect x="10" y="150" width="46" height="30" rx="2" class="mk-img"/>
-  <rect x="62" y="152" width="108" height="6" rx="2" class="mk-t2"/>
-  <rect x="62" y="163" width="138" height="4" rx="2" class="mk-t3"/>
-  <rect x="62" y="171" width="118" height="4" rx="2" class="mk-t3"/>
-  <rect x="214" y="150" width="96" height="30" rx="3" class="mk-side"/>
-  <rect x="10" y="186" width="196" height="14" rx="3" class="mk-band"/>
-  <rect x="78" y="189" width="60" height="8" rx="4" class="mk-cta"/>
-</svg>
-            <p class="mock-cap">構成イメージ（模式図）</p>
-          </div>
-          <div class="est__cardbody">
-            <p class="est__tag">PLAN C</p>
-            <h3 class="est__name">WordPress + SWELL + ブログ</h3>
-            <p class="est__price"><span class="num">150,000</span><small>円（税別）</small><span class="est__fixed">固定価格</span></p>
-            <dl class="est__meta">
-              <div><dt>向いている</dt><dd class="est__fit">3つ選ぶと表示します</dd></div>
-              <div><dt>ページ構成</dt><dd class="est__pages">3つ選ぶと表示します</dd></div>
-              <div><dt>納期</dt><dd>素材受領後 5週間</dd></div>
-            </dl>
-            <details class="est__all" open>
-            <summary class="est__h est__all-sum">含まれるもの（標準仕様）</summary>
-            <ul class="est__feats">
-              <li>WordPress＋SWELL の固定6ページ＋ブログ</li>
-              <li>ブログのカテゴリ設計・投稿テンプレート・見本記事1本</li>
-              <li>レスポンシブ・お問い合わせフォーム</li>
-              <li>基本SEO設定とGA4設置</li>
-              <li>操作レクチャー60分＋簡易マニュアル</li>
-              <li>公開前QA・公開作業</li>
-              <li>修正 初稿提示後2回まで（ページ単位）</li>
-            </ul>
-            </details>
-            <p class="est__cta">
-              <a class="btn btn--primary" href="contact.html">この内容で相談する</a>
-              <a class="est__more" href="#price">料金の詳細を見る</a>
-            </p>
-          </div>
-        </article>
-        </div>
+      <div class="hero-cta">
+        <a class="btn free lg" href="demo/electrician/" target="_blank" rel="noopener"><span class="btn-sub">実際に制作したWordPressサイト・全5ページ</span>制作デモを見る</a>
+        <a class="btn ghost lg" href="#plans">先に料金を見る</a>
       </div>
-
-      <p class="note est__note">
-        表示している金額は標準仕様の固定価格（税別）です。標準仕様を超える分は追加オプションとして別途お見積りします。
-        <a href="#price" style="color:var(--v3-accent-text)">料金と制作内容</a>に全条件を書いています。
-      </p>
+      <p class="hero-tag">未来へ、遺す。</p>
     </div>
-  </section>
-
-  <!-- ============ WORKS ／ 6作品を1つのグリッドに統合 ============
-       V3.3 は大型3件＋文字リスト3件で、同じ作品が二重に出ていた（モバイル 5,684px）。
-       大2＋標準4 の 1 グリッドに統合。サムネイルは実際に公開しているデモサイトの実スクショ。
-       hover / focus で切り取り位置を下へ送り、「実際に開けるページである」ことを示す。 -->
-  <section class="sec dark" id="works" aria-labelledby="works-h">
-    <div class="wrap wrap--wide">
-      <p class="eyebrow">WORKS</p>
-      <div class="works__head">
-        <h2 class="h2" id="works-h">制作例（いずれも公開中）</h2>
-        <p class="works__all works__all--static">6作品すべて実際に開けます</p>
-      </div>
-      <p class="lead">
-        掲載しているものはいずれも<strong>架空のクライアントを想定した自主制作</strong>で、
-        実際の受注案件ではありません。実案件は守秘義務で中身をお見せできないことが多いため、
-        設計・実装・品質確認まで包み隠さず見ていただけるものとして掲載しています。
-        6作品すべて公開中で、そのまま開いて確認できます。
-      </p>
-
-      <ul class="wgrid">
-          <li class="wcard">
-            <a class="wcard__link" href="https://nesta.legacraft.com/" target="_blank" rel="noopener">
-              <span class="wcard__num" aria-hidden="true">01</span>
-              <span class="wcard__shot">
-                <picture>
-                  <source type="image/avif" srcset="assets/thumb-nesta-480.avif 480w, assets/thumb-nesta-960.avif 960w" sizes="(min-width: 900px) 30rem, (min-width: 620px) 44vw, 88vw">
-                  <source type="image/webp" srcset="assets/thumb-nesta-480.webp 480w, assets/thumb-nesta-960.webp 960w" sizes="(min-width: 900px) 30rem, (min-width: 620px) 44vw, 88vw">
-                  <img src="assets/thumb-nesta-480.jpg" srcset="assets/thumb-nesta-480.jpg 480w, assets/thumb-nesta-960.jpg 960w" sizes="(min-width: 900px) 30rem, (min-width: 620px) 44vw, 88vw"
-                   width="480" height="300" loading="lazy" decoding="async" alt="NESTA ARCHITECTS のトップページ。夕景の住宅写真に見出しを重ねた構成。">
-                </picture>
-              </span>
-              <span class="wcard__cat wcard__pill">建築設計（架空・注文住宅設計事務所）</span>
-              <span class="wcard__name">NESTA ARCHITECTS</span>
-              <span class="wcard__desc">文字量を半分に削り、写真に語らせると決めた。WordPress＋SWELL、全7ページ。</span>
-              <span class="wcard__go">デモサイトを見る<span aria-hidden="true">↗</span><span class="sr">（別タブで開きます）</span></span>
-            </a>
-            <p class="wcard__case"><a href="case-study.html?work=work-03">制作事例を見る<span aria-hidden="true">→</span></a></p>
-          </li>
-          <li class="wcard">
-            <a class="wcard__link" href="https://lumea.legacraft.com/" target="_blank" rel="noopener">
-              <span class="wcard__num" aria-hidden="true">02</span>
-              <span class="wcard__shot">
-                <picture>
-                  <source type="image/avif" srcset="assets/thumb-lumea-480.avif 480w, assets/thumb-lumea-960.avif 960w" sizes="(min-width: 900px) 30rem, (min-width: 620px) 44vw, 88vw">
-                  <source type="image/webp" srcset="assets/thumb-lumea-480.webp 480w, assets/thumb-lumea-960.webp 960w" sizes="(min-width: 900px) 30rem, (min-width: 620px) 44vw, 88vw">
-                  <img src="assets/thumb-lumea-480.jpg" srcset="assets/thumb-lumea-480.jpg 480w, assets/thumb-lumea-960.jpg 960w" sizes="(min-width: 900px) 30rem, (min-width: 620px) 44vw, 88vw"
-                   width="480" height="300" loading="lazy" decoding="async" alt="LUMÉA SKIN CLINIC のトップページ。明るい配色の美容皮膚科サイト。">
-                </picture>
-              </span>
-              <span class="wcard__cat wcard__pill">美容医療（架空・美容皮膚科クリニック）</span>
-              <span class="wcard__name">LUMÉA SKIN CLINIC</span>
-              <span class="wcard__desc">価格と施術内容を、予約より前に読み切れる順番にすると決めた。全11ページ。</span>
-              <span class="wcard__go">デモサイトを見る<span aria-hidden="true">↗</span><span class="sr">（別タブで開きます）</span></span>
-            </a>
-            <p class="wcard__case"><a href="case-study.html?work=work-04">制作事例を見る<span aria-hidden="true">→</span></a></p>
-          </li>
-          <li class="wcard">
-            <a class="wcard__link" href="https://kenvhana510.github.io/portfolio-mirai-tech-lp/" target="_blank" rel="noopener">
-              <span class="wcard__num" aria-hidden="true">03</span>
-              <span class="wcard__shot">
-                <picture>
-                  <source type="image/avif" srcset="assets/thumb-mirai-480.avif 480w, assets/thumb-mirai-960.avif 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <source type="image/webp" srcset="assets/thumb-mirai-480.webp 480w, assets/thumb-mirai-960.webp 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <img src="assets/thumb-mirai-480.jpg" srcset="assets/thumb-mirai-480.jpg 480w, assets/thumb-mirai-960.jpg 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw"
-                   width="480" height="300" loading="lazy" decoding="async" alt="株式会社ミライテック 採用LP のトップページ。工場で作業する人物写真に見出しを重ねた構成。">
-                </picture>
-              </span>
-              <span class="wcard__cat wcard__pill">製造業・採用（架空・自動車部品メーカー）</span>
-              <span class="wcard__name">株式会社ミライテック 採用LP</span>
-              <span class="wcard__desc">未経験者の不安に順番に答える構成にし、写真は現場の人を主役にすると決めた。</span>
-              <span class="wcard__go">デモサイトを見る<span aria-hidden="true">↗</span><span class="sr">（別タブで開きます）</span></span>
-            </a>
-            <p class="wcard__case"><a href="case-study.html?work=work-01">制作事例を見る<span aria-hidden="true">→</span></a></p>
-          </li>
-          <li class="wcard">
-            <a class="wcard__link" href="https://kenvhana510.github.io/aichi-clean-lp/" target="_blank" rel="noopener">
-              <span class="wcard__num" aria-hidden="true">04</span>
-              <span class="wcard__shot">
-                <picture>
-                  <source type="image/avif" srcset="assets/thumb-aichi-480.avif 480w, assets/thumb-aichi-960.avif 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <source type="image/webp" srcset="assets/thumb-aichi-480.webp 480w, assets/thumb-aichi-960.webp 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <img src="assets/thumb-aichi-480.jpg" srcset="assets/thumb-aichi-480.jpg 480w, assets/thumb-aichi-960.jpg 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw"
-                   width="480" height="300" loading="lazy" decoding="async" alt="AICHI CLEAN のトップページ。室内で清掃するスタッフの写真。">
-                </picture>
-              </span>
-              <span class="wcard__cat wcard__pill">ハウスクリーニング（架空）</span>
-              <span class="wcard__name">AICHI CLEAN</span>
-              <span class="wcard__desc">料金を先に出し、迷う時間を作らないと決めた。1ページ＋フォーム。</span>
-              <span class="wcard__go">デモサイトを見る<span aria-hidden="true">↗</span><span class="sr">（別タブで開きます）</span></span>
-            </a>
-            <p class="wcard__case"><a href="case-study.html?work=work-02">制作事例を見る<span aria-hidden="true">→</span></a></p>
-          </li>
-          <li class="wcard">
-            <a class="wcard__link" href="https://kenvhana510.github.io/shiokaze-logistics/" target="_blank" rel="noopener">
-              <span class="wcard__num" aria-hidden="true">05</span>
-              <span class="wcard__shot">
-                <picture>
-                  <source type="image/avif" srcset="assets/thumb-shiokaze-480.avif 480w, assets/thumb-shiokaze-960.avif 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <source type="image/webp" srcset="assets/thumb-shiokaze-480.webp 480w, assets/thumb-shiokaze-960.webp 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <img src="assets/thumb-shiokaze-480.jpg" srcset="assets/thumb-shiokaze-480.jpg 480w, assets/thumb-shiokaze-960.jpg 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw"
-                   width="480" height="300" loading="lazy" decoding="async" alt="潮風ロジスティクス株式会社のトップページ。夕景の道路を走るトラックの写真。">
-                </picture>
-              </span>
-              <span class="wcard__cat wcard__pill">物流（架空）</span>
-              <span class="wcard__name">潮風ロジスティクス</span>
-              <span class="wcard__desc">扱う荷物ではなく「止めない」という約束を先頭に置くと決めた。</span>
-              <span class="wcard__go">デモサイトを見る<span aria-hidden="true">↗</span><span class="sr">（別タブで開きます）</span></span>
-            </a>
-            <p class="wcard__case"><a href="case-study.html?work=work-06">制作事例を見る<span aria-hidden="true">→</span></a></p>
-          </li>
-          <li class="wcard">
-            <a class="wcard__link" href="https://kenvhana510.github.io/hanamizuki-care/" target="_blank" rel="noopener">
-              <span class="wcard__num" aria-hidden="true">06</span>
-              <span class="wcard__shot">
-                <picture>
-                  <source type="image/avif" srcset="assets/thumb-hidamari-480.avif 480w, assets/thumb-hidamari-960.avif 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <source type="image/webp" srcset="assets/thumb-hidamari-480.webp 480w, assets/thumb-hidamari-960.webp 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw">
-                  <img src="assets/thumb-hidamari-480.jpg" srcset="assets/thumb-hidamari-480.jpg 480w, assets/thumb-hidamari-960.jpg 960w" sizes="(min-width: 900px) 20rem, (min-width: 620px) 44vw, 88vw"
-                   width="480" height="300" loading="lazy" decoding="async" alt="ひだまり介護ステーションのトップページ。利用者とスタッフが会話している写真。">
-                </picture>
-              </span>
-              <span class="wcard__cat wcard__pill">介護福祉（架空）</span>
-              <span class="wcard__name">ひだまり介護ステーション</span>
-              <span class="wcard__desc">相談する側の不安を先に受け止める語り口にすると決めた。</span>
-              <span class="wcard__go">デモサイトを見る<span aria-hidden="true">↗</span><span class="sr">（別タブで開きます）</span></span>
-            </a>
-            <p class="wcard__case"><a href="case-study.html?work=work-05">制作事例を見る<span aria-hidden="true">→</span></a></p>
-          </li>
-      </ul>
-
-      <p class="note" style="margin-top:var(--v3-s6)">
-        デモサイトは実際に公開しているもので、設計・実装・表示速度までそのまま確認していただけます。
-      </p>
+    <div class="hero-visual">
+      <figure class="mock hero-mock"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-nesta-960.webp"><img src="assets/thumb-nesta-960.jpg" alt="制作したサイトのPC画面の例" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+      <figure class="phone"><div class="phone-notch"></div><img src="images/works/work-04-sp-390.webp" alt="制作したサイトのスマホ画面の例" class="phone-img" width="390" height="844" loading="lazy" decoding="async"></figure>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ============ BRAND ／ ブランド文 ============
-       V3.3 は 1 行のために約 700px の空の緑ブロックだった。写真を隣に置いた帯にして、
-       文言はそのまま、縦を詰める。 -->
-  <section class="brand-band dark-deep" aria-labelledby="brand-h">
-    <div class="wrap brand-band__in">
-      <div class="brand-band__grid">
-        <div>
-          <span class="brand-band__mark" aria-hidden="true"></span>
-          <h2 id="brand-h">未来へ、<em>遺す。</em></h2>
-          <p>
-            公開した日がいちばん良い状態、で終わらせない。
-            引き継げる形で作り、事業が続く限り効くものを残す。
-            LEGACRAFT という名前は、そこから付けています。
-          </p>
-        </div>
-        <figure class="brand-band__fig human">
-          <picture>
-            <source type="image/avif" srcset="assets/human-brand-480.avif 480w, assets/human-brand-960.avif 960w" sizes="(min-width: 860px) 20rem, 100vw">
-            <source type="image/webp" srcset="assets/human-brand-480.webp 480w, assets/human-brand-960.webp 960w" sizes="(min-width: 860px) 20rem, 100vw">
-            <img src="assets/human-brand-480.jpg" srcset="assets/human-brand-480.jpg 480w, assets/human-brand-960.jpg 960w" sizes="(min-width: 860px) 20rem, 100vw"
-                 width="480" height="360" loading="lazy" decoding="async"
-                 alt="小さな工房で、作り手が仕上がった木の品物を受け取り手へ手渡している。二人とも品物を見て微笑んでいる。">
-          </picture>
-          <figcaption class="cap">写真はイメージです。</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PROCESS ／ 1 本の線に沿った工程表 ============ -->
-  <section class="sec paper" id="process" aria-labelledby="process-h">
-    <div class="wrap">
-      <p class="eyebrow">PROCESS</p>
-      <h2 class="h2" id="process-h">ご依頼から公開まで</h2>
-      <p class="lead">
-        窓口と作り手が同じなので、伝えたことが途中で誰かの解釈に置き換わりません。
-        下の線は 6 工程を通して 1 本です。担当が替わる箇所がないという意味です。
-      </p>
-
-      <ol class="flow">
-        <li>
-          <p class="flow__n">01</p>
-          <div><h3 class="flow__t">ヒアリング</h3>
-            <p class="flow__b">目的・対象・掲載したい内容と、出せる予算を伺います。</p></div>
-        </li>
-        <li>
-          <p class="flow__n">02</p>
-          <div><h3 class="flow__t">構成設計</h3>
-            <p class="flow__b">何をどの順で見せるかを先に決めます。ここが仕上がりを決めます。</p></div>
-        </li>
-        <li>
-          <p class="flow__n">03</p>
-          <div><h3 class="flow__t">デザイン</h3>
-            <p class="flow__b">業種に合わせて設計します。テンプレートに流し込みません。</p></div>
-        </li>
-        <li>
-          <p class="flow__n">04</p>
-          <div><h3 class="flow__t">実装</h3>
-            <p class="flow__b">スマートフォン表示を含めて組みます。WordPress の場合は更新しやすさを優先します。</p></div>
-        </li>
-        <li>
-          <p class="flow__n">05</p>
-          <div><h3 class="flow__t">QA</h3>
-            <p class="flow__b">表示崩れ・フォーム動作・リンク切れ・表示速度を公開前に確認します。</p></div>
-        </li>
-        <li>
-          <p class="flow__n">06</p>
-          <div><h3 class="flow__t">公開</h3>
-            <p class="flow__b">公開作業まで行い、簡易マニュアルをお渡しします。</p></div>
-        </li>
-      </ol>
-      <p class="flow__owner"><b>担当</b>　01 から 06 まで同じ 1 人。窓口と作り手を分けていません。</p>
-    </div>
-  </section>
-
-  <!-- ============ FAQ ／ 罫だけの開閉 ============ -->
-  <section class="sec paper-2" id="faq" aria-labelledby="faq-h">
-    <div class="wrap">
-      <p class="eyebrow">FAQ</p>
-      <h2 class="h2" id="faq-h">よくあるご質問</h2>
-      <div class="faq">
-        <details>
-          <summary>結局いくらかかりますか</summary>
-          <p>LP制作 30,000円、WordPressサイト 80,000円、WordPress + SWELL + ブログ 150,000円
-             （いずれも税別・素材支給前提）の固定価格です。
-             含まれる範囲を標準仕様として決めてあるので、見積り前に金額が分かります。
-             標準仕様を超える分だけを追加オプションとしてお見積りします。</p>
-        </details>
-        <details>
-          <summary>修正は何回までですか</summary>
-          <p>初稿提示後2回までです。「WordPress + SWELL + ブログ」の場合はページ単位で2回までとしています。</p>
-        </details>
-        <details>
-          <summary>スマートフォン対応は含まれますか</summary>
-          <p>含まれます。すべてのプランでレスポンシブ対応を行い、
-             公開前にスマートフォン表示の確認をしています。</p>
-        </details>
-        <details>
-          <summary>公開後に自分で更新できますか</summary>
-          <p>「WordPress + SWELL + ブログ」でお作りした場合は、ご自身で更新できる状態でお渡しし、
-             簡易マニュアルと操作レクチャー60分をお付けします。</p>
-        </details>
-        <details>
-          <summary>どのくらいで公開できますか</summary>
-          <p>素材をお預かりしてから、LP制作 10営業日、WordPressサイト 3週間、
-             WordPress + SWELL + ブログ 5週間です。</p>
-        </details>
-        <details>
-          <summary>対応していないことはありますか</summary>
-          <p>広告運用、SEOライティングの代行、商品撮影、ロゴのゼロベース制作、
-             大規模なシステム開発は対応範囲外です。
-             各プランの「対応しないこと」を料金の欄に書いています。</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FINAL CTA ／ 締め ============ -->
-  <section class="final dark" id="contact" aria-labelledby="contact-h">
-    <div class="wrap final__in">
-      <figure class="final__human human">
-        <picture>
-              <source type="image/avif" srcset="assets/human-contact-560.avif 560w, assets/human-contact-1120.avif 1120w" sizes="(min-width: 760px) 34rem, 92vw">
-              <source type="image/webp" srcset="assets/human-contact-560.webp 560w, assets/human-contact-1120.webp 1120w" sizes="(min-width: 760px) 34rem, 92vw">
-              <img src="assets/human-contact-560.jpg" srcset="assets/human-contact-560.jpg 560w, assets/human-contact-1120.jpg 1120w" sizes="(min-width: 760px) 34rem, 92vw"
-                   width="560" height="373" loading="lazy" decoding="async" alt="小さな工房で、作業の合間にエプロン姿の職人がスマートフォンでメッセージを打っている。">
-            </picture>
-        <figcaption class="cap">作業の合間に、スマートフォンから送っていただければ十分です。写真はイメージです。</figcaption>
-      </figure>
-      <span class="final__mark" aria-hidden="true"></span>
-      <p class="eyebrow">CONTACT</p>
-      <h2 id="contact-h">まず、いくらかかるかだけでも。</h2>
-      <p class="lead">
-        いきなり発注していただく必要はありません。
-        いまのサイトの状態と、やりたいことを教えていただければ、
-        対応できる範囲・かかる期間・おおよその金額をお伝えします。
-      </p>
-      <p class="final__who">読むのは制作者本人です。営業担当はいません。</p>
-      <div class="cta-row">
-        <a class="btn btn--primary btn--lg" href="contact.html">無料で相談する</a>
-        <a class="btn btn--ghost" href="#estimate">3分で概算費用を出す</a>
-      </div>
-      <ul class="final__band">
-        <li>税別・素材支給前提</li>
-        <li>修正は初稿提示後2回まで</li>
-        <li>対応しないことも明記</li>
-      </ul>
-      <p class="note" style="margin-top:var(--v3-s6);text-align:center">
-        いただいた内容は制作者本人が読み、2営業日以内にご返信します。
-      </p>
-    </div>
-  </section>
-</main>
-
-<footer class="ft dark-deep">
+<!-- ═══ 02 PLAN-B 制作デモ（STAGE 1）══════════════════
+     STAGE 1 では質問Chat を公開しない。したがってこのセクションは
+     「その場で作ります」ではなく「もう作ってあるものをそのまま見せます」
+     しか言わない。提供していない機能を提供しているように書かない。 -->
+<section class="sec free-sec" id="demo">
   <div class="wrap">
-    <div class="ft__top">
-      <p class="ft__mark"><b>LEGACRAFT</b><span>未来へ、遺す。</span></p>
-      <nav class="ft__nav" aria-label="フッター">
-        <a href="service.html">サービス</a><a href="works.html">制作例</a>
-        <a href="about.html">LEGACRAFTについて</a><a href="contact.html">お問い合わせ</a>
-        <a href="privacy.html">プライバシーポリシー</a>
-      </nav>
+    <p class="kicker free-k">DEMO — 制作デモ</p>
+    <h2 class="dsp">見てから、決めてください。</h2>
+    <p class="sec-lead big">
+      <b>プランB（WordPressサイト・80,000円）で実際に制作したデモ</b>を、そのまま公開しています。<br>
+      申し込みも入力も不要です。PCでもスマホでも、全5ページをご覧いただけます。
+    </p>
+
+    <div class="free-grid">
+      <div class="free-steps">
+        <div class="fstep"><span class="fnum">1</span><div><h3>電気工事店を想定した架空の会社</h3><p>実在の企業ではありません。同じ作り方で、お客様の会社の内容に置き換えます。</p></div></div><div class="fstep"><span class="fnum">2</span><div><h3>全5ページ</h3><p>トップ／サービス／会社案内／よくあるご質問／お問い合わせ。</p></div></div><div class="fstep"><span class="fnum">3</span><div><h3>WordPress で更新できる形</h3><p>公開後、文章や写真をご自身で直せる構成です。</p></div></div><div class="fstep"><span class="fnum">4</span><div><h3>スマホでの見え方も確認できます</h3><p>そのままスマホでも開いてみてください。</p></div></div><div class="fstep"><span class="fnum">5</span><div><h3>ご覧いただいてから、決めてください</h3><p>見ただけで連絡が来ることはありません。</p></div></div>
+      </div>
+      <div class="free-visual">
+        
+        <figure class="mock free-mock"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/demo-pc-960.webp"><img src="assets/demo-pc-960.jpg" alt="電気工事店の制作デモのPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+        <figure class="phone"><div class="phone-notch"></div><picture><source type="image/webp" srcset="assets/demo-sp-390.webp"><img src="assets/demo-sp-390.jpg" alt="電気工事店の制作デモのスマホ画面" class="phone-img" width="390" height="844" loading="lazy" decoding="async"></picture></figure>
+      </div>
     </div>
-    <p class="ft__sub">
+
+    <div class="promise">
+      <p class="promise-h">この制作デモについて</p>
+      <ol>
+        <li><b>閲覧に費用はかかりません。</b>お申し込みも会員登録も不要です。</li>
+        <li><b>架空の電気工事店を想定した制作物です。</b>実在する企業・団体とは関係ありません。実際の受注案件でもありません。</li>
+        <li><b>掲載している写真は実在の従業員・現場ではありません。</b>デモ用に用意した画像です。</li>
+        <li><b>見ていただいた後、こちらから勝手に連絡することはありません。</b></li>
+      </ol>
+    </div>
+
+    <div class="free-cta">
+      <a class="btn free lg" href="demo/electrician/" target="_blank" rel="noopener"><span class="btn-sub">申し込み不要・全5ページ</span>制作デモを見る</a>
+      <p class="free-note">※ お客様の会社の内容に合わせた個別のデモ作成は、ご相談いただいた方に順次お作りしています。<a href="contact.html">お問い合わせ</a>からご連絡ください。</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="band" id="band-1">
+  <div class="wrap band-in">
+    <div>
+      <p class="band-k">見てから決められます</p>
+      <p class="band-h">作る前に、完成イメージを無料で確認できます。</p>
+    </div>
+    <div class="band-btns">
+      <a class="btn free" href="demo/electrician/" target="_blank" rel="noopener"><span class="btn-sub">実際に制作したサイト</span>制作デモを見る</a>
+      <a class="btn ghost" href="contact.html">相談だけしてみる</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 PROBLEM ═══════════════════════════════════ -->
+<section class="sec" id="problem">
+  <div class="wrap">
+    <p class="kicker">よくあるお悩み</p>
+    <h2 class="dsp">ホームページでつまずく所は、<br>だいたいこの3つです。</h2>
+    <div class="prob-wrap">
+      <div class="prob-list">
+        
+        <div class="prob">
+          <span class="pnum">01</span>
+          <div><h3>いくらかかるのか分からない</h3><p>「お問い合わせください」としか書いていない。何社も見積りを取るのは、それだけで負担になる。</p></div>
+        </div>
+        <div class="prob">
+          <span class="pnum">02</span>
+          <div><h3>できあがるまで、中身が見えない</h3><p>打ち合わせを重ねても、実物が出てくるのは終盤。イメージと違っても、その時点では引き返しにくい。</p></div>
+        </div>
+        <div class="prob">
+          <span class="pnum">03</span>
+          <div><h3>誰が作っているのか分からない</h3><p>窓口と実際に作る人が別で、話が伝わっているのか不安になる。</p></div>
+        </div>
+      </div>
+      <div class="prob-media"><picture><source type="image/webp" srcset="assets/human-problem-960.webp"><img src="assets/human-problem-960.jpg" alt="ホームページ制作の相談をしている場面" class="" width="960" height="1440" loading="lazy" decoding="async"></picture></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 04 SOLUTION ══════════════════════════════════ -->
+<section class="sec alt" id="solution">
+  <div class="wrap">
+    <p class="kicker">LEGACRAFTの答え</p>
+    <h2 class="dsp">3つとも、先に出します。</h2>
+    <div class="sol-grid">
+      
+      <div class="sol">
+        <picture><source type="image/webp" srcset="assets/human-brand-960.webp"><img src="assets/human-brand-960.jpg" alt="金額を先に示すこと" class="sol-img" width="960" height="720" loading="lazy" decoding="async"></picture>
+        <p class="sol-k">金額を</p>
+        <h3>先に出す</h3>
+        <p>3つのプランを固定価格で公開しています。相談してから金額が分かる、という順番にしていません。</p>
+      </div>
+      <div class="sol">
+        <picture><source type="image/webp" srcset="assets/thumb-hidamari-960.webp"><img src="assets/thumb-hidamari-960.jpg" alt="完成イメージを先に示すこと" class="sol-img" width="960" height="600" loading="lazy" decoding="async"></picture>
+        <p class="sol-k">完成イメージを</p>
+        <h3>先に見せる</h3>
+        <p>実際に制作したWordPressサイトを、全5ページそのまま公開しています。見てから判断していただけます。</p>
+      </div>
+      <div class="sol">
+        <picture><source type="image/webp" srcset="assets/human-contact-1120.webp"><img src="assets/human-contact-1120.jpg" alt="作る人を先に示すこと" class="sol-img" width="1120" height="747" loading="lazy" decoding="async"></picture>
+        <p class="sol-k">作る人を</p>
+        <h3>最初から最後まで同じ</h3>
+        <p>窓口と制作者が分かれていません。話した内容が、そのまま形になります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 THREE PLANS ═══════════════════════════════ -->
+<section class="sec" id="plans">
+  <div class="wrap">
+    <p class="kicker">料金プラン</p>
+    <h2 class="dsp">料金は、この3つだけです。</h2>
+    <p class="sec-lead">すべて<b>買い切り</b>です。月額はいただきません。<br>画像を見ていただければ、A・B・Cの違いが分かるようにしています。</p>
+
+    <div class="plan-zero">
+      <div class="pz-l"><span class="pz-badge">まずここから</span><b class="pz-price">0円</b></div>
+      <div class="pz-r"><h3>制作デモの閲覧</h3><p>プランB で実際に制作したWordPressサイトを公開しています。お申し込みも入力も不要で、全5ページをご覧いただけます。</p></div>
+      <a class="btn free sm" href="demo/electrician/" target="_blank" rel="noopener">制作デモを見る</a>
+    </div>
+
+    <div class="plans">
+  <article class="plan">
+    <div class="plan-visual">
+      <figure class="mock in-plan"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-aichi-960.webp"><img src="assets/thumb-aichi-960.jpg" alt="1ページ完結型のLPの画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+      <figure class="phone"><div class="phone-notch"></div><img src="images/works/work-02-sp-390.webp" alt="1ページ完結型のLPの画面（スマホ表示）" class="phone-img" width="390" height="844" loading="lazy" decoding="async"></figure>
+    </div>
+    <div class="plan-body">
+      <p class="plan-tag">プラン A</p>
+      <h3 class="plan-name">LP制作</h3>
+      <p class="plan-line">1ページで、申し込みまで運ぶ</p>
+      <p class="plan-price"><b>30,000円</b><span>税別・買い切り／月額なし</span></p>
+      <p class="plan-desc">縦に長い1ページの中で、悩み・サービス・料金・流れ・問い合わせまでを一続きに見せる形です。広告やSNSからの受け皿に向いています。</p>
+      <ul class="plan-spec"><li>1ページ（縦に長い構成）</li><li>お問い合わせフォーム</li><li>スマホ対応</li><li>公開までの設定込み</li></ul>
+      <p class="plan-proof">この形の実物：AICHI CLEAN（ハウスクリーニング集客LP・12セクション）</p>
+      
+      <a class="btn free sm" href="contact.html">このプランで相談する</a>
+    </div>
+  </article>
+  <article class="plan">
+    <div class="plan-visual">
+      <figure class="mock in-plan"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-shiokaze-960.webp"><img src="assets/thumb-shiokaze-960.jpg" alt="複数ページ構成の企業サイトの画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+      <figure class="phone"><div class="phone-notch"></div><img src="images/works/work-06-sp-390.webp" alt="複数ページ構成の企業サイトの画面（スマホ表示）" class="phone-img" width="390" height="844" loading="lazy" decoding="async"></figure>
+    </div>
+    <div class="plan-body">
+      <p class="plan-tag">プラン B</p>
+      <h3 class="plan-name">WordPressサイト</h3>
+      <p class="plan-line">会社の入口を、きちんと持つ</p>
+      <p class="plan-price"><b>80,000円</b><span>税別・買い切り／月額なし</span></p>
+      <p class="plan-desc">トップ・サービス・会社案内・お問い合わせなど、複数ページに分けて構成します。名刺やチラシから見に来た人に、会社として見てもらう形です。</p>
+      <ul class="plan-spec"><li>3〜5ページ構成</li><li>WordPressで更新できる</li><li>お問い合わせフォーム</li><li>スマホ対応</li></ul>
+      <p class="plan-proof">この形のデモ：<a href="demo/electrician/" target="_blank" rel="noopener">電気工事店のWordPressサイト（制作デモ）</a></p>
+      
+      <a class="btn free sm" href="demo/electrician/" target="_blank" rel="noopener">このプランの制作デモを見る</a>
+    </div>
+  </article>
+  <article class="plan">
+    <div class="plan-visual">
+      <figure class="mock in-plan"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-nesta-960.webp"><img src="assets/thumb-nesta-960.jpg" alt="WordPress + SWELL で制作した企業サイトの画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+      <figure class="phone"><div class="phone-notch"></div><img src="images/works/work-03-sp-390.webp" alt="WordPress + SWELL で制作した企業サイトの画面（スマホ表示）" class="phone-img" width="390" height="844" loading="lazy" decoding="async"></figure>
+    </div>
+    <div class="plan-body">
+      <p class="plan-tag">プラン C</p>
+      <h3 class="plan-name">WordPress + SWELL + ブログ</h3>
+      <p class="plan-line">作ったあと、記事で育てていく</p>
+      <p class="plan-price"><b>150,000円</b><span>税別・買い切り／月額なし</span></p>
+      <p class="plan-desc">SWELLを使ったWordPressサイトに、ブログ（記事）機能を加えた構成です。公開したあとに記事を足しながら、検索から見つけてもらう形をつくります。</p>
+      <ul class="plan-spec"><li>6〜10ページ構成</li><li>WordPress + SWELL</li><li>ブログ（記事投稿）機能</li><li>記事の書き方のご説明つき</li></ul>
+      <p class="plan-proof">この形の実物：NESTA ARCHITECTS（全7ページ）／ LUMÉA SKIN CLINIC（全11ページ）</p>
+      <p class="plan-gap">※ 掲載している2作品は WordPress + SWELL の実物ですが、ブログ運用そのものを含む公開実績はまだありません。</p>
+      <a class="btn free sm" href="contact.html">このプランで相談する</a>
+    </div>
+  </article></div>
+    <p class="plans-note">※ 表示価格はすべて税別です。サーバー代・ドメイン代など、お客様が直接ご契約される費用は含みません。</p>
+  </div>
+</section>
+
+
+<section class="band" id="band-2">
+  <div class="wrap band-in">
+    <div>
+      <p class="band-k">どのプランでも</p>
+      <p class="band-h">デモの作成は無料です。実物を見てから選べます。</p>
+    </div>
+    <div class="band-btns">
+      <a class="btn free" href="demo/electrician/" target="_blank" rel="noopener"><span class="btn-sub">実際に制作したサイト</span>制作デモを見る</a>
+      <a class="btn ghost" href="contact.html">相談だけしてみる</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 06 BENEFITS ══════════════════════════════════ -->
+<section class="sec alt" id="benefits">
+  <div class="wrap">
+    <p class="kicker">導入して変わること</p>
+    <h2 class="dsp">ホームページがあると、<br>こういう場面が変わります。</h2>
+    <div class="ben-grid">
+      
+      <div class="ben">
+        <picture><source type="image/webp" srcset="assets/thumb-nesta-960.webp"><img src="assets/thumb-nesta-960.jpg" alt="名刺を渡したあとの場面" class="ben-img" width="960" height="600" loading="lazy" decoding="async"></picture>
+        <h3>名刺を渡したあと</h3><p>「あとで見ておきます」で終わっていたところを、実際に見てもらえる状態にします。</p>
+      </div>
+      <div class="ben">
+        <picture><source type="image/webp" srcset="assets/thumb-aichi-960.webp"><img src="assets/thumb-aichi-960.jpg" alt="問い合わせの前の場面" class="ben-img" width="960" height="600" loading="lazy" decoding="async"></picture>
+        <h3>問い合わせの前</h3><p>料金・対応エリア・流れが先に分かっていると、問い合わせの段階で話が進んでいます。</p>
+      </div>
+      <div class="ben">
+        <picture><source type="image/webp" srcset="assets/thumb-mirai-960.webp"><img src="assets/thumb-mirai-960.jpg" alt="求人に応募するときの場面" class="ben-img" width="960" height="600" loading="lazy" decoding="async"></picture>
+        <h3>求人に応募するとき</h3><p>どんな人が働いているかが分かると、応募のハードルが下がります。</p>
+      </div>
+      <div class="ben">
+        <picture><source type="image/webp" srcset="assets/thumb-shiokaze-960.webp"><img src="assets/thumb-shiokaze-960.jpg" alt="取引先に見られるときの場面" class="ben-img" width="960" height="600" loading="lazy" decoding="async"></picture>
+        <h3>取引先に見られるとき</h3><p>会社概要と実績が整理されていることが、そのまま信用になります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 07 WHY LEGACRAFT ═════════════════════════════ -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <p class="kicker">選ばれる理由</p>
+    <h2 class="dsp">なぜ、先に見せられるのか。</h2>
+    <div class="why-grid">
+      
+      <div class="why">
+        <span class="why-n">01</span>
+        <h3>見てから決められる</h3>
+        <p>完成イメージを無料で確認してから、進めるかどうかを判断していただけます。想像で発注する必要がありません。</p>
+      </div>
+      <div class="why">
+        <span class="why-n">02</span>
+        <h3>最初から最後まで、同じ人が担当します</h3>
+        <p>打ち合わせをした人が、そのまま設計・デザイン・実装・公開まで行います。伝言のあいだに要望が薄まりません。</p>
+      </div>
+      <div class="why">
+        <span class="why-n">03</span>
+        <h3>価格が固定で、追加費用の条件を先に開示します</h3>
+        <p>3つのプランは固定価格です。追加費用が発生する場合は、どういうときに発生するかを先にお伝えします。</p>
+      </div>
+    </div>
+    <figure class="why-media"><picture><source type="image/webp" srcset="assets/human-nesta-960.webp"><img src="assets/human-nesta-960.jpg" alt="制作の作業風景" class="" width="960" height="640" loading="lazy" decoding="async"></picture><figcaption>設計から公開まで、同じ制作者が一貫して担当します。</figcaption></figure>
+  </div>
+</section>
+
+<!-- ═══ 08 WORKS ═════════════════════════════════════ -->
+<section class="sec alt" id="works">
+  <div class="wrap">
+    <p class="kicker">制作例</p>
+    <h2 class="dsp">実際に公開しているサイト、6件。</h2>
+    <p class="sec-lead">いずれも<b>架空の企業を想定した制作サンプル</b>です。実在する企業・団体とは関係ありません。すべて公開URLからご覧いただけます。</p>
+    <div class="works">
+  <article class="work">
+    <figure class="mock in-work"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-nesta-960.webp"><img src="assets/thumb-nesta-960.jpg" alt="NESTA ARCHITECTS（ネスタ建築設計） のPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    <div class="work-b">
+      <p class="work-n">CASE 01</p>
+      <h3>NESTA ARCHITECTS（ネスタ建築設計）</h3>
+      <p class="work-sum">「Quiet Luxury」を軸にしたWordPress＋SWELLの高デザイン企業サイト。</p>
+      <dl class="work-meta">
+        <div><dt>業種</dt><dd>建築設計</dd></div>
+        <div><dt>実装</dt><dd>WordPress + SWELL</dd></div>
+        <div><dt>規模</dt><dd>7ページ</dd></div>
+        <div><dt>近いプラン</dt><dd>C（WordPress + SWELL）</dd></div>
+      </dl>
+      <p class="work-note">掲載可（架空企業を想定した制作サンプル・エックスサーバーで本番公開済み）</p>
+      <a class="work-link" href="https://nesta.legacraft.com/" target="_blank" rel="noopener">公開中のサイトを見る</a>
+    </div>
+  </article>
+  <article class="work">
+    <figure class="mock in-work"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-lumea-960.webp"><img src="assets/thumb-lumea-960.jpg" alt="LUMÉA SKIN CLINIC（ルメア スキンクリニック） のPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    <div class="work-b">
+      <p class="work-n">CASE 02</p>
+      <h3>LUMÉA SKIN CLINIC（ルメア スキンクリニック）</h3>
+      <p class="work-sum">「Soft Luxury」を軸にした、20〜40代女性向け美容クリニックサイト。</p>
+      <dl class="work-meta">
+        <div><dt>業種</dt><dd>美容医療</dd></div>
+        <div><dt>実装</dt><dd>WordPress + SWELL</dd></div>
+        <div><dt>規模</dt><dd>11ページ</dd></div>
+        <div><dt>近いプラン</dt><dd>C（WordPress + SWELL）</dd></div>
+      </dl>
+      <p class="work-note">掲載可（架空企業を想定した制作サンプル・エックスサーバーで本番公開済み）</p>
+      <a class="work-link" href="https://lumea.legacraft.com/" target="_blank" rel="noopener">公開中のサイトを見る</a>
+    </div>
+  </article>
+  <article class="work">
+    <figure class="mock in-work"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-aichi-960.webp"><img src="assets/thumb-aichi-960.jpg" alt="AICHI CLEAN（ハウスクリーニング集客LP） のPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    <div class="work-b">
+      <p class="work-n">CASE 03</p>
+      <h3>AICHI CLEAN（ハウスクリーニング集客LP）</h3>
+      <p class="work-sum">料金の不透明さで踏み出せない層に向けた、早期価格提示型の集客LP。</p>
+      <dl class="work-meta">
+        <div><dt>業種</dt><dd>ハウスクリーニング</dd></div>
+        <div><dt>実装</dt><dd>静的サイト</dd></div>
+        <div><dt>規模</dt><dd>1ページ</dd></div>
+        <div><dt>近いプラン</dt><dd>A（LP制作）</dd></div>
+      </dl>
+      <p class="work-note">掲載可（架空企業を想定した制作サンプル）</p>
+      <a class="work-link" href="https://kenvhana510.github.io/aichi-clean-lp/" target="_blank" rel="noopener">公開中のサイトを見る</a>
+    </div>
+  </article>
+  <article class="work">
+    <figure class="mock in-work"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-mirai-960.webp"><img src="assets/thumb-mirai-960.jpg" alt="株式会社ミライテック 採用LP のPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    <div class="work-b">
+      <p class="work-n">CASE 04</p>
+      <h3>株式会社ミライテック 採用LP</h3>
+      <p class="work-sum">未経験求職者の不安に寄り添う構成の採用LP。全17セクション。</p>
+      <dl class="work-meta">
+        <div><dt>業種</dt><dd>製造業</dd></div>
+        <div><dt>実装</dt><dd>静的サイト</dd></div>
+        <div><dt>規模</dt><dd>1ページ</dd></div>
+        <div><dt>近いプラン</dt><dd>A（LP制作）</dd></div>
+      </dl>
+      <p class="work-note">掲載可（架空企業を想定した制作サンプル）</p>
+      <a class="work-link" href="https://kenvhana510.github.io/portfolio-mirai-tech-lp/" target="_blank" rel="noopener">公開中のサイトを見る</a>
+    </div>
+  </article>
+  <article class="work">
+    <figure class="mock in-work"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-shiokaze-960.webp"><img src="assets/thumb-shiokaze-960.jpg" alt="潮風ロジスティクス株式会社（幹線輸送・地域配送・倉庫保管） のPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    <div class="work-b">
+      <p class="work-n">CASE 05</p>
+      <h3>潮風ロジスティクス株式会社（幹線輸送・地域配送・倉庫保管）</h3>
+      <p class="work-sum">幹線輸送・地域配送・倉庫保管/3PLをワンストップで紹介する物流会社の企業サイト。</p>
+      <dl class="work-meta">
+        <div><dt>業種</dt><dd>物流</dd></div>
+        <div><dt>実装</dt><dd>静的サイト</dd></div>
+        <div><dt>規模</dt><dd>1ページ</dd></div>
+        <div><dt>近いプラン</dt><dd>—</dd></div>
+      </dl>
+      <p class="work-note">掲載可（架空の企業を想定した制作サンプル。実在の企業・団体とは無関係。GitHub Pagesで本番公開済み）</p>
+      <a class="work-link" href="https://kenvhana510.github.io/shiokaze-logistics/" target="_blank" rel="noopener">公開中のサイトを見る</a>
+    </div>
+  </article>
+  <article class="work">
+    <figure class="mock in-work"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-hidamari-960.webp"><img src="assets/thumb-hidamari-960.jpg" alt="ひだまり介護ステーション（訪問・通所・居宅介護支援） のPC画面" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    <div class="work-b">
+      <p class="work-n">CASE 06</p>
+      <h3>ひだまり介護ステーション（訪問・通所・居宅介護支援）</h3>
+      <p class="work-sum">訪問介護・通所介護・居宅介護支援をワンストップで紹介する地域密着型介護サービスサイト。</p>
+      <dl class="work-meta">
+        <div><dt>業種</dt><dd>介護福祉</dd></div>
+        <div><dt>実装</dt><dd>静的サイト</dd></div>
+        <div><dt>規模</dt><dd>1ページ</dd></div>
+        <div><dt>近いプラン</dt><dd>—</dd></div>
+      </dl>
+      <p class="work-note">掲載可（架空の事業者を想定した制作サンプル。実在の法人・施設とは無関係。GitHub Pagesで本番公開済み）</p>
+      <a class="work-link" href="https://kenvhana510.github.io/hanamizuki-care/" target="_blank" rel="noopener">公開中のサイトを見る</a>
+    </div>
+  </article></div>
+  </div>
+</section>
+
+<!-- ═══ 09 DEMO FLOW ═════════════════════════════════ -->
+<section class="sec" id="demo-flow">
+  <div class="wrap">
+    <p class="kicker free-k">制作デモの見かた</p>
+    <h2 class="dsp">クリックすれば、すぐ開きます。</h2>
+    <div class="dflow">
+      <div class="dstep"><span class="dnum">STEP 1</span><h3>制作デモを開く</h3><p>お申し込みも入力も不要です。新しいタブで開きます。</p></div><div class="dstep"><span class="dnum">STEP 2</span><h3>5ページを見て回る</h3><p>トップ／サービス／会社案内／よくあるご質問／お問い合わせ。スマホでも同じように見られます。</p></div><div class="dstep"><span class="dnum">STEP 3</span><h3>見て、決める</h3><p>進めるか、見送るか。見ただけでご連絡が来ることはありません。</p></div>
+    </div>
+    <div class="dflow-visual">
+      <figure class="mock df-mock"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/demo-pc-960.webp"><img src="assets/demo-pc-960.jpg" alt="制作デモのトップページ" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+      <figure class="phone"><div class="phone-notch"></div><picture><source type="image/webp" srcset="assets/demo-sp-390.webp"><img src="assets/demo-sp-390.jpg" alt="制作デモのスマホ画面" class="phone-img" width="390" height="844" loading="lazy" decoding="async"></picture></figure>
+      <figure class="mock df-mock"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/demo-services-960.webp"><img src="assets/demo-services-960.jpg" alt="制作デモのサービス紹介ページ" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure>
+    </div>
+  </div>
+</section>
+
+
+<section class="band" id="band-3">
+  <div class="wrap band-in">
+    <div>
+      <p class="band-k">申し込み不要</p>
+      <p class="band-h">いま見るか、あとで見るか。どちらでも費用はかかりません。</p>
+    </div>
+    <div class="band-btns">
+      <a class="btn free" href="demo/electrician/" target="_blank" rel="noopener"><span class="btn-sub">実際に制作したサイト</span>制作デモを見る</a>
+      <a class="btn ghost" href="contact.html">相談だけしてみる</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 10 PRODUCTION PROCESS ════════════════════════ -->
+<section class="sec alt" id="flow">
+  <div class="wrap">
+    <p class="kicker">正式なご依頼のあと</p>
+    <h2 class="dsp">ご依頼から公開まで。</h2>
+    <ol class="pflow">
+      <li><span class="ps">01</span><div><h3>ヒアリング</h3><p>デモでお伺いした内容をもとに、詳しいご要望を確認します。</p></div></li><li><span class="ps">02</span><div><h3>構成のご提案</h3><p>どのページに何を載せるかを決めます。ここで文章の方向も決まります。</p></div></li><li><span class="ps">03</span><div><h3>デザイン</h3><p>実際の画面をお見せしながら進めます。</p></div></li><li><span class="ps">04</span><div><h3>実装</h3><p>PC・スマホの両方で確認しながら組み上げます。</p></div></li><li><span class="ps">05</span><div><h3>ご確認・修正</h3><p>気になる点をお知らせください。</p></div></li><li><span class="ps">06</span><div><h3>公開</h3><p>公開作業までこちらで行います。更新のしかたもご説明します。</p></div></li>
+    </ol>
+    <figure class="pflow-media"><figure class="mock pf-mock"><div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">example.co.jp</span></div><picture><source type="image/webp" srcset="assets/thumb-lumea-960.webp"><img src="assets/thumb-lumea-960.jpg" alt="制作中の画面確認" class="mock-img" width="960" height="600" loading="lazy" decoding="async"></picture></figure></figure>
+  </div>
+</section>
+
+<!-- ═══ 11 PRICE / INCLUDED ══════════════════════════ -->
+<section class="sec" id="price">
+  <div class="wrap">
+    <p class="kicker price-k">料金に含まれるもの</p>
+    <h2 class="dsp">この金額に、何が入っているか。</h2>
+    <div class="inc-table-wrap">
+      <table class="inc">
+        <thead><tr><th>項目</th><th>A LP制作<span>30,000円</span></th><th>B WordPressサイト<span>80,000円</span></th><th>C WordPress + SWELL + ブログ<span>150,000円</span></th></tr></thead>
+        <tbody>
+          <tr><th>ページ数</th><td>1ページ</td><td>3〜5ページ</td><td>6〜10ページ</td></tr><tr><th>構成・原稿の設計</th><td>○</td><td>○</td><td>○</td></tr><tr><th>デザイン</th><td>○</td><td>○</td><td>○</td></tr><tr><th>スマホ対応</th><td>○</td><td>○</td><td>○</td></tr><tr><th>お問い合わせフォーム</th><td>○</td><td>○</td><td>○</td></tr><tr><th>WordPressで更新</th><td>—</td><td>○</td><td>○</td></tr><tr><th>SWELL（有料テーマ）</th><td>—</td><td>—</td><td>○</td></tr><tr><th>ブログ（記事投稿）機能</th><td>—</td><td>—</td><td>○</td></tr><tr><th>公開作業</th><td>○</td><td>○</td><td>○</td></tr><tr><th>更新方法のご説明</th><td>—</td><td>○</td><td>○</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="inc-note">※ 表示価格はすべて税別・買い切りです。<br>※ サーバー代・ドメイン代・SWELLのライセンス費用など、お客様が直接ご契約される費用は含みません。<br>※ 追加ページ・撮影・記事の代行執筆などは別途お見積りとなります。どういう場合に追加費用が発生するかは、ご依頼前にお伝えします。</p>
+  </div>
+</section>
+
+<!-- ═══ 12 ESTIMATE ══════════════════════════════════ -->
+<section class="sec alt" id="estimate">
+  <div class="wrap narrow center">
+    <p class="kicker">概算</p>
+    <h2 class="dsp">金額だけ先に知りたい方へ。</h2>
+    <p class="sec-lead">あてはまるものを選んでいくだけで、どのプランが近いか・いくらになるかの目安が出ます。<br>お名前やご連絡先の入力は必要ありません。</p>
+    <a class="btn ghost lg" href="tools/price-estimator/">3分でプランと金額を出す</a>
+  </div>
+</section>
+
+<!-- ═══ 13 FAQ ═══════════════════════════════════════ -->
+<section class="sec" id="faq">
+  <div class="wrap narrow">
+    <p class="kicker">よくあるご質問</p>
+    <h2 class="dsp">気になるところ。</h2>
+    <div class="faq">
+      <details open><summary>制作デモを見るのに、お金はかかりますか？</summary><div class="fa">かかりません。お申し込みも会員登録も不要です。ご覧いただいた後、こちらから勝手にご連絡することもありません。</div></details><details><summary>制作デモの会社は実在しますか？</summary><div class="fa">実在しません。電気工事店を想定した架空の会社です。掲載している写真も、実在の従業員や現場ではありません。実際の受注案件でもありません。</div></details><details><summary>デモと、実際に納品されるサイトは同じものですか？</summary><div class="fa">作り方は同じですが、中身は入れ替わります。正式にご依頼いただいた後は、お客様の会社の写真・文章に置き換え、細部を調整したうえで納品します。</div></details><details><summary>自分の会社に合わせたデモは作ってもらえますか？</summary><div class="fa">ご相談いただいた方に順次お作りしています。お問い合わせからご連絡ください。現時点では、この画面からその場で自動作成することはできません。</div></details><details><summary>月額料金はかかりますか？</summary><div class="fa">制作費は買い切りです。月額はいただきません。サーバー代・ドメイン代など、お客様が直接契約される費用は別途必要です。</div></details><details><summary>写真がないのですが、頼めますか？</summary><div class="fa">はい。お手元の写真がない場合の進め方も含めてご相談いただけます。</div></details><details><summary>制作後に自分で更新できますか？</summary><div class="fa">プランB・CはWordPressで更新できます。更新のしかたはお引き渡しのときにご説明します。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 14 FINAL FREE DEMO CTA ═══════════════════════ -->
+<section class="final" id="final">
+  <div class="final-bg"><picture><source type="image/webp" srcset="assets/human-contact-1120.webp"><img src="assets/human-contact-1120.jpg" alt="相談を受ける様子" class="" width="1120" height="747" loading="lazy" decoding="async"></picture></div>
+  <div class="wrap final-in">
+    <p class="final-k">DEMO — 閲覧に費用はかかりません</p>
+    <h2 class="final-h">迷っている時間の分だけ、<br>先に見てしまいましょう。</h2>
+    <p class="final-lead">プランBで実際に制作したWordPressサイトを、全5ページそのまま公開しています。<br>お申し込みも入力も不要です。見たうえで見送っていただいて構いません。</p>
+    <div class="final-cta">
+      <a class="btn free lg" href="demo/electrician/" target="_blank" rel="noopener"><span class="btn-sub">申し込み不要</span>制作デモを見る</a>
+      <a class="btn ghost lg" href="contact.html">先に相談する</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 15 CONTACT ═══════════════════════════════════ -->
+<section class="sec" id="contact">
+  <div class="wrap narrow">
+    <p class="kicker">お問い合わせ</p>
+    <h2 class="dsp">ご相談だけでも。</h2>
+    <div class="contact-grid">
+      <div class="cbox">
+        <h3>お問い合わせフォーム</h3>
+        <p>内容が決まっていない段階でも構いません。</p>
+        <a class="btn ghost" href="contact.html">お問い合わせフォームへ</a>
+        <p class="cbox-sub">メールの方は <a href="mailto:info@legacraft.jp">info@legacraft.jp</a> へ。</p>
+      </div>
+      <div class="cbox">
+        <h3>各サービスから</h3>
+        <p>実績・評価をご覧いただけます。</p>
+        <div class="cbtns">
+          <a class="btn ghost sm" href="https://www.lancers.jp/menu/detail/1337339" target="_blank" rel="noopener">ランサーズ</a>
+          <a class="btn ghost sm" href="https://coconala.com/services/4361612" target="_blank" rel="noopener">ココナラ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="wrap ft-in">
+    <p class="ft-brand">LEGACRAFT</p>
+    <p class="ft-tag">未来へ、遺す。</p>
+    <nav class="ft-nav" aria-label="フッター">
+      <a href="service.html">サービス</a><a href="works.html">制作例</a>
+      <a href="about.html">LEGACRAFTについて</a><a href="contact.html">お問い合わせ</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+    </nav>
+    <p class="ft-sub">
       <a href="tools/price-estimator/">価格シミュレーター</a>
       <a href="aichi/">愛知県で対面相談をご希望の方へ</a>
-      <a href="#price">料金と制作内容</a>
-      <a href="#process">ご依頼から公開まで</a>
-      <a href="#faq">よくあるご質問</a>
+      <a href="demo/electrician/">WordPressサイトの制作デモ</a>
     </p>
-    <p class="note">
-      掲載している制作物はすべて架空のクライアントを想定した自主制作です。
-      実際の受注案件ではありません。
-    </p>
+    <p class="ft-note">掲載している制作物はすべて架空のクライアントを想定した自主制作です。実際の受注案件ではありません。</p>
   </div>
 </footer>
-
-<div class="sticky" aria-label="お問い合わせ">
-  <a class="btn btn--primary" href="contact.html">無料で相談する</a>
-  <a class="btn btn--ghost" href="#estimate">3分で概算</a>
-</div>
-
-<script src="assets/v31.js" defer></script>
-<script src="assets/v34.js" defer></script>
 </body>
 </html>
