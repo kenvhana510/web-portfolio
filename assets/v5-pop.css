@@ -378,3 +378,16 @@ b,strong{font-weight:800}
   background:#fff;color:var(--ink);font-style:normal;font-size:16px;display:grid;place-items:center}
 .rs:nth-child(1) .no{background:var(--pink)} .rs:nth-child(2) .no{background:var(--paper-2)}
 .rs:nth-child(3) .no{background:var(--mint)} .rs:nth-child(4) .no{background:var(--sky)}
+
+.woe{padding-right:78px}
+.woe-ill{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:56px;height:56px;object-fit:contain}
+
+.merit .ic{overflow:hidden}
+.merit .ic-img{width:72%;height:72%;object-fit:contain}
+
+.chips li{display:inline-flex;align-items:center;gap:6px}
+.chip-ic{width:26px;height:22px;object-fit:contain;margin-left:-6px}
+
+.faq-ill{width:110px}
+
+.final-ill{display:block;width:min(300px,70%);height:auto;margin:0 auto 14px}
