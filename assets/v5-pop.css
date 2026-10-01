@@ -337,7 +337,7 @@ b,strong{font-weight:800}
 
 /* ── フッター ───────────────────────────── */
 .ft{background:var(--ink);color:#fff;padding:48px 0 32px}
-.ft-in{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:30px}
+.ft-in{display:grid;grid-template-columns:1.4fr 1fr;gap:30px}
 .ft img{height:36px;width:auto;background:#fff;border-radius:10px;padding:6px 10px}
 .ft-tag{margin-top:12px;font-weight:800;font-size:var(--t3);opacity:.9}
 .ft h4{font-size:var(--t3);font-weight:900;letter-spacing:.1em;opacity:.7;margin-bottom:10px}
