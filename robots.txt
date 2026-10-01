@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /column/_src/
 
 Sitemap: https://legacraft.jp/sitemap.xml
