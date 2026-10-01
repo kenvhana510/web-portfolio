@@ -161,7 +161,7 @@ const footer = () => `<footer class="ft">
       <p class="ft-tag">制作費0円・月額2,980円のサブスク型ホームページ制作</p>
       <dl><dt>屋号</dt><dd>LEGACRAFT（レガクラフト）</dd><dt>拠点</dt><dd>愛知県（全国オンライン対応）</dd><dt>メール</dt><dd><a href="mailto:info@legacraft.jp">info@legacraft.jp</a></dd></dl>
     </div>
-    <div><h4>MENU</h4><ul><li><a href="/#points">特徴</a></li><li><a href="/#price">料金</a></li><li><a href="/#works">制作例</a></li><li><a href="/#flow">ご利用の流れ</a></li><li><a href="/#faq">よくあるご質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/privacy.html">プライバシーポリシー</a></li><li><a href="/terms/">利用規約</a></li></ul></div>
+    <div><h4>MENU</h4><ul><li><a href="/#points">特徴</a></li><li><a href="/#price">料金</a></li><li><a href="/#works">制作例</a></li><li><a href="/#flow">ご利用の流れ</a></li><li><a href="/#faq">よくあるご質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/privacy.html">プライバシーポリシー</a></li><li><a href="/terms/">利用規約</a></li><li><a href="/tokushoho/">特定商取引法に基づく表記</a></li></ul></div>
     <p class="ft-note">掲載している制作例・デモはすべて架空の企業を想定した自主制作です。実在する企業・団体とは関係ありません。<br>© LEGACRAFT</p>
   </div>
 </footer>
