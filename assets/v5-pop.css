@@ -354,3 +354,27 @@ b,strong{font-weight:800}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+
+/* ── イラスト素材（images/site/）────────── */
+.hero-visual .owner{position:absolute;right:-6%;bottom:-36px;width:46%;z-index:2;margin:0}
+.hero-visual .owner::before{content:"";position:absolute;left:6%;right:6%;top:8%;bottom:4%;border-radius:50%;
+  background:var(--paper);border:var(--bd);z-index:-1}
+.hero-visual .owner img{width:100%;height:auto;display:block}
+@media (max-width:900px){.hero-visual .owner{width:42%;right:0;bottom:-24px}}
+
+.solve-ill{margin:22px auto 0;max-width:720px;border:var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.solve-ill img{width:100%;height:auto;display:block}
+
+.pt-ill{display:block;width:min(170px,62%);height:auto;margin:0 auto 6px}
+
+.sec-ill{display:block;width:150px;height:auto;margin:0 auto 10px}
+
+.rk-ill{float:right;width:84px;height:auto;margin:-10px -6px 6px 10px}
+
+.rs{grid-template-columns:88px 1fr}
+.rs .no{width:88px;height:88px;position:relative;padding:10px}
+.rs .no img{width:100%;height:100%;object-fit:contain;display:block}
+.rs .no i{position:absolute;top:-10px;left:-10px;width:32px;height:32px;border-radius:50%;border:var(--bd);
+  background:#fff;color:var(--ink);font-style:normal;font-size:16px;display:grid;place-items:center}
+.rs:nth-child(1) .no{background:var(--pink)} .rs:nth-child(2) .no{background:var(--paper-2)}
+.rs:nth-child(3) .no{background:var(--mint)} .rs:nth-child(4) .no{background:var(--sky)}
