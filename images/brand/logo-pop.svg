@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120" width="560" height="120" role="img" aria-label="LEGACRAFT">
+  <defs><style>
+    .w{font-family:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN",system-ui,sans-serif;font-weight:900;font-size:64px;letter-spacing:2px;fill:#1B1B2F}
+  </style></defs>
+  <!-- ブロック（2×2のスタッド付き）-->
+  <g transform="translate(10,14)">
+    <rect x="0" y="34" width="46" height="46" rx="10" fill="#FF4D4D" stroke="#1B1B2F" stroke-width="5"/>
+    <rect x="50" y="34" width="46" height="46" rx="10" fill="#2D7DFF" stroke="#1B1B2F" stroke-width="5"/>
+    <rect x="0" y="-12" width="46" height="46" rx="10" fill="#FFD23F" stroke="#1B1B2F" stroke-width="5"/>
+    <rect x="50" y="-12" width="46" height="46" rx="10" fill="#22C55E" stroke="#1B1B2F" stroke-width="5"/>
+    <circle cx="23" cy="11" r="8" fill="#fff" stroke="#1B1B2F" stroke-width="4"/>
+    <circle cx="73" cy="11" r="8" fill="#fff" stroke="#1B1B2F" stroke-width="4"/>
+    <circle cx="23" cy="57" r="8" fill="#fff" stroke="#1B1B2F" stroke-width="4"/>
+    <circle cx="73" cy="57" r="8" fill="#fff" stroke="#1B1B2F" stroke-width="4"/>
+  </g>
+  <text class="w" x="128" y="82">LEGA<tspan fill="#2D7DFF">CRAFT</tspan></text>
+</svg>

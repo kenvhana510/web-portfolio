@@ -17,6 +17,9 @@ const SITE_CONFIG = {
   // 表示と計算が別々に書かれていると必ず片方だけ更新されるため——実際に
   // price-estimator が legacraft/site/06-price.md の旧「仮」価格を参照し続け、
   // 公開価格の最大4倍を提示していた（2026-08-24 に発見）。
+  // 2026-10-01 サブスク型プラン（トップページV5で表示）。制作費0円・月額2,980円(税込)・24ヶ月契約。
+  subscription: { setup: 0, monthly: 2980, termMonths: 24, taxIncluded: true },
+
   pricing: {
     // 2026-09-09 固定価格化。min と max を同額にしてある。
     // キーを消さないのは price-estimator が min/max の両方を必須で読むため。
@@ -33,6 +36,9 @@ const SITE_CONFIG = {
   // 各プラットフォームのアカウント登録・URL確定後にここへ入力する。
   // 未確定の間は null のままにし、フロント側では「準備中」表示にする。
   contact: {
+    // 公式LINE（友だち追加URL）。開設したら lin.ee のURLをここへ入れるだけで、
+    // トップページの全CTAがLINEへ切り替わる。null の間は contact.html へフォールバックする。
+    line: "https://lin.ee/XQBjU3A",
     crowdworks: null,
     lancers: "https://www.lancers.jp/menu/detail/1337339",
     coconala: "https://coconala.com/services/4361612",
