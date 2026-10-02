@@ -401,3 +401,5 @@ b,strong{font-weight:800}
 
 .tl{overflow:hidden}
 .tl-ill{float:right;width:min(88px,26%);height:auto;margin:-4px -6px 6px 10px}
+
+.cta-duo{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}

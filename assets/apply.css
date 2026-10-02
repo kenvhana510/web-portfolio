@@ -1,0 +1,82 @@
+/* 申込・申込完了・ヒアリングの3ページ共通（v5-pop.css の上に重ねる） */
+.ap-hero{background:var(--yellow);border-bottom:var(--bd);
+  background-image:radial-gradient(var(--yellow-d) 2.2px,transparent 2.6px);background-size:26px 26px;
+  padding:clamp(40px,6vw,72px) 0;text-align:center}
+.ap-hero .h2{margin-top:6px}
+.ap-hero .lead{margin-left:auto;margin-right:auto;color:var(--ink)}
+.ap-ill{display:block;width:min(180px,46%);height:auto;margin:0 auto 12px}
+.ap-sec{padding:clamp(44px,7vw,80px) 0}
+.ap-sec + .ap-sec{padding-top:0}
+.ap-sec h2{font-size:var(--d3);font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.ap-sec h2 .no{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;border:var(--bd);background:var(--yellow);font-size:17px;flex:none}
+.ap-card{background:#fff;border:var(--bd);border-radius:var(--r);box-shadow:var(--sh);padding:clamp(20px,3vw,30px)}
+
+/* 料金の要約 */
+.ap-price{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.ap-price div{border:var(--bd);border-radius:var(--r-s);padding:12px 8px;text-align:center;background:var(--paper)}
+.ap-price .k{display:block;font-size:var(--t4);font-weight:900;color:var(--mu)}
+.ap-price .v{display:block;font-size:clamp(24px,3.4vw,36px);font-weight:900;line-height:1.2}
+.ap-price .v small{font-size:.45em}
+.ap-price .r{color:var(--red)} .ap-price .b{color:var(--blue)}
+@media (max-width:560px){.ap-price{grid-template-columns:1fr 1fr}.ap-price div:last-child{grid-column:1/-1}}
+
+/* 確認事項 */
+.ap-check{display:grid;gap:12px}
+.ap-check li{background:#fff;border:var(--bd);border-radius:var(--r-s);padding:14px 16px 14px 54px;position:relative;box-shadow:var(--sh-s);font-size:var(--t3)}
+.ap-check li b{display:block;font-size:var(--t2);margin-bottom:2px}
+.ap-check li::before{content:"!";position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:50%;border:2.5px solid var(--ink);
+  background:var(--yellow);display:grid;place-items:center;font-weight:900;font-size:15px}
+.ap-check li.ok::before{content:"✓";background:var(--green);color:#fff}
+
+/* 流れ */
+.ap-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;counter-reset:f}
+.ap-flow li{background:#fff;border:var(--bd);border-radius:var(--r-s);padding:16px 12px;text-align:center;box-shadow:var(--sh-s);font-size:var(--t4);color:var(--ink-2)}
+.ap-flow li::before{counter-increment:f;content:counter(f);display:grid;place-items:center;width:36px;height:36px;margin:0 auto 8px;border-radius:50%;border:var(--bd);background:var(--blue);color:#fff;font-weight:900}
+.ap-flow li.now::before{background:var(--red)}
+.ap-flow li b{display:block;font-size:var(--t3);color:var(--ink);margin-bottom:4px}
+@media (max-width:760px){.ap-flow{grid-template-columns:1fr 1fr}}
+
+/* 同意と申込ボタン */
+.ap-agree{display:flex;gap:12px;align-items:flex-start;background:var(--paper-2);border:var(--bd);border-radius:var(--r-s);padding:16px;font-weight:800;font-size:var(--t3);cursor:pointer}
+.ap-agree input{width:24px;height:24px;flex:none;margin:1px 0 0;accent-color:var(--green);cursor:pointer}
+.ap-agree a{color:var(--blue-d)}
+.ap-go{margin-top:18px;text-align:center}
+.ap-go .btn{min-width:min(100%,420px)}
+.ap-go .btn[aria-disabled="true"]{background:#D9D6CC;color:#7A7A8C;box-shadow:none;cursor:not-allowed;transform:none}
+.ap-note{font-size:var(--t4);color:var(--mu);margin-top:10px;text-align:center}
+.ap-sub{margin-top:26px;text-align:center;font-size:var(--t3)}
+.ap-sub a{font-weight:900;color:var(--blue-d)}
+
+/* 申込完了 */
+.ap-next{display:grid;gap:14px}
+.ap-next li{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:start;background:#fff;border:var(--bd);border-radius:var(--r);padding:18px;box-shadow:var(--sh-s)}
+.ap-next .n{width:52px;height:52px;border-radius:14px;border:var(--bd);display:grid;place-items:center;font-weight:900;font-size:22px;color:#fff;background:var(--red)}
+.ap-next li:nth-child(2) .n{background:var(--line)} .ap-next li:nth-child(3) .n{background:var(--blue)}
+.ap-next h3{font-size:var(--t1);font-weight:900;line-height:1.4}
+.ap-next p{font-size:var(--t3);color:var(--ink-2);margin-top:4px}
+.ap-next .btn{margin-top:12px}
+
+/* ヒアリングフォーム */
+.hf fieldset{border:var(--bd);border-radius:var(--r);background:#fff;box-shadow:var(--sh-s);padding:clamp(18px,3vw,26px);margin:0 0 22px}
+.hf legend{font-size:var(--t1);font-weight:900;background:var(--ink);color:#fff;border-radius:999px;padding:4px 16px}
+.hf .f{margin-top:16px}
+.hf label.t,.hf .t{display:block;font-weight:900;font-size:var(--t3);margin-bottom:6px}
+.hf .req{display:inline-block;margin-left:6px;font-size:11px;background:var(--red);color:#fff;border-radius:999px;padding:1px 8px;vertical-align:2px}
+.hf .hint{display:block;font-size:var(--t4);color:var(--mu);font-weight:700;margin-top:-2px;margin-bottom:6px}
+.hf input[type=text],.hf input[type=email],.hf input[type=tel],.hf input[type=url],.hf textarea,.hf select{
+  width:100%;font:inherit;font-size:16px;border:2.5px solid var(--ink);border-radius:12px;padding:11px 13px;background:var(--paper)}
+.hf textarea{min-height:110px;resize:vertical}
+.hf input:focus,.hf textarea:focus,.hf select:focus{outline:3px solid var(--yellow);outline-offset:1px;background:#fff}
+.hf .opts{display:flex;flex-wrap:wrap;gap:8px}
+.hf .opts label{display:inline-flex;align-items:center;gap:6px;border:2.5px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:800;font-size:var(--t3);cursor:pointer;background:#fff}
+.hf .opts input{accent-color:var(--blue);width:18px;height:18px;margin:0}
+.hf .opts label:has(input:checked){background:var(--sky)}
+.hf-save{font-size:var(--t4);color:var(--mu);text-align:right;margin:-10px 0 18px}
+.hf-err{display:none;background:var(--pink);border:var(--bd);border-radius:var(--r-s);padding:12px 16px;font-weight:800;font-size:var(--t3);margin-bottom:16px}
+.hf-err.on{display:block}
+.hf .bad{border-color:var(--red) !important;background:var(--pink) !important}
+.hf-done{display:none}
+.hf-done.on{display:block}
+.hf-done pre{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:var(--t3);background:var(--paper);border:2.5px solid var(--ink);border-radius:12px;padding:14px;max-height:320px;overflow:auto;margin:12px 0 0}
+.hf-send{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:18px}
+.hf-copied{font-size:var(--t3);font-weight:900;color:var(--green-d);text-align:center;margin-top:10px;min-height:1.5em}
