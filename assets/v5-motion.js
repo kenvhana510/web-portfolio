@@ -146,3 +146,95 @@
     }
   });
 })();
+
+/* ══ 第2弾：ワクワク演出 ══ */
+(function () {
+  "use strict";
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var finePointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var COLORS = ["#FFD23F", "#FF4D4D", "#2D7DFF", "#22C55E"];
+
+  /* 1. 「制作費0円」を1文字ずつに分ける（読み上げ用に元の文を残す） */
+  var big = document.querySelector(".hero-h .big");
+  if (big && !big.querySelector(".ch")) {
+    var text = big.textContent;
+    big.setAttribute("aria-label", text);
+    big.textContent = "";
+    Array.prototype.forEach.call(text, function (c, i) {
+      var s = document.createElement("span");
+      s.className = "ch";
+      s.setAttribute("aria-hidden", "true");
+      s.style.setProperty("--ci", i);
+      s.textContent = c;
+      big.appendChild(s);
+    });
+  }
+
+  /* 2. お悩みの「?」が順番に首をかしげるよう、ずらし用の番号を振る */
+  Array.prototype.forEach.call(document.querySelectorAll(".woe"), function (w, i) { w.style.setProperty("--i", i); });
+
+  /* 3. カードの立体傾き（マウス操作の端末だけ） */
+  if (finePointer) {
+    Array.prototype.forEach.call(document.querySelectorAll(".work, .pt"), function (card) {
+      card.classList.add("tilt");
+      var base = card.classList.contains("work") ? " translate(-3px,-3px)" : "";
+      card.addEventListener("pointermove", function (e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = "perspective(800px) rotateX(" + (-y * 9).toFixed(2) + "deg) rotateY(" + (x * 11).toFixed(2) + "deg)" + base;
+      });
+      card.addEventListener("pointerleave", function () { card.style.transform = ""; });
+    });
+  }
+
+  /* 4. ファーストビューでマウスを動かすと、カラフルな星がこぼれる */
+  var hero = document.querySelector(".hero");
+  if (hero && finePointer) {
+    var last = 0, n = 0;
+    hero.addEventListener("pointermove", function (e) {
+      var now = performance.now();
+      if (now - last < 45) return;
+      last = now;
+      var s = document.createElement("span");
+      s.className = "spark";
+      s.style.background = COLORS[n++ % COLORS.length];
+      s.style.left = e.clientX - 8 + "px";
+      s.style.top = e.clientY - 8 + "px";
+      document.body.appendChild(s);
+      var a = s.animate([
+        { transform: "translate(0,0) scale(1) rotate(0deg)", opacity: 1 },
+        { transform: "translate(" + (Math.random() * 30 - 15) + "px," + (24 + Math.random() * 24) + "px) scale(.2) rotate(140deg)", opacity: 0 }
+      ], { duration: 750, easing: "ease-out" });
+      a.onfinish = function () { s.remove(); };
+    });
+  }
+
+  /* 5. 最後の「友だち追加」セクションに来たら、1回だけ紙吹雪 */
+  var fin = document.querySelector("#final");
+  if (fin && "IntersectionObserver" in window) {
+    var fired = false;
+    var io = new IntersectionObserver(function (es) {
+      if (fired || !es[0].isIntersecting) return;
+      fired = true;
+      io.disconnect();
+      var W = window.innerWidth, H = window.innerHeight, count = W < 600 ? 45 : 90;
+      for (var i = 0; i < count; i++) {
+        (function (i) {
+          var c = document.createElement("span");
+          c.className = "confetti";
+          c.style.background = COLORS[i % COLORS.length];
+          c.style.left = Math.random() * W + "px";
+          document.body.appendChild(c);
+          var drift = Math.random() * 160 - 80, spin = 360 + Math.random() * 720;
+          var a = c.animate([
+            { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+            { transform: "translate(" + drift + "px," + (H * 0.6) + "px) rotate(" + spin / 2 + "deg)", opacity: 1, offset: 0.7 },
+            { transform: "translate(" + drift * 1.3 + "px," + (H + 40) + "px) rotate(" + spin + "deg)", opacity: 0 }
+          ], { duration: 2200 + Math.random() * 1600, delay: Math.random() * 500, easing: "cubic-bezier(.25,.6,.4,1)" });
+          a.onfinish = function () { c.remove(); };
+        })(i);
+      }
+    }, { threshold: 0.45 });
+    io.observe(fin);
+  }
+})();

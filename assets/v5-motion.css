@@ -113,5 +113,59 @@
 }
 
 @media (max-width:700px){
-  .deco-b:nth-of-type(n+5){display:none}
+  .final .deco-b{display:none}
+  .hero .deco-b{--s:30px !important}
+}
+
+/* ══ 第2弾：ワクワク演出 ═════════════════════════════════════ */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes m-char{0%{opacity:0;translate:0 -70px;rotate:-25deg;scale:.4}60%{opacity:1;translate:0 8px;rotate:6deg;scale:1.1}100%{opacity:1;translate:0 0;rotate:0deg;scale:1}}
+  @keyframes m-stamp{0%{opacity:0;scale:3.2;rotate:-18deg}55%{opacity:1;scale:.86;rotate:3deg}75%{scale:1.08}100%{opacity:1;scale:1;rotate:0deg}}
+  @keyframes m-shake{0%,100%{translate:0 0}20%{translate:-6px 3px}40%{translate:5px -3px}60%{translate:-3px 2px}80%{translate:2px -1px}}
+  @keyframes m-spin-pop{0%{opacity:0;scale:.2;rotate:-270deg}70%{opacity:1;scale:1.15;rotate:15deg}100%{opacity:1;scale:1;rotate:0deg}}
+  @keyframes m-swing{0%,100%{rotate:-6deg}50%{rotate:6deg}}
+  @keyframes m-qwob{0%,100%{rotate:0deg;scale:1}40%{rotate:-14deg;scale:1.12}70%{rotate:10deg}}
+  @keyframes m-faq{0%{opacity:0;translate:0 -10px}100%{opacity:1;translate:0 0}}
+  @keyframes m-logo{0%{opacity:0;translate:0 -30px;rotate:-12deg}60%{opacity:1;translate:0 4px;rotate:4deg}100%{opacity:1;translate:0 0;rotate:0deg}}
+
+  /* ファーストビュー「制作費0円」：1文字ずつ空から落ちてくる（JS が .ch に分割） */
+  .hero-h .big{animation:m-glow 3.2s ease-in-out 1.8s infinite}
+  .hero-h .big .ch{display:inline-block;animation:m-char .7s cubic-bezier(.34,1.56,.64,1) backwards;animation-delay:calc(.35s + var(--ci) * 85ms)}
+
+  /* ロゴ：落ちてきて、触るとぴょこっと */
+  .brand img{animation:m-logo .7s cubic-bezier(.34,1.56,.64,1) backwards}
+  @media (hover:hover){.brand:hover img{animation:m-wiggle .6s ease-in-out}}
+
+  /* 料金「0円」：ハンコを押すようにドン！ カードごと揺れる */
+  .plan.rv .pp .v.red{display:inline-block}
+  .plan.rv.in .pp .v.red{animation:m-stamp .6s cubic-bezier(.34,1.56,.64,1) .45s backwards}
+  .plan.rv.in{animation:m-shake .35s ease-out .8s}
+
+  /* 5ステップ：番号がくるっと回って登場 */
+  .steps.rv.stg.in .st .sn{animation:m-spin-pop .7s cubic-bezier(.34,1.56,.64,1) backwards;animation-delay:calc(var(--i,0) * 90ms + .25s)}
+
+  /* 失敗ランキングの王冠がゆらゆら、お悩みの「?」がときどき首をかしげる */
+  .rk .crown{transform-origin:50% 120%;animation:m-swing 2.6s ease-in-out infinite}
+  .rk:nth-child(2) .crown{animation-delay:-.9s} .rk:nth-child(3) .crown{animation-delay:-1.7s}
+  .woe::before{animation:m-qwob 3.4s ease-in-out infinite;animation-delay:calc(var(--i,0) * .45s)}
+
+  /* よくある質問：開いた答えがすっと出る */
+  .faq details[open] .fa{animation:m-faq .35s cubic-bezier(.22,1,.36,1)}
+  .faq summary::after{transition:rotate .3s cubic-bezier(.34,1.56,.64,1)}
+  .faq details[open] summary::after{rotate:180deg}
+
+  /* 制作例のマーキー：カードを少しずつ傾けて、触ると前に出る */
+  .marq .mock{transition:scale .3s cubic-bezier(.34,1.56,.64,1),rotate .3s}
+  .marq .mock:nth-child(odd){rotate:-2deg} .marq .mock:nth-child(even){rotate:2deg}
+  @media (hover:hover){.marq .mock:hover{scale:1.08;rotate:0deg;z-index:2}}
+
+  /* 制作例・ポイントのカードはマウスに合わせて立体的に傾く（JS） */
+  .tilt{transform-style:preserve-3d;will-change:transform}
+
+  /* マウスの軌跡に出る星（JS、ファーストビュー内だけ） */
+  .spark{position:fixed;z-index:75;width:16px;height:16px;pointer-events:none;
+    clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+
+  /* 最後のセクションに来たら紙吹雪（JS） */
+  .confetti{position:fixed;z-index:85;top:-20px;pointer-events:none;width:10px;height:16px;border:2px solid var(--ink);border-radius:3px}
 }
