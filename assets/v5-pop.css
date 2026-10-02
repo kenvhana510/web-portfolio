@@ -398,3 +398,6 @@ b,strong{font-weight:800}
 .sp .ic-img{width:78%;height:78%;object-fit:contain}
 
 .sec.cream{background-image:url("../images/site/deco-blocks.webp");background-size:520px 520px}
+
+.tl{overflow:hidden}
+.tl-ill{float:right;width:min(88px,26%);height:auto;margin:-4px -6px 6px 10px}
