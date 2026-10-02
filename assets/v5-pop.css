@@ -391,3 +391,10 @@ b,strong{font-weight:800}
 .faq-ill{width:110px}
 
 .final-ill{display:block;width:min(300px,70%);height:auto;margin:0 auto 14px}
+
+.st-ill{display:block;width:min(130px,70%);height:auto;margin:0 auto 8px}
+@media (max-width:1000px){.st-ill{width:120px}}
+.sp .ic{width:72px;height:72px}
+.sp .ic-img{width:78%;height:78%;object-fit:contain}
+
+.sec.cream{background-image:url("../images/site/deco-blocks.webp");background-size:520px 520px}

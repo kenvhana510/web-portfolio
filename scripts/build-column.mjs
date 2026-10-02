@@ -264,6 +264,7 @@ ${header()}
     <p class="kicker y">COLUMN</p>
     <h1 class="h2">ホームページの「わからない」を、<span class="mk">ぜんぶ解決するコラム</span></h1>
     <p class="lead">費用のこと、作り方のこと、作ったあとのこと。小さな会社・個人事業主の方に向けて、むずかしい言葉を使わずに書いています。</p>
+    <figure style="margin:22px auto 0;max-width:640px"><img src="/images/site/column-top.webp" alt="本からブロックが飛び出す本棚の前で、楽しそうに本を読む二人のイラスト" width="1200" height="675" decoding="async" style="width:100%;height:auto;display:block;border:3px solid #1B1B2F;border-radius:18px"></figure>
   </div></section>
   <div class="wrap">
     <div class="cats" role="tablist" aria-label="カテゴリ"><button class="chip on" data-filter="all">すべて（${all.length}）</button>${cats.map((c) => `<button class="chip ${CAT_COLOR[c] || ""}" data-filter="${esc(c)}">${esc(c)}（${all.filter((p) => p.meta.category === c).length}）</button>`).join("")}</div>
