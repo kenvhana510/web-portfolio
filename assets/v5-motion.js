@@ -238,3 +238,36 @@
     io.observe(fin);
   }
 })();
+
+/* ── v6 partial: #works phone carousel progress (works with reduced motion too) ──
+   .works-prog gets .is-live only here, so the bar never shows without JS. */
+(function () {
+  "use strict";
+  var works = document.querySelector("#works .works");
+  var prog = document.querySelector("#works .works-prog");
+  var wbar = prog && prog.querySelector("i");
+  if (!works) return;
+  if (wbar) {
+    var queued = false;
+    var update = function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        var p = Math.min(1, (works.scrollLeft + works.clientWidth) / Math.max(1, works.scrollWidth));
+        wbar.style.transform = "scaleX(" + p.toFixed(3) + ")";
+      });
+    };
+    prog.classList.add("is-live");
+    works.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+  }
+  /* keyboard focus inside the carousel: bring a partly visible card fully into view (snap positions unchanged).
+     Keyboard only (:focus-visible): scrolling on a mouse/touch press would move the card away before mouseup. */
+  works.addEventListener("focusin", function (e) {
+    var t = e.target, c = t && t.closest ? t.closest(".work") : null, kb = false;
+    try { kb = !!(c && t.matches(":focus-visible")); } catch (x) { kb = false; }
+    if (kb && c.scrollIntoView) c.scrollIntoView({ block: "nearest", inline: "nearest" });
+  });
+})();

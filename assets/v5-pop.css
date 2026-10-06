@@ -26,6 +26,13 @@
   --t1:clamp(16px,1.4vw,19px);
   --t2:16px; --t3:14px; --t4:12.5px;
   --wrap:1120px;
+  /* v6 footer tokens (shared by every page's footer; the top page adds its own in v6-partial.css) */
+  --ff:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;
+  --on-dark:#C9C9DB;
+  --r-sm:10px;
+  --d-2:200ms;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --brick-course:repeating-linear-gradient(90deg,var(--red) 0 46px,var(--ink) 46px 48px,var(--yellow) 48px 94px,var(--ink) 94px 96px,var(--blue) 96px 142px,var(--ink) 142px 144px,var(--green) 144px 190px,var(--ink) 190px 192px);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
@@ -336,19 +343,28 @@ b,strong{font-weight:800}
 }
 
 /* ── フッター ───────────────────────────── */
-.ft{background:var(--ink);color:#fff;padding:48px 0 32px}
-.ft-in{display:grid;grid-template-columns:1.4fr 1fr;gap:30px}
-.ft img{height:36px;width:auto;background:#fff;border-radius:10px;padding:6px 10px}
-.ft-tag{margin-top:12px;font-weight:800;font-size:var(--t3);opacity:.9}
-.ft h4{font-size:var(--t3);font-weight:900;letter-spacing:.1em;opacity:.7;margin-bottom:10px}
-.ft a{color:#fff;text-decoration:none;font-weight:700;font-size:var(--t3)}
-.ft a:hover{text-decoration:underline}
-.ft li{margin:4px 0}
-.ft dl{margin:0;font-size:var(--t3)}
-.ft dt{font-weight:900;opacity:.7;font-size:var(--t4);margin-top:8px}
+/* v6 footer: brick course on the top boundary, yellow tilted logo sticker, 2-column MENU */
+.ft{background:var(--ink);color:var(--white);border-top:var(--bd);padding:0 0 32px;--focus:var(--yellow)}
+.ft::before{content:"";display:block;height:17px;background:var(--brick-course);border-bottom:var(--bd);margin-bottom:48px}
+.ft-in{display:grid;grid-template-columns:1fr;gap:28px}
+@media (min-width:1000px){.ft-in{grid-template-columns:minmax(0,1.1fr) minmax(0,1.9fr);gap:32px 48px}}
+.ft img{height:40px;width:auto;background:var(--yellow);border-radius:var(--r-sm);padding:6px 12px;rotate:-2deg;box-shadow:4px 4px 0 var(--yellow-d)}
+.ft-tag{margin-top:14px;font:800 14px/1.6 var(--ff);word-break:keep-all;overflow-wrap:anywhere}
+.ft dl{margin:0;font-size:14px}
+.ft dt{margin-top:10px;font:800 12px/1.4 var(--ff);letter-spacing:.06em;color:var(--on-dark)}
 .ft dd{margin:0}
-.ft-note{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.2);padding-top:18px;font-size:var(--t4);opacity:.8}
-@media (max-width:800px){.ft-in{grid-template-columns:1fr}}
+.ft h4{font:900 12px/1.4 var(--ff);letter-spacing:.14em;color:var(--yellow);margin-bottom:8px}
+.ft ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.ft a{position:relative;display:inline-flex;align-items:center;min-height:40px;color:var(--white);text-decoration:none;font:500 15px/1.5 var(--ff)}
+/* small phone: the long last label (特定商取引法に基づく表記) gets its own row and the columns a little more room,
+   so no MENU label wraps from 360 up; 44px tap targets on phones */
+@media (max-width:560px){.ft ul{column-gap:12px}.ft li:last-child{grid-column:1/-1}}
+@media (max-width:720px){.ft a{min-height:44px}}
+.ft a::after{content:"";position:absolute;left:0;right:0;bottom:8px;height:2px;background:currentColor;
+  transform:scaleX(0);transform-origin:0 50%;transition:transform var(--d-2) var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.ft a:hover::after{transform:scaleX(1)}}
+.ft a:focus-visible::after{transform:scaleX(1)}
+.ft-note{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.2);padding-top:18px;font:500 13px/1.7 var(--ff);color:var(--on-dark)}
 
 /* ── 出現アニメーション（控えめ）────────── */
 .rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}

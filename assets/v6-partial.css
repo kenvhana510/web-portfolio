@@ -1,0 +1,136 @@
+/* ══════════════════════════════════════════════════════════════
+   LEGACRAFT v6 PARTIAL — top-page only
+   Ported from the v6 redesign (redesign/v6-brushup) for exactly three
+   sections: #works (white band + phone carousel), #flow (rail + nodes),
+   #about (polaroid). Everything is scoped under those section ids so the
+   rest of the v5 top page is untouched. Loaded after v5-motion.css.
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  /* v6 tokens used below that v5-pop.css does not define (never redefine --sh/--r/--bd/--mu etc.) */
+  --yellow-l:#FFF3C4;
+  --blue-ink:#1C5FD6;
+  --r-md:16px; --r-lg:24px; --r-pill:999px;
+  --bd-1:2px solid var(--ink);
+  --sh-1:3px 3px 0 var(--ink);
+  --sh-2:5px 5px 0 var(--ink);
+  --sh-3:7px 7px 0 var(--ink);
+  --sh-card-up:8px 8px 0 var(--ink);
+  --sh-press:2px 2px 0 var(--ink);
+  --fs-h3:clamp(19px, .45vw + 17.2px, 23px);
+  --d-1:120ms;
+  --ease-pop:cubic-bezier(.34,1.56,.64,1);
+  --gutter:20px;   /* = .wrap side padding in v5-pop.css (v6 used 16px with its own wrap) */
+  --s7:32px;
+  --measure:38em;
+}
+
+/* ── #works (white proof band; v6 7.11) ─────────────────────── */
+#works .works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+@media (min-width:721px) and (max-width:999px){#works .works{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#works .work{display:flex;flex-direction:column;background:var(--white);border:var(--bd);border-radius:var(--r-lg);box-shadow:var(--sh-2);
+  overflow:hidden;text-decoration:none;color:var(--ink);
+  transition:transform var(--d-2) var(--ease-pop),box-shadow var(--d-2) var(--ease-pop)}
+#works .work .mock{position:relative;overflow:hidden;border:0;border-bottom:var(--bd);border-radius:0;box-shadow:none}
+#works .mock-bar i{width:10px;height:10px}
+#works .work .mock-img{transition:transform 600ms var(--ease-out)}
+#works .work-b{display:flex;flex-direction:column;flex:1;padding:18px 20px 20px}
+#works .work-tag{display:inline-block;align-self:flex-start;margin-bottom:8px;font:800 12px/1.4 var(--ff);border:var(--bd-1);border-radius:var(--r-pill);
+  padding:2px 10px;background:var(--yellow-l)}
+#works .work h3{font-size:var(--fs-h3);font-weight:900;line-height:1.35}
+#works .work p{margin-top:6px;font:500 14px/1.7 var(--ff);color:var(--mu)}
+@supports (word-break:auto-phrase){#works .work p{word-break:auto-phrase}}
+@media (min-width:1000px) and (max-width:1279px){#works .work h3{min-height:2.7em}}
+#works .work-go{margin-top:auto;padding-top:12px;font:800 14px/1.4 var(--ff);color:var(--blue-ink);transition:transform var(--d-2) var(--ease-pop)}
+@media (hover:hover) and (pointer:fine){
+  #works .work:hover{transform:translate(-3px,-3px);box-shadow:var(--sh-card-up)}
+  #works .work:hover .mock-img{transform:scale(1.04)}
+  #works .work:hover .work-go{transform:translateX(4px)}
+}
+#works .work:focus-visible{transform:translate(-3px,-3px);box-shadow:var(--sh-card-up);outline-offset:10px}
+#works .work:focus-visible .mock-img{transform:scale(1.04)}
+#works .work:focus-visible .work-go{transform:translateX(4px)}
+#works .work:active{transform:translate(3px,3px);box-shadow:var(--sh-press);transition-duration:var(--d-1)}
+#works .works-prog{display:none}
+@media (max-width:720px){
+  #works .works{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;
+    margin-inline:calc(var(--gutter) * -1);padding:17px var(--gutter) 16px;margin-top:-13px;gap:24px;
+    scroll-padding-inline:calc(var(--gutter) + 48px);overscroll-behavior-x:contain;scrollbar-width:none}
+  #works .works::-webkit-scrollbar{display:none}
+  #works .work{scroll-snap-align:start;scroll-margin-inline:-48px}
+  /* progress bar: shown only once the JS that moves it has run (.is-live) */
+  #works .works-prog.is-live{display:block;width:min(60%,220px);height:10px;margin:4px auto 0;border:var(--bd-1);border-radius:var(--r-pill);
+    background:var(--white);overflow:hidden}
+  #works .works-prog i{display:block;height:100%;background:var(--yellow);transform-origin:0 50%;transform:scaleX(.19)}
+}
+
+/* ── #flow (rail + fill + nodes; v6 7.13) ───────────────────── */
+#flow .steps{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+#flow .steps::before{content:"";position:absolute;z-index:0;left:10%;right:10%;top:16px;height:12px;border:var(--bd-1);border-radius:6px;background:var(--white)}
+#flow .steps::after{content:"";position:absolute;z-index:0;left:10%;right:10%;top:16px;height:12px;border:var(--bd-1);border-radius:6px;
+  background:var(--yellow);transform-origin:0 50%}
+#flow .st{position:relative;z-index:1;margin-top:60px;background:var(--white);border:var(--bd);border-radius:var(--r-lg);box-shadow:var(--sh-2);
+  padding:20px 16px;text-align:left}
+/* v5 had "▶"/"▼" arrows between the cards (with an infinite nudge); the rail layout has none */
+#flow .st::after{content:none;animation:none}
+#flow .st .sn{position:absolute;left:calc(50% - 22px);top:-60px;width:44px;height:44px;margin:0;border:var(--bd);border-radius:50%;background:var(--yellow);
+  color:var(--ink);display:grid;place-items:center;font:900 20px/1 var(--ff)}
+#flow .st-ill{display:block;width:100%;height:112px;object-fit:contain;margin:0 0 10px}
+#flow .st h3{font-size:var(--fs-h3);font-weight:900;line-height:1.35}
+@media (min-width:1000px){#flow .st h3{min-height:2.7em}}
+#flow .st p{margin-top:6px;font:500 14px/1.75 var(--ff);color:var(--ink-2);text-align:left}
+@supports (word-break:auto-phrase){#flow .st p{word-break:auto-phrase}}
+#flow .free-tag{position:absolute;top:-12px;right:10px;z-index:2;background:var(--red);color:var(--ink);border:var(--bd-1);border-radius:var(--r-pill);
+  font:900 12px/1.4 var(--ff);padding:2px 10px}
+@media (max-width:999px){
+  #flow .steps{grid-template-columns:1fr;gap:14px;padding-left:56px}
+  #flow .steps::before,#flow .steps::after{left:16px;right:auto;top:22px;bottom:22px;width:12px;height:auto}
+  #flow .steps::after{transform-origin:50% 0}
+  #flow .st{margin-top:0;display:grid;grid-template-columns:minmax(0,1fr) 72px;column-gap:12px;padding:16px;border-width:2px;box-shadow:var(--sh-1)}
+  #flow .st .sn{left:-56px;top:14px}
+  #flow .st-ill{grid-column:2;grid-row:1/span 2;width:72px;height:72px;margin:0}
+  #flow .st h3{grid-column:1;grid-row:1}
+  #flow .st p{grid-column:1;grid-row:2}
+  #flow .free-tag{left:12px;right:auto}
+}
+
+/* ── #about (polaroid; v6 7.15) ─────────────────────────────── */
+#about .about{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:var(--s7);align-items:center;background:var(--white);
+  border:var(--bd);border-radius:var(--r-lg);box-shadow:var(--sh-3);padding:clamp(20px,3vw,32px)}
+#about .about figure{position:relative;margin:0;background:var(--white);border:var(--bd);border-radius:var(--r-sm);padding:10px 10px 28px;
+  box-shadow:var(--sh-2);rotate:-2deg}
+#about .about figure::before{content:"";position:absolute;left:calc(50% - 36px);top:-11px;width:72px;height:20px;background:rgba(255,210,63,.85);
+  border:1.5px solid rgba(27,27,47,.3);rotate:4deg;z-index:1}
+/* the file is 960x720 (4:3) but the markup says 960x640: reserve the real ratio before the lazy image arrives (CLS) */
+#about .about img{border:var(--bd-1);border-radius:6px;aspect-ratio:auto 4 / 3}
+#about .about h3{font-size:var(--fs-h3);font-weight:900;line-height:1.45;margin-bottom:10px}
+#about .about p{font:500 15px/1.9 var(--ff);color:var(--ink-2);max-width:var(--measure)}
+#about .about p + p{margin-top:10px}
+@media (max-width:999px){
+  #about .about{grid-template-columns:1fr}
+  #about .about figure{width:86%;margin-inline:auto}
+}
+
+/* ── Motion additions (v6 M28 rail fill · M30 polaroid settle) ──
+   Keyed on the v5 reveal classes (.rv gets .in from the inline IntersectionObserver). */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes m-polar{from{opacity:0;translate:0 -14px;rotate:-7deg}}
+  #flow .steps.rv::after{transition:scale 800ms var(--ease-out)}
+  #flow .steps.rv:not(.in)::after{scale:0 1}
+  @media (max-width:999px){#flow .steps.rv:not(.in)::after{scale:1 0}}
+  #about .about.rv.in figure{animation:m-polar 600ms var(--ease-pop) backwards}
+}
+
+/* ── #problem .solve: v6 "lid + body" (lid on top of the illustration, one rounded block) ── */
+#problem .solve{max-width:760px;margin:20px auto 0;background:var(--ink);color:#fff;border:var(--bd);border-radius:var(--r-lg) var(--r-lg) 0 0;
+  box-shadow:var(--sh-3);padding:24px 24px 20px;text-align:center;font-size:calc(var(--fs-h3) * 1.15);font-weight:900;line-height:1.45}
+#problem .solve .mk{background:linear-gradient(transparent 60%,var(--red) 60% 94%,transparent 94%);padding:0 2px}
+@media (max-width:560px){
+  #problem .solve{font-size:var(--fs-h3)}
+  #problem .solve .mk{word-break:keep-all}
+}
+#problem .solve-ill{position:relative;max-width:760px;margin:0 auto;border:var(--bd);border-top:0;border-radius:0 0 var(--r-lg) var(--r-lg);
+  overflow:hidden;box-shadow:var(--sh-3)}
+/* break at phrases (まるっと, 解決します stay whole), as v6 did via its shared .solve rule */
+#problem .solve{word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
+@supports (word-break:auto-phrase){#problem .solve{word-break:auto-phrase}}
+#problem .solve .mk{word-break:keep-all}
