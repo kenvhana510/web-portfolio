@@ -134,3 +134,11 @@
 #problem .solve{word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
 @supports (word-break:auto-phrase){#problem .solve{word-break:auto-phrase}}
 #problem .solve .mk{word-break:keep-all}
+
+/* owner tweaks 2026-10-06 */
+.hero-h .l.sm{font-size:.8em;line-height:1.3;margin-bottom:6px}
+.sp-br{display:none}
+@media (max-width:720px){
+  .sp-br{display:inline}
+  .final .lead,.line-box h3,.line-box p{word-break:keep-all;overflow-wrap:anywhere}
+}
