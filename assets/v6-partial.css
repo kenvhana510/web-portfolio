@@ -142,3 +142,12 @@
   .sp-br{display:inline}
   .final .lead,.line-box h3,.line-box p{word-break:keep-all;overflow-wrap:anywhere}
 }
+
+/* hero h1: "ホームページ" as a third display line (green, same lettering as 制作費0円 / 2,980) */
+.hero-h .l.sm{margin-bottom:0}
+.hero-h .hp{font-size:1.25em;color:var(--green-d);text-shadow:3px 3px 0 #fff}
+@media (prefers-reduced-motion:no-preference){
+  .hero-h .hp{display:inline-block;animation:m-pop .7s cubic-bezier(.34,1.56,.64,1) .35s backwards}
+  .hero-h .l:nth-child(3){animation-delay:.32s}
+  .hero-h .l:nth-child(4){animation-delay:.42s}
+}
