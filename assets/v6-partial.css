@@ -162,3 +162,13 @@
   .hero-cta{text-align:center}
   .hero-cta .btn{margin-inline:auto}
 }
+
+/* hero v3: two-line bubble, "完全オーダーメイド" over ホームページ, works special-offer LINE button */
+.hero-h .l.sm{text-align:center;border-radius:18px;font-size:.5em;padding:10px 18px}
+.hero-h .hp{line-height:1.05}
+.hero-h .hp-sub{display:block;font-size:.5em;line-height:1.25;letter-spacing:.04em;text-shadow:2px 2px 0 #fff}
+#works .cta-block .btn-col{align-items:center;text-align:center}
+#works .cta-block .btn .sub{font-size:13px;line-height:1.35;margin-bottom:2px}
+@media (max-width:720px){#works .cta-block .btn{display:flex;justify-content:center;align-items:center;gap:10px;width:100%}}
+#works .cta-block .btn-col{word-break:keep-all;overflow-wrap:anywhere}
+@media (max-width:720px){#works .cta-block .btn-col{font-size:17px}}
