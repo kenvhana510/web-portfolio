@@ -172,3 +172,6 @@
 @media (max-width:720px){#works .cta-block .btn{display:flex;justify-content:center;align-items:center;gap:10px;width:100%}}
 #works .cta-block .btn-col{word-break:keep-all;overflow-wrap:anywhere}
 @media (max-width:720px){#works .cta-block .btn-col{font-size:17px}}
+/* one-line bubble again; 完全オーダーメイド in ink */
+.hero-h .l.sm{font-size:.6em;padding:8px 20px 9px;border-radius:999px}
+.hero-h .hp-sub{color:var(--ink)}
