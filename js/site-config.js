@@ -119,6 +119,14 @@ window.SITE_CONFIG = SITE_CONFIG;
   }
   window.gtag = gtag;
   gtag("js", new Date());
+  // 2026-10-06 自分のアクセスを GA4 から除外する。各端末で一度 ?internal=1 を付けて開くと、
+  // その端末は traffic_type=internal になり、GA4 の「内部トラフィック」データフィルタで除外される。?internal=0 で解除
+  try {
+    var q = window.location.search;
+    if (/[?&]internal=1(&|$)/.test(q)) window.localStorage.setItem("lc_internal", "1");
+    if (/[?&]internal=0(&|$)/.test(q)) window.localStorage.removeItem("lc_internal");
+    if (window.localStorage.getItem("lc_internal") === "1") gtag("set", { traffic_type: "internal" });
+  } catch (e) { /* localStorage が使えない環境では何もしない */ }
   gtag("config", id);
 
   var tag = document.createElement("script");
