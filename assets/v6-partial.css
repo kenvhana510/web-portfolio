@@ -151,3 +151,14 @@
   .hero-h .l:nth-child(3){animation-delay:.32s}
   .hero-h .l:nth-child(4){animation-delay:.42s}
 }
+
+/* "プロが作る" as a tilted white speech bubble above the display lines */
+.hero-h .l.sm{display:inline-block;position:relative;font-size:.6em;line-height:1.2;padding:8px 20px 9px;margin:0 0 14px 4px;
+  background:#fff;color:var(--ink);border:var(--bd);border-radius:999px;box-shadow:var(--sh-s);rotate:-3deg;transform-origin:0 100%}
+.hero-h .l.sm::after{content:"";position:absolute;left:26px;bottom:-11px;width:14px;height:14px;background:#fff;
+  border-right:var(--bd);border-bottom:var(--bd);transform:skewX(8deg) rotate(45deg)}
+/* phones: hero CTA + note centred */
+@media (max-width:720px){
+  .hero-cta{text-align:center}
+  .hero-cta .btn{margin-inline:auto}
+}
