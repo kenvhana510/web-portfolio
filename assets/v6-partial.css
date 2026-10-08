@@ -207,3 +207,10 @@
   #report .rp-box{grid-template-columns:1fr;gap:28px}
   #report .rp-sheet{rotate:0deg}
 }
+
+/* industry chips are links to a live example site */
+.chips li{padding:0}
+.chips li a{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;color:inherit;text-decoration:none;border-radius:999px;min-height:44px}
+.chips li a::after{content:"↗";font-size:.85em;opacity:.55;margin-left:2px}
+.chips li a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media (hover:hover) and (pointer:fine){.chips li a:hover::after{opacity:1}}
