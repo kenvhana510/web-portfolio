@@ -214,3 +214,19 @@
 .chips li a::after{content:"↗";font-size:.85em;opacity:.55;margin-left:2px}
 .chips li a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @media (hover:hover) and (pointer:fine){.chips li a:hover::after{opacity:1}}
+
+/* ── 2026-10-09 owner tweaks: hero badges x3 on phones / lead emphasis / 2-row gallery / 20 works ── */
+@media (max-width:720px){
+  .hero-badges{flex-wrap:nowrap;gap:8px;margin-bottom:16px}
+  .hero-badges .badge{flex:1 1 0;min-width:0;justify-content:center;padding:7px 4px;font-size:13px;white-space:nowrap;box-shadow:2px 2px 0 var(--ink)}
+}
+@media (max-width:360px){.hero-badges .badge{font-size:12px;padding:6px 2px}}
+.hero-lead b.em{font-size:1.2em;font-weight:900;color:var(--ink);background:linear-gradient(transparent 58%,#fff 58%);padding:0 3px}
+.gallery{padding:26px 0}
+.marq{gap:12px;padding-right:12px;animation-duration:64s}
+.marq.marq-2{margin-top:12px;margin-left:-130px;animation-direction:reverse}
+.marq .mock{width:240px;border-width:2px;border-radius:12px;box-shadow:3px 3px 0 var(--ink)}
+.marq .mock .mock-bar{padding:6px 10px}
+@media (max-width:720px){.marq .mock{width:200px}.marq.marq-2{margin-left:-100px}}
+@media (prefers-reduced-motion:reduce){.marq{padding-right:0}.marq.marq-2{margin-left:0}.marq .mock[aria-hidden="true"]{display:none}}
+@media (min-width:1100px){#works .works{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}}
