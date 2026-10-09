@@ -230,3 +230,7 @@
 @media (max-width:720px){.marq .mock{width:200px}.marq.marq-2{margin-left:-100px}}
 @media (prefers-reduced-motion:reduce){.marq{padding-right:0}.marq.marq-2{margin-left:0}.marq .mock[aria-hidden="true"]{display:none}}
 @media (min-width:1100px){#works .works{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}}
+.marq > a{flex:none;display:block;text-decoration:none;color:inherit;border-radius:12px}
+.marq > a .mock{transition:transform .18s,box-shadow .18s}
+@media (hover:hover) and (pointer:fine){.marq > a:hover .mock{transform:translate(-2px,-4px);box-shadow:6px 7px 0 var(--ink)}}
+.marq > a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
