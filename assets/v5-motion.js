@@ -271,3 +271,21 @@
     if (kb && c.scrollIntoView) c.scrollIntoView({ block: "nearest", inline: "nearest" });
   });
 })();
+
+/* ── #problem .solve-ill: play the "rain clears" video once each time it scrolls into view.
+   Reduced motion: never plays (poster = the final high-five illustration). ── */
+(function () {
+  "use strict";
+  var v = document.querySelector("#problem .solve-vid");
+  if (!v) return;
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var play = function () { v.currentTime = 0; var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+  if (!("IntersectionObserver" in window)) { play(); return; }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && e.intersectionRatio >= 0.5) play();
+      else if (!e.isIntersecting) v.pause();
+    });
+  }, { threshold: [0, 0.5] });
+  io.observe(v);
+})();

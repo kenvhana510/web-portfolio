@@ -234,3 +234,4 @@
 .marq > a .mock{transition:transform .18s,box-shadow .18s}
 @media (hover:hover) and (pointer:fine){.marq > a:hover .mock{transform:translate(-2px,-4px);box-shadow:6px 7px 0 var(--ink)}}
 .marq > a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+#problem .solve-ill .solve-vid{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#dfe9f7}
