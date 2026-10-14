@@ -54,6 +54,19 @@ const SITE_CONFIG = {
   analytics: {
     measurementId: "G-ZFSK3YRNJL",
   },
+
+  // 広告の計測（2026-10-14）。空文字のうちは何も読み込まず、何も送らない（fail-closed）。
+  // プレースホルダー（REPLACE_ME 等）を入れてはいけない。形式が合わない値は無視される。
+  //   metaPixelId:   Meta イベントマネージャの「データセットID」。15〜16桁の数字。
+  //   googleAdsId:   Google 広告のコンバージョン ID。"AW-" + 9〜11桁の数字。
+  //   googleAdsConversionLabel: 同じコンバージョンアクションのラベル（英数字と - _）。
+  // LINE の CTA（lin.ee / line.me へのリンク）をクリックした時だけ、
+  // Meta は Lead、Google 広告は conversion を送る。両方とも GA4 の cta_click とは独立。
+  ads: {
+    metaPixelId: "",
+    googleAdsId: "",
+    googleAdsConversionLabel: "",
+  },
 };
 
 // 上の `const` は「スクリプトスコープ」に束縛されるだけで、window のプロパティには
@@ -274,6 +287,7 @@ window.SITE_CONFIG = SITE_CONFIG;
   function resolveCtaType(a, href, rawHref) {
     var explicit = attr(a, "data-cta-type");
     if (explicit) return explicit;
+    if (/lin\.ee|line\.me/i.test(href)) return "line";
     if (/^mailto:/i.test(rawHref)) return "email";
     if (/^tel:/i.test(rawHref)) return "tel";
     if (/lancers\.jp/i.test(href)) return "lancers";
@@ -427,4 +441,59 @@ window.SITE_CONFIG = SITE_CONFIG;
     },
     false
   );
+})(window, document);
+
+/* ==========================================================================
+   広告の計測（Meta ピクセル / Google 広告コンバージョン）── 2026-10-14
+   ==========================================================================
+   SITE_CONFIG.ads の値が正しい形式のときだけ動く。空なら外部へのリクエストは
+   一切発生しない。成果（Lead / conversion）は LINE の CTA クリックだけで、
+   LINE リンクは target=_blank なのでページは残り、送信はその場で完了する。
+   ?internal=1 でこの端末を内部扱いにしてあれば（GA4 と同じ仕組み）、Lead も送らない。
+   ========================================================================== */
+(function (window, document) {
+  "use strict";
+  var cfg = (window.SITE_CONFIG && window.SITE_CONFIG.ads) || {};
+  function str(v) { return typeof v === "string" ? v.trim() : ""; }
+  var pixelId = /^\d{15,16}$/.test(str(cfg.metaPixelId)) ? str(cfg.metaPixelId) : "";
+  var adsId = /^AW-\d{9,11}$/.test(str(cfg.googleAdsId)) ? str(cfg.googleAdsId) : "";
+  var adsLabel = /^[A-Za-z0-9_-]{4,64}$/.test(str(cfg.googleAdsConversionLabel)) ? str(cfg.googleAdsConversionLabel) : "";
+  if (!pixelId && !adsId) return;
+  var internal = false;
+  try { internal = window.localStorage.getItem("lc_internal") === "1"; } catch (e) { internal = false; }
+
+  if (pixelId) {
+    /* Meta 公式のベースコードと同等。fbq を先に定義してからスクリプトを読む。 */
+    (function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n;
+      n.push = n; n.loaded = true; n.version = "2.0"; n.queue = [];
+      t = b.createElement(e); t.async = true; t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      if (s && s.parentNode) s.parentNode.insertBefore(t, s); else b.head.appendChild(t);
+    })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+    window.fbq("init", pixelId);
+    window.fbq("track", "PageView");
+  }
+
+  if (adsId && typeof window.gtag === "function") {
+    /* gtag.js は GA4 のブロックが既に読み込んでいる。同じタグに広告 ID を足すだけ。 */
+    window.gtag("config", adsId);
+  }
+
+  function isLine(a) {
+    var h = (a && a.href) || "";
+    return /^https?:\/\/(lin\.ee|line\.me)\//i.test(h);
+  }
+  document.addEventListener("click", function (ev) {
+    var a = ev.target && ev.target.closest ? ev.target.closest("a[href]") : null;
+    if (!a || !isLine(a) || internal) return;
+    if (pixelId && typeof window.fbq === "function") {
+      try { window.fbq("track", "Lead", { content_name: "line_cta" }); } catch (e) { /* 計測で遷移を止めない */ }
+    }
+    if (adsId && adsLabel && typeof window.gtag === "function") {
+      try { window.gtag("event", "conversion", { send_to: adsId + "/" + adsLabel }); } catch (e) { /* 同上 */ }
+    }
+  }, true);
 })(window, document);
